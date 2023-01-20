@@ -5,10 +5,10 @@
 # Note: ensure you have sufficient rights (e.g., owner/contributor role) to create and manage Azure resources.
 
 # Set variables (globally unique)
-export ACR_NAME=""
-export KEYVAULT_NAME="" 
+export ACR_NAME="workloadidentitysandbox2acr" # e.g. workloadidentitysandbox2acr (alphanumberic only up to 50 chars). Important: Set in deploy.sh also
+export KEYVAULT_NAME="aks-sandbox2-kv" # e.g. aks-sandbox2-kv (up to 24 url allowable chars)
 
-# Review variables (update as appropriate)
+# Other variables (do not change)
 export SUBSCRIPTION_ID="$(az account show --query id --output tsv)"
 export RESOURCE_GROUP="sandbox-rg"
 export LOCATION="AustraliaEast"

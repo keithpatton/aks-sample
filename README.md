@@ -9,9 +9,10 @@ Provides a working example of AKS Workload Identity using the Asp.Net Core Api p
 - Docker Desktop.
 
 ## Setup Azure Environment
-- Open setup.sh and set ACR_NAME and KEYVAULT_NAME variables as must be globally unique (others you can leave or update as required).
-- Using Azure Cloud Shell in bash mode, copy the contents of setup.sh and execute.
+- Open setup.sh set ACR_NAME and KEYVAULT_NAME variables as must be globally unique (others you can leave or update as required).
+- Using Azure Cloud Shell bash, upload setup.sh and execute using: ```bash setup.sh```.
 - This step will create all the necessary Azure resources using Azure CLI and kubectl (will take around 10 mins).
+- This script is idempotent so can be re-run if necessary
 - Keep Azure Cloud Shell session alive as we'll use it for the deploy step below.
 
 ## Deploy Application Locally 
@@ -30,7 +31,8 @@ Provides a working example of AKS Workload Identity using the Asp.Net Core Api p
 - Click on Publish button which will build and deploy your application image to the ACR.
 
 ## Deploy Application to the AKS Cluster
-- Using your open Azure Cloud Shell session, copy the contents of deploy.sh and execute
+- Open deploy.sh and ACR_NAME to the same value you chose for setup.sh
+- Using your open Azure Cloud Shell session, upload deploy.sh and execute using: ```bash deploy.sh```.
 - This will deploy your application into the AKS cluster and expose it on port 80. (obviously only suitable for development!).
 - Execute the following to watch for the EXTERNAL_IP value to be published for the pod: ```watch kubectl get services```
 - Browse to the AKS hosted url endpoint, e.g. http://{{EXTERNAL-IP}}/WeatherForecast 
