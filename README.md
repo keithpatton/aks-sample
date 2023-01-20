@@ -11,7 +11,7 @@ Provides a working example of AKS Workload Identity using the Asp.Net Core Api p
 ## Setup Azure Environment
 - Open setup.sh set ACR_NAME and KEYVAULT_NAME variables as must be globally unique (others you can leave or update as required).
 - Using Azure Cloud Shell bash, upload setup.sh and execute using: ```bash setup.sh```.
-- This step will create all the necessary Azure resources using Azure CLI and kubectl (will take around 10 mins).
+- This step will create all the necessary Azure resources using Azure CLI and kubectl (will take a fe mins).
 - This script is idempotent so can be re-run if necessary
 - Keep Azure Cloud Shell session alive as we'll use it for the deploy step below.
 
