@@ -10,10 +10,18 @@ Provides a working example of AKS Workload Identity using the Asp.Net Core Api p
 
 ## Setup Azure Environment
 - Open setup.sh and set ACR_NAME and KEYVAULT_NAME variables as must be globally unique (others you can leave or update as required).
-- *Important*: Update the keyVaultName variable in WeatheForecastController.cs to match the KEYVAULT_NAME value.
 - Using Azure Cloud Shell in bash mode, copy the contents of setup.sh and execute.
 - This step will create all the necessary Azure resources using Azure CLI and kubectl (will take around 10 mins).
 - Keep Azure Cloud Shell session alive as we'll use it for the deploy step below.
+
+## Deploy Application Locally 
+- *Important*: Update the keyVaultName variable in WeatheForecastController.cs to match the KEYVAULT_NAME value used in the Setup step.
+ - Check that you are logged into Visual Studio with an account that has priviliges on the Key Vault resource. 
+ - You can confirm your account via Tools > Options > Azure Service Authentication > Account Selection.
+ - If you switch to use 'IIS Express' as the deploy target (not Docker) then this Azure Managed Identity will work seamlessly using this MS account. 
+ - Deploy the app which will bring up the Swagger endpoint, then try out the WeatherForecast endpoint which will be at http://localhost:{{port}}/WeatherForecast 
+ - You should receive the forecast data in the browser with '(Changeable)' as part of every summary which is the value that is from Key Vault.
+ - We should see the exact same thing after we deploy the application to AKS with no additional code changes.
 
 ## Publish Application Image to the Container Registry
 - Right-click the project in Visual Studio and select 'Publish'.
