@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  aks-mt.api:
+    image: ${DOCKER_REGISTRY-}aksmtapi
+    build:
+      context: .
+      dockerfile: aks-mt.api/Dockerfile
