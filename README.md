@@ -9,10 +9,10 @@ Provides a working example of AKS Workload Identity using the Asp.Net Core Api p
 - Docker Desktop.
 
 ## Setup Azure Environment
-- Open setup.sh, review and update variables as required.
+- Open setup.sh and set ACR_NAME and KEYVAULT_NAME variables as must be globally unique (others you can leave or update as required).
+- *Important*: Update the keyVaultName variable in WeatheForecastController.cs to match the KEYVAULT_NAME value.
 - Using Azure Cloud Shell in bash mode, copy the contents of setup.sh and execute.
 - This step will create all the necessary Azure resources using Azure CLI and kubectl (will take around 10 mins).
-- *Important*: Update the keyVaultName variable in WeatheForecastController.cs to match setup.sh KEYVAULT_NAME value.
 - Keep Azure Cloud Shell session alive as we'll use it for the deploy step below.
 
 ## Publish Application Image to the Container Registry

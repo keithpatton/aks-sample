@@ -4,7 +4,11 @@
 # Recommended: Use Azure Cloud Shell in bash mode within your Azure subscription
 # Note: ensure you have sufficient rights (e.g., owner/contributor role) to create and manage Azure resources.
 
-# Define variables (update as appropriate)
+# Set variables (globally unique)
+export ACR_NAME=""
+export KEYVAULT_NAME="" 
+
+# Review variables (update as appropriate)
 export SUBSCRIPTION_ID="$(az account show --query id --output tsv)"
 export RESOURCE_GROUP="sandbox-rg"
 export LOCATION="AustraliaEast"
@@ -13,9 +17,7 @@ export AKS_NODES_RESOURCE_GROUP="sandbox-aks-nodes-rg"
 export AKS_WORKLOAD_IDENTITY_SERVICE_ACCOUNT_NAME="workload-identity-sa"
 export AKS_NAMESPACE="default"
 export AZ_FEDERATED_IDENTITY_NAME="workload-identity-fed" 
-export KEYVAULT_NAME="workloadidentity-sandbox1-kv" # update as must be globally unique
 export KEYVAULT_IDENTITY_NAME="kvidentity2"
-export ACR_NAME="workloadidentitysandbox1acr" # update as must be globally unique
 
 # Ensure providers are registered
 az provider register --namespace Microsoft.OperationsManagement
