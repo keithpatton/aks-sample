@@ -3,7 +3,7 @@
 ## Purpose
 Provides a working example of :
 - AKS Workload Identity using the Asp.Net Core Api project template with minor modifications. 
-- Dynamically provisioned Persitent Volumes backed by Azure Blob Storage
+- Dynamically provisioned Persistent Volumes backed by Azure Blob Storage
 
 ## Pre-requistes
 - Azure Subscription Account with sufficient priviliges to create/manage resources.
