@@ -1,12 +1,13 @@
 # Creates AKS Cluster ensures Azure AD Workload Identity is enabled
 # Creates Key Vault and User Managed Identity with appropriate Key Vault Permissions and links this identity to AKS Service Account
 # Creates Azure Container Registry and links it to the AKS Cluster
+# Creates Storage Classes and Persisent Volume Claims for storage writing test
 # Recommended: Use Azure Cloud Shell in bash mode within your Azure subscription
 # Note: ensure you have sufficient rights (e.g., owner/contributor role) to create and manage Azure resources.
 
 # Set variables (globally unique)
 export ACR_NAME="workloadidentitysandbox2acr" # e.g. workloadidentitysandbox2acr (alphanumberic only up to 50 chars). Important: Set in deploy.sh also
-export KEYVAULT_NAME="aks-sandbox2-kv" # e.g. aks-sandbox2-kv (up to 24 url allowable chars)
+export KEYVAULT_NAME="aks-sandbox3-kv" # e.g. aks-sandbox2-kv (up to 24 url allowable chars)
 
 # Other variables (do not change)
 export SUBSCRIPTION_ID="$(az account show --query id --output tsv)"
@@ -18,6 +19,13 @@ export AKS_WORKLOAD_IDENTITY_SERVICE_ACCOUNT_NAME="workload-identity-sa"
 export AKS_NAMESPACE="default"
 export AZ_FEDERATED_IDENTITY_NAME="workload-identity-fed" 
 export KEYVAULT_IDENTITY_NAME="kvidentity2"
+export STORAGECLASS_ACCOUNT_NAME="azurestorageandbox1"
+export STORAGECLASS_BLOB_NAME="azureblob-nfs-standard"
+export STORAGECLASS_BLOB_NAME_TENANT1="azureblob-nfs-standard-tenant1"
+export STORAGECLASS_BLOB_NAME_TENANT2="azureblob-nfs-standard-tenant2"
+export PVCLAIM_BLOB_NAME="azure-blob"
+export PVCLAIM_BLOB_NAME_TENANT1="azure-blob-tenant1"
+export PVCLAIM_BLOB_NAME_TENANT2="azure-blob-tenant2"
 
 # Ensure providers are registered
 az provider register --namespace Microsoft.OperationsManagement
@@ -35,7 +43,7 @@ az provider register --namespace Microsoft.ContainerService
 az group create --name "${RESOURCE_GROUP}" --location "${LOCATION}"
 
 # Create AKS Cluster and fetch credentials
-az aks create -g ${RESOURCE_GROUP} -n ${AKS_NAME} --node-count 1 --enable-oidc-issuer --enable-workload-identity --enable-managed-identity --generate-ssh-keys --node-resource-group ${AKS_NODES_RESOURCE_GROUP}
+az aks create -g ${RESOURCE_GROUP} -n ${AKS_NAME} --node-count 1 --enable-oidc-issuer --enable-blob-driver --enable-workload-identity --enable-managed-identity --generate-ssh-keys --node-resource-group ${AKS_NODES_RESOURCE_GROUP}
 az aks get-credentials -n ${AKS_NAME} -g "${RESOURCE_GROUP}"
 
 # Create a Key Vault resource (note: key vault names are globally unique, so update number as required)
@@ -70,3 +78,101 @@ az acr create --resource-group ${RESOURCE_GROUP} --name ${ACR_NAME} --sku Basic
 
 # Ensure AKS cluster has rights to pull from the ACR
 az aks update -n ${AKS_NAME} -g ${RESOURCE_GROUP} --attach-acr ${ACR_NAME}
+
+# Create Azure Container Registry (ACR) to store container images
+az acr create --resource-group ${RESOURCE_GROUP} --name ${ACR_NAME} --sku Basic
+
+# Create custom StorageClasses which uses the Blob CSI Driver from Microsoft
+
+# common storage class container
+cat <<EOF | kubectl apply -f -
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: "${STORAGECLASS_BLOB_NAME}"
+  namespace: "${AKS_NAMESPACE}"
+provisioner: blob.csi.azure.com
+parameters:
+  skuName: Standard_ZRS
+  containerName: common
+  protocol: nfs
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+EOF
+
+# tenant1 storage class container
+cat <<EOF | kubectl apply -f -
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: "${STORAGECLASS_BLOB_NAME_TENANT1}"
+  namespace: "${AKS_NAMESPACE}"
+provisioner: blob.csi.azure.com
+parameters:
+  skuName: Standard_ZRS
+  containerName: tenant1
+  protocol: nfs
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+EOF
+
+# tenant2 storage class container
+cat <<EOF | kubectl apply -f -
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: "${STORAGECLASS_BLOB_NAME_TENANT2}"
+  namespace: "${AKS_NAMESPACE}"
+provisioner: blob.csi.azure.com
+parameters:
+  skuName: Standard_ZRS
+  containerName: tenant2
+  protocol: nfs
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+EOF
+
+# persistent volume claim for common storage class container
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "${PVCLAIM_BLOB_NAME}"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: "${STORAGECLASS_BLOB_NAME}"
+  resources:
+    requests:
+      storage: 5Gi
+EOF
+
+# persistent volume claim for tenant1 storage class container
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "${PVCLAIM_BLOB_NAME_TENANT1}"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: "${STORAGECLASS_BLOB_NAME_TENANT1}"
+  resources:
+    requests:
+      storage: 5Gi
+EOF
+
+# persistent volume claim for tenant2 storage class container
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "${PVCLAIM_BLOB_NAME_TENANT2}"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: "${STORAGECLASS_BLOB_NAME_TENANT2}"
+  resources:
+    requests:
+      storage: 5Gi
+EOF

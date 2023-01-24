@@ -1,7 +1,9 @@
-# AKS Workload Identity Sample
+# AKS Sample
 
 ## Purpose
-Provides a working example of AKS Workload Identity using the Asp.Net Core Api project template with minor modifications. 
+Provides a working example of :
+- AKS Workload Identity using the Asp.Net Core Api project template with minor modifications. 
+- Dynamically provisioned Persitent Volumes backed by Azure Blob Storage
 
 ## Pre-requistes
 - Azure Subscription Account with sufficient priviliges to create/manage resources.
@@ -22,6 +24,7 @@ Provides a working example of AKS Workload Identity using the Asp.Net Core Api p
  - If you switch to use 'IIS Express' as the deploy target (not Docker) then this Azure Managed Identity will work seamlessly using this MS account. 
  - Deploy the app which will bring up the Swagger endpoint, then try out the WeatherForecast endpoint which will be at http://localhost:{{port}}/WeatherForecast 
  - You should receive the forecast data in the browser with '(Changeable)' as part of every summary which is the value that is from Key Vault.
+ - You should also see files created in C:\Temp\AksWorkloadIdentitySample\, which in AKS wouold write to Azure Blob Storage containers.
  - We should see the exact same thing after we deploy the application to AKS with no additional code changes.
 
 ## Publish Application Image to the Container Registry
@@ -38,23 +41,29 @@ Provides a working example of AKS Workload Identity using the Asp.Net Core Api p
 - Browse to the AKS hosted url endpoint, e.g. http://{{EXTERNAL-IP}}/WeatherForecast 
 - You should receive the json with "(Changeable)" in the summary from key vault as within your local dev environment.
 - This proves the Azure AD Workload Identity is working correctly!
+- Files are also written to Azure Blob Containers which you can find within the dynamically provsioned azure storage account within the resource group "sandbox-aks-nodes-rg"
 
 ## Conclusion
 - Azure AD Workload Identity for AKS greatly simplifies application access to Azure Resources by using Azure Managed Identity directly from within your applications. 
 - This example uses Azure Key Vault, but the same principle would apply to other Azure Managed Identity aware resources such as Azure SQL and Azure Storage.
+- Azure Blob Storage is used with dynamically provisioned Persitent Volumes which allow for persisent storage which can be shared between pods.
 - You can clean up and delete resources by simply deleting the resource group you created using setup.sh.
 
 ## What changes were applied to the project template?
 The template app provides a simple weather forecast api which is a simple GET to the /WeatherForecast endpoint. 
 
 - Azure.Identity and Azure.Security.KeyVault.Secrets Nuget Packages were added to the project.
-- WeatherForecastController.cs was updated to access Key Vault, create and retrieve a secret using Azure Managed Identity, then return within the response summary.
-- These changes are enough to prove that the Azure AD Managed Identity is being used which is the purpose of the sample.
+- WeatherForecastController.cs was updated to write to persistent storage, access Key Vault, create and retrieve a secret using Azure Managed Identity, then return within the response summary.
+- These changes are enough to prove that the Azure AD Managed Identity is being used and that Azure Blob Storage could be used for shared storage.
 
 ```
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+
+            // test out writing to persistent volume storage
+            WriteToPersistentStorage();
+
             // use Azure AD Identity to create and retrieve a new secret, then use it within the response within Summary
             // this proves the Azure AD Identity flow is working 
             var keyVaultName = "aks-sandbox2-kv";

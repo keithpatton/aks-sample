@@ -3,6 +3,9 @@ export ACR_NAME="workloadidentitysandbox2acr" # e.g. workloadidentitysandbox2acr
 
 # Other variables (do not change)
 export AKS_WORKLOAD_IDENTITY_SERVICE_ACCOUNT_NAME="workload-identity-sa"
+export PVCLAIM_BLOB_NAME="azure-blob"
+export PVCLAIM_BLOB_NAME_TENANT1="azure-blob-tenant1"
+export PVCLAIM_BLOB_NAME_TENANT2="azure-blob-tenant2"
 
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1
@@ -34,6 +37,23 @@ spec:
           env:
             - name: ASPNETCORE_URLS
               value: http://+:80
+          volumeMounts:
+            - mountPath: "/var/common"
+              name: common
+            - mountPath: "/var/tenant1"
+              name: tenant1
+            - mountPath: "/var/tenant2"
+              name: tenant2
+      volumes:
+         - name: common
+           persistentVolumeClaim:
+             claimName: ${PVCLAIM_BLOB_NAME}
+         - name: tenant1
+           persistentVolumeClaim:
+             claimName: ${PVCLAIM_BLOB_NAME_TENANT1}
+         - name: tenant2
+           persistentVolumeClaim:
+             claimName: ${PVCLAIM_BLOB_NAME_TENANT2}
 ---
 apiVersion: v1
 kind: Service

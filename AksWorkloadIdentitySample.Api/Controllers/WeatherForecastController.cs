@@ -1,7 +1,6 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace AksWorkloadIdentitySample.Api.Controllers
 {
@@ -24,9 +23,12 @@ namespace AksWorkloadIdentitySample.Api.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+            // test out writing to persistent volume storage
+            WriteToPersistentStorage();
+
             // use Azure AD Identity to create and retrieve a new secret, then use it within the response within Summary
             // this proves the Azure AD Identity flow is working 
-            var keyVaultName = "aks-sandbox2-kv";
+            var keyVaultName = "aks-sandbox3-kv";
             var client = new SecretClient(new Uri($"https://{keyVaultName}.vault.azure.net/"), new DefaultAzureCredential());
             client.SetSecret(new KeyVaultSecret("kvsecret", "(Changeable)"));
             var secret = client.GetSecret("kvsecret")?.Value;
@@ -39,5 +41,44 @@ namespace AksWorkloadIdentitySample.Api.Controllers
             })
             .ToArray();
         }
+
+        /// <summary>
+        /// Tests out writing to azure blob storage backed persistent volumes which map to separate azure blob containers
+        /// </summary>
+        private void WriteToPersistentStorage()
+        {
+            // write to shared storage 
+            var commonFolder = "common";
+            var tenant1Folder = "tenant1";
+            var tenant2Folder = "tenant2";
+
+            var commonPath = $"/var/{commonFolder}/";
+            var tenant1Path = $"/var/{tenant1Folder}/";
+            var tenant2Path = $"/var/{tenant2Folder}/";
+
+            if (String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("KUBERNETES_SERVICE_HOST")))
+            {
+                // not running in K8s, assume local windows pc
+                var localRoot = @"C:\Temp\AksWorkloadIdentitySample\";
+                commonPath = $"{localRoot}{commonFolder}";
+                tenant1Path = $"{localRoot}{tenant1Folder}";
+                tenant2Path = $"{localRoot}{tenant2Folder}";
+                if (!Directory.Exists(commonPath))
+                    Directory.CreateDirectory(commonPath);
+                if (!Directory.Exists(tenant1Path))
+                    Directory.CreateDirectory(tenant1Path);
+                if (!Directory.Exists(tenant2Path))
+                    Directory.CreateDirectory(tenant2Path);
+            }
+
+            var fileName = $"{DateTime.Now.Hour}-{DateTime.Now.Minute}-{DateTime.Now.Second}.txt";
+            var commonFileName = Path.Combine(commonPath, fileName);
+            var tenant1FileName = Path.Combine(tenant1Path, fileName);
+            var tenant2FileName = Path.Combine(tenant2Path, fileName);
+            System.IO.File.WriteAllText(commonFileName, "Weather Forecast was requested - common");
+            System.IO.File.WriteAllText(tenant1FileName, "Weather Forecast was requested - tenant 1");
+            System.IO.File.WriteAllText(tenant2FileName, "Weather Forecast was requested - tenant 2");
+        }
+
     }
 }
