@@ -23,12 +23,14 @@ namespace AksWorkloadIdentitySample.Api.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
-            // test out writing to persistent volume storage
+            // Write To persistent volume storage
             WriteToPersistentStorage();
 
-            // use Azure AD Identity to create and retrieve a new secret, then use it within the response within Summary
-            // this proves the Azure AD Identity flow is working 
-            var keyVaultName = "aks-sandbox3-kv";
+            // Use Azure AD Identity to create and retrieve a new secret, then use it within the response within Summary
+            // This proves the Azure AD Identity flow is working 
+            var keyVaultName = Environment.GetEnvironmentVariable("aks_keyvault");
+            if (String.IsNullOrWhiteSpace(keyVaultName))
+                keyVaultName = "kv-aksdemo-qpe"; // update for local dev
             var client = new SecretClient(new Uri($"https://{keyVaultName}.vault.azure.net/"), new DefaultAzureCredential());
             client.SetSecret(new KeyVaultSecret("kvsecret", "(Changeable)"));
             var secret = client.GetSecret("kvsecret")?.Value;

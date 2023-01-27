@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapi
+  labels:
+    app: weather-forecast
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: webapi
+  template:
+    metadata:
+      labels:
+        app: weather-forecast
+        azure.workload.identity/use: "true"
+        service: webapi
+    spec:
+      serviceAccountName: {{ .Values.workloadIdentityServiceAccountName }}
+      containers:
+        - name: webapi
+          image: {{ .Values.azureContainerRegistryName }}.azurecr.io/aksworkloadidentitysampleapi:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: webapi-configmap
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:80
+          volumeMounts:
+            - mountPath: /var/common
+              name: common
+            - mountPath: /var/tenant1
+              name: tenant1
+            - mountPath: /var/tenant2
+              name: tenant2
+      volumes:
+        - name: common
+          persistentVolumeClaim:
+             claimName: {{ .Values.pvcBlobName }}
+        - name: tenant1
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvcBlobNameTenant1 }}
+        - name: tenant2
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvcBlobNameTenant2 }}

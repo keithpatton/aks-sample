@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AksWorkloadIdentitySample.Api", "AksWorkloadIdentitySample.Api\AksWorkloadIdentitySample.Api.csproj", "{070B3727-74E5-4B31-825B-6035EA0AD8DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AksWorkloadIdentitySample.Api", "AksWorkloadIdentitySample.Api\AksWorkloadIdentitySample.Api.csproj", "{070B3727-74E5-4B31-825B-6035EA0AD8DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

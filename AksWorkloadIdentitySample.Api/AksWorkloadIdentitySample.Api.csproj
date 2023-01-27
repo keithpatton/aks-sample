@@ -9,6 +9,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Terraform\Deploy\.terraform\**" />
+	  <Compile Remove="Terraform\Infrastructure\.terraform\**" />
+	  <Content Remove="Terraform\Deploy\.terraform\**" />
+	  <Content Remove="Terraform\Infrastructure\.terraform\**" />
+	  <EmbeddedResource Remove="Terraform\Deploy\.terraform\**" />
+	  <EmbeddedResource Remove="Terraform\Infrastructure\.terraform\**" />
+	  <None Remove="Terraform\Deploy\.terraform\**" />
+	  <None Remove="Terraform\Infrastructure\.terraform\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Azure.Identity" Version="1.8.1" />
 		<PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.4.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />

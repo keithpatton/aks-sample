@@ -5,41 +5,56 @@ Provides a working example of :
 - AKS Workload Identity using the Asp.Net Core Api project template with minor modifications. 
 - Dynamically provisioned Persistent Volumes backed by Azure Blob Storage
 
-## Pre-requistes
-- Azure Subscription Account with sufficient priviliges to create/manage resources.
-- Visual Studio 2022+.
-- Docker Desktop.
+Uses Terraform to provision infrastructure and deploy the application using the Azure and Helm Providers.
 
-## Setup Azure Environment
-- Open setup.sh set ACR_NAME and KEYVAULT_NAME variables as must be globally unique (others you can leave or update as required).
-- Using Azure Cloud Shell bash, upload setup.sh and execute using: ```bash setup.sh```.
-- This step will create all the necessary Azure resources using Azure CLI and kubectl (will take a fe mins).
-- This script is idempotent so can be re-run if necessary
-- Keep Azure Cloud Shell session alive as we'll use it for the deploy step below.
+## Pre-requisites
+- Azure Account to create/manage resources on Azure Subscription and Azure AD tenancy
+- Visual Studio 2022+
+- Docker Desktop
+- Azure CLI
+- Terraform - Ensure [Authenticated for Azure](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs#authenticating-to-azure)
+- Helm
 
-## Deploy Application Locally 
-- *Important*: Update the keyVaultName variable in WeatheForecastController.cs to match the KEYVAULT_NAME value used in the Setup step.
- - Check that you are logged into Visual Studio with an account that has priviliges on the Key Vault resource. 
- - You can confirm your account via Tools > Options > Azure Service Authentication > Account Selection.
- - If you switch to use 'IIS Express' as the deploy target (not Docker) then this Azure Managed Identity will work seamlessly using this MS account. 
- - Deploy the app which will bring up the Swagger endpoint, then try out the WeatherForecast endpoint which will be at http://localhost:{{port}}/WeatherForecast 
- - You should receive the forecast data in the browser with '(Changeable)' as part of every summary which is the value that is from Key Vault.
- - You should also see files created in C:\Temp\AksWorkloadIdentitySample\, which in AKS wouold write to Azure Blob Storage containers.
- - We should see the exact same thing after we deploy the application to AKS with no additional code changes.
+### Configure Azure AD Workload Identity (Preview)
+```
+az extension add --name aks-preview
+az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
+az provider register --namespace Microsoft.ContainerService
+```
+
+## Check Variables
+Terraform is used to provision infrastructure and deploy the application (using the Helm Provider).
+
+Within the Terraform folder:
+- shared.tfvars - values used for infrastructure and application deployment. 
+- infra.tfvars - values used only as part of the infrastructure provisioning
+
+It is advised only to update the app_name value (keep it under 12 alphanumeric chars) within shared.tfvars.
+
+## Create Infrastructure
+Run from from within the project directory:
+```
+terraform -chdir="Terraform/Infrastructure" init
+terraform -chdir="Terraform/Infrastructure" apply -auto-approve -var-file="..\shared.tfvars" -var-file="..\infra.tfvars"
+```
 
 ## Publish Application Image to the Container Registry
 - Right-click the project in Visual Studio and select 'Publish'.
 - Select Docker Container Registry > Azure Container Registry.
-- Select the resource group used during setup and then the name of the ACR we created in during setup.
+- Select the resource group used during setup and then the name of the ACR that was created with terraform earlier
 - Click on Publish button which will build and deploy your application image to the ACR.
 
-## Deploy Application to the AKS Cluster
-- Open deploy.sh and ACR_NAME to the same value you chose for setup.sh
-- Using your open Azure Cloud Shell session, upload deploy.sh and execute using: ```bash deploy.sh```.
-- This will deploy your application into the AKS cluster and expose it on port 80. (obviously only suitable for development!).
+## Deploy Application to AKS Cluster
+Run from from within the project directory:
+```
+terraform -chdir="Terraform/Deploy" init
+terraform -chdir="Terraform/Deploy" apply -auto-approve -var-file="..\shared.tfvars" -var-file="..\infra.tfvars"
+```
+
+## Verify Application is Working
 - Execute the following to watch for the EXTERNAL_IP value to be published for the pod: ```watch kubectl get services```
 - Browse to the AKS hosted url endpoint, e.g. http://{{EXTERNAL-IP}}/WeatherForecast 
-- You should receive the json with "(Changeable)" in the summary from key vault as within your local dev environment.
+- You should receive the forecast data in the browser with '(Changeable)' as part of every summary which is the value that is from Key Vault.
 - This proves the Azure AD Workload Identity is working correctly!
 - Files are also written to Azure Blob Containers which you can find within the dynamically provsioned azure storage account within the resource group "sandbox-aks-nodes-rg"
 
@@ -47,7 +62,28 @@ Provides a working example of :
 - Azure AD Workload Identity for AKS greatly simplifies application access to Azure Resources by using Azure Managed Identity directly from within your applications. 
 - This example uses Azure Key Vault, but the same principle would apply to other Azure Managed Identity aware resources such as Azure SQL and Azure Storage.
 - Azure Blob Storage is used with dynamically provisioned Persitent Volumes which allow for persisent storage which can be shared between pods.
-- You can clean up and delete resources by simply deleting the resource group you created using setup.sh.
+
+## Clean Up
+To clean up all resourcs, run from from within the project directory:
+ ```
+terraform -chdir="Terraform/Deploy" destroy -auto-approve -var-file="..\shared.tfvars"
+terraform -chdir="Terraform/Infrastructure" destroy -auto-approve -var-file="..\shared.tfvars" -var-file="..\infra.tfvars"
+```
+
+## Running Locally 
+
+You can also run things locally with a few steps:
+
+ Configure Key Vault for User:
+ - Confirm your account via Tools > Options > Azure Service Authentication > Account Selection.
+ - Create a new Key Vault policy with Get/Set privileges on the new key vault resource for this user.
+ - Update the keyVaultName variable in WeatheForecastController.cs to match the name of the Key Vault 
+
+ Deploy locally:
+ - Switch deploy target to 'ask_mt.api' (Kestrel, not Docker) and then the Azure Managed Identity will work seamlessly using your MS account. 
+ - Deploy the app which will bring up the Swagger endpoint, then try out the WeatherForecast endpoint which will be at http://localhost:{{port}}/WeatherForecast 
+ - You should receive the forecast data in the browser with '(Changeable)' as part of every summary which is the value that is from Key Vault.
+ - You should also see files created in C:\Temp\AksWorkloadIdentitySample\ (which in AKS would write to Azure Blob Storage containers)
 
 ## What changes were applied to the project template?
 The template app provides a simple weather forecast api which is a simple GET to the /WeatherForecast endpoint. 
@@ -83,4 +119,5 @@ The template app provides a simple weather forecast api which is a simple GET to
 ```
 
 ## Links
-https://azure.github.io/azure-workload-identity/docs/quick-start.html
+- https://azure.github.io/azure-workload-identity/docs/quick-start.html
+- https://github.com/epomatti/azure-workload-identity-terraform
