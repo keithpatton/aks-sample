@@ -32,7 +32,7 @@ Within the Terraform folder:
 It is advised only to update the app_name value (keep it under 12 alphanumeric chars) within shared.tfvars.
 
 ## Create Infrastructure
-Run from from within the project directory:
+Run from from repo root:
 ```
 terraform -chdir="Terraform/Infrastructure" init
 terraform -chdir="Terraform/Infrastructure" apply -auto-approve -var-file="..\shared.tfvars" -var-file="..\infra.tfvars"
@@ -45,7 +45,7 @@ terraform -chdir="Terraform/Infrastructure" apply -auto-approve -var-file="..\sh
 - Click on Publish button which will build and deploy your application image to the ACR.
 
 ## Deploy Application to AKS Cluster
-Run from from within the project directory:
+Run from from repo root:
 ```
 terraform -chdir="Terraform/Deploy" init
 terraform -chdir="Terraform/Deploy" apply -auto-approve -var-file="..\shared.tfvars" 
