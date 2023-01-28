@@ -33,17 +33,17 @@ spec:
           volumeMounts:
             - mountPath: /var/common
               name: common
-            - mountPath: /var/tenant1
-              name: tenant1
-            - mountPath: /var/tenant2
-              name: tenant2
+              {{- range .Values.tenants }}
+            - mountPath: /var/{{ . }}
+              name: {{ . }}
+              {{- end }}
+      {{- $pvcBlobName := .Values.pvcBlobName }}
       volumes:
         - name: common
           persistentVolumeClaim:
-             claimName: {{ .Values.pvcBlobName }}
-        - name: tenant1
+             claimName: {{ $pvcBlobName }}
+        {{- range .Values.tenants }}
+        - name: {{ . }}
           persistentVolumeClaim:
-            claimName: {{ .Values.pvcBlobNameTenant1 }}
-        - name: tenant2
-          persistentVolumeClaim:
-            claimName: {{ .Values.pvcBlobNameTenant2 }}
+            claimName: {{ $pvcBlobName }}-{{ . }}
+        {{- end }}

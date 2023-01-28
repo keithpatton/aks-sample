@@ -11,28 +11,20 @@ spec:
     requests:
       storage: 5Gi
 ---
-# persistent volume claim for tenant1 storage class container
+# persistent volume claims for tenant storage class
+{{- $pvcBlobName := .Values.pvcBlobName }}
+{{- $storageClassBlobName := .Values.storageClassBlobName }}
+{{- range .Values.tenants }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.pvcBlobNameTenant1 }}
+  name: {{ $pvcBlobName }}-{{ . }}
 spec:
   accessModes:
   - ReadWriteOnce
-  storageClassName: {{ .Values.storageClassBlobNameTenant1 }}
+  storageClassName: {{ $storageClassBlobName }}-{{ . }}
   resources:
     requests:
       storage: 5Gi
 ---
-# persistent volume claim for tenant2 storage class container
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ .Values.pvcBlobNameTenant2 }}
-spec:
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: {{ .Values.storageClassBlobNameTenant2 }}
-  resources:
-    requests:
-      storage: 5Gi
+{{- end }}

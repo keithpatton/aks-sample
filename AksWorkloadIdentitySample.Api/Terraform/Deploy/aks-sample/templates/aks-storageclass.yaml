@@ -11,30 +11,21 @@ parameters:
 volumeBindingMode: Immediate
 allowVolumeExpansion: true
 ---
-# tenant1 storage class container
+# tenanted storage class containers
+{{- $aksNamespace := .Values.aksNamespace}}
+{{- $storageClassBlobName := .Values.storageClassBlobName }}
+{{- range .Values.tenants }}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ .Values.storageClassBlobNameTenant1 }}
-  namespace: {{ .Values.aksNamespace }}
+  name: {{ $storageClassBlobName }}-{{ . }}
+  namespace: {{ $aksNamespace }}
 provisioner: blob.csi.azure.com
 parameters:
   skuName: Standard_ZRS
-  containerName: tenant1
+  containerName: {{ . }}
   protocol: nfs
 volumeBindingMode: Immediate
 allowVolumeExpansion: true
 ---
-# tenant2 storage class container
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: {{ .Values.storageClassBlobNameTenant2 }}
-  namespace: {{ .Values.aksNamespace }}
-provisioner: blob.csi.azure.com
-parameters:
-  skuName: Standard_ZRS
-  containerName: tenant2
-  protocol: nfs
-volumeBindingMode: Immediate
-allowVolumeExpansion: true
+{{- end }}
