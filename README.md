@@ -48,7 +48,7 @@ terraform -chdir="Terraform/Infrastructure" apply -auto-approve -var-file="..\sh
 Run from from within the project directory:
 ```
 terraform -chdir="Terraform/Deploy" init
-terraform -chdir="Terraform/Deploy" apply -auto-approve -var-file="..\shared.tfvars" -var-file="..\infra.tfvars"
+terraform -chdir="Terraform/Deploy" apply -auto-approve -var-file="..\shared.tfvars" 
 ```
 
 ## Verify Application is Working
