@@ -63,9 +63,10 @@ stages:
       displayName: Build Image
       inputs:
         command: build
+        repository: $(imageName)
         dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
         buildContext: '$(Build.SourcesDirectory)'
-        tags: $(imageName)
+        tags: $(imageTagName)
     - task: AzureCLI@2
       displayName: 'Push Image'
       inputs:
@@ -76,3 +77,4 @@ stages:
           az acr login --name $(acrName)
           docker tag $(imageName):$(imageTagName) $(acrName).azurecr.io/$(imageName):$(imageTagName)
           docker push $(acrName).azurecr.io/$(imageName):$(imageTagName)
+
