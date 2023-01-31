@@ -113,7 +113,7 @@ stages:
         namespace: $(aksNamespace)
         command: 'upgrade'
         chartType: 'FilePath'
-        chartPath: '$(System.DefaultWorkingDirectory)/AksWorkloadIdentitySample.Api/Terraform/Deploy/aks-sample'
+        chartPath: '$(System.DefaultWorkingDirectory)/Terraform/Deploy/aks-sample'
         chartVersion: $(helmChartVersion)
         releaseName: $(helmReleaseName)
         overrideValues: 'aksNamespace=$(aksNamespace),workloadIdentityServiceAccountName=$(aksWorkloadIdentityServiceAccountName),keyVaultName=$(kvName),azureContainerRegistryName=$(acrName),workloadIdentityClientId=$(aksWorkloadIdentityClientId)'
