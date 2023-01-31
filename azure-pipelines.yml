@@ -21,7 +21,7 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - task: Docker@2
-      displayName: Build an image
+      displayName: Build Image
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
@@ -29,8 +29,10 @@ stages:
         tags: |
           $(tag)   
     - task: TerraformTaskV3@3
+      displayName: Terraform Init - Infrastructure
       inputs:
         provider: 'azurerm'
+        backendServiceArm: 'Keith Patton - VS Professional Sub'
         command: 'init'
         commandOptions: '-chdir="Terraform/Infrastructure"'
         backendAzureRmResourceGroupName: 'rg-terraform'
