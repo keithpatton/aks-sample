@@ -71,7 +71,7 @@ stages:
       displayName: 'Push Image'
       inputs:
         azureSubscription: $(svcConnAzureRm)
-        scriptType: 'ps'
+        scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
           az acr login --name $(acrName)
