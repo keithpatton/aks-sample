@@ -27,4 +27,13 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
         buildContext: '$(Build.SourcesDirectory)'
         tags: |
-          $(tag)
+          $(tag)   
+    - task: TerraformTaskV3@3
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        commandOptions: '-chdir="Terraform/Infrastructure"'
+        backendAzureRmResourceGroupName: 'rg-terraform'
+        backendAzureRmStorageAccountName: 'terraformstateakssample'
+        backendAzureRmContainerName: 'tfstate'
+        backendAzureRmKey: 'terraform.tfstate'
