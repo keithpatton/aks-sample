@@ -16,7 +16,7 @@ stages:
   displayName: Ensure Infrastructure
   jobs:
   - job: Terraform
-    displayName: Use Terraform to ensure infrastructure is ready for the deploy stage
+    displayName: Ensure Azure Resources
     pool:
       vmImage: ubuntu-latest
     steps:
