@@ -1,4 +1,8 @@
-﻿# Configure the Azure providers
+﻿ terraform {
+│   backend "local" {}
+│ }
+
+# Configure the Azure providers
 terraform {
   required_providers {
     azurerm = {
