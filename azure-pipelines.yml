@@ -31,6 +31,15 @@ stages:
         backendAzureRmStorageAccountName: 'terraformstateakssample'
         backendAzureRmContainerName: 'tfstate'
         backendAzureRmKey: 'terraform.tfstate'
+    - task: AzureCLI@2
+      displayName: Az Cli Login
+      inputs:
+        azureSubscription: 'Keith Patton - VS Professional Sub'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az --version
+          az account show
     - task: TerraformTaskV3@3
       displayName: Terraform Apply
       inputs:
