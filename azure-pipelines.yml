@@ -36,15 +36,6 @@ stages:
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
         backendAzureRmKey: $(tfStateFileName)
-    - task: AzureCLI@2
-      displayName: Az Cli Login
-      inputs:
-        azureSubscription: $(svcConnAzureRm)
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az --version
-          az account show
     - task: TerraformTaskV3@3
       displayName: Terraform Apply
       inputs:
