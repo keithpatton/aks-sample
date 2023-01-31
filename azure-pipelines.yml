@@ -101,7 +101,7 @@ stages:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          $aksWorkloadIdentityClientId = & (az identity show --resource-group $(aksResourceGroup) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
+          $aksWorkloadIdentityClientId = (az identity show --resource-group $(aksResourceGroup) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
           Write-Output("##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId")
     - task: HelmDeploy@0
       displayName: 'Deploy Chart'
