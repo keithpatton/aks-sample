@@ -18,6 +18,14 @@ variables:
   acrName: 'acraksdemoqpe'
   imageName: 'aksworkloadidentitysampleapi'
   imageTagName: 'latest'
+  kvName: 'kv-aksdemo-qpe'
+  aksResourceGroup: 'rg-aksdemo'
+  aksClusterName: 'aks-aksdemo'
+  aksWorkloadIdentityName: 'sa-workload-identity-aksdemo'
+  aksNamespace: 'default'
+  aksWorkloadIdentityClientId: '{TerraformOutput}'
+  helmReleaseName: 'aks-sample'
+  helmChartVersion: '0.4.0'
 
 stages:
 - stage: Infrastructure
@@ -77,4 +85,26 @@ stages:
           az acr login --name $(acrName)
           docker tag $(imageName):$(imageTagName) $(acrName).azurecr.io/$(imageName):$(imageTagName)
           docker push $(acrName).azurecr.io/$(imageName):$(imageTagName)
-
+- stage: Deploy
+  displayName: Deploy Application
+  jobs:
+  - job: Deploy
+    displayName: Deploy Application
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: HelmDeploy@0
+      displayName: 'Deploy Chart'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscription: $(svcConnAzureRm)
+        azureResourceGroup: $(aksResourceGroup)
+        kubernetesCluster: $(aksClusterName)
+        namespace: $(aksNamespace)
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: 'AksWorkloadIdentitySample.Api/Terraform/Deploy/aks-sample'
+        chartVersion: $(helmChartVersion)
+        releaseName: $(helmReleaseName)
+        overrideValues: 'aksNamespace=$(aksNamespace),workloadIdentityServiceAccountName=$(aksWorkloadIdentityName),keyVaultName=$(kvName),azureContainerRegistryName=$(acrName),workloadIdentityClientId=$(aksWorkloadIdentityClientId)'
+        arguments: '--install --atomic'
