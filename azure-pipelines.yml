@@ -51,8 +51,8 @@ stages:
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
         backendAzureRmKey: $(tfStateFileName)
-- stage: Build and Push
-  displayName: Build image
+- stage: Image
+  displayName: Build and Push Image
   jobs:
   - job: Build
     displayName: Build Image
