@@ -2,14 +2,19 @@
 # Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
-trigger:
-- master
+#trigger:
+#- master
 
 resources:
 - repo: self
 
 variables:
   tag: '$(Build.BuildId)'
+  svcConnAzureRm: 'Keith Patton - VS Professional Sub'
+  tfStateResourceGroup: 'rg-terraform'
+  tfStateStorageAccount: 'terraformstateakssample'
+  tfStateContainerName: 'tfstate'
+  tfStateFileName: 'terraform.tfstate'
 
 stages:
 - stage: Infrastructure
@@ -24,25 +29,39 @@ stages:
       displayName: Terraform Init 
       inputs:
         provider: 'azurerm'
-        backendServiceArm: 'Keith Patton - VS Professional Sub'
+        backendServiceArm: $(svcConnAzureRm)
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
-        backendAzureRmResourceGroupName: 'rg-terraform'
-        backendAzureRmStorageAccountName: 'terraformstateakssample'
-        backendAzureRmContainerName: 'tfstate'
-        backendAzureRmKey: 'terraform.tfstate'
+        backendAzureRmResourceGroupName: $(tfStateResourceGroup)
+        backendAzureRmStorageAccountName: $(tfStateStorageAccount)
+        backendAzureRmContainerName: $(tfStateContainerName)
+        backendAzureRmKey: $(tfStateFileName)
+    - task: AzureCLI@2
+      displayName: Az Cli Login
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az --version
+          az account show
     - task: TerraformTaskV3@3
       displayName: Terraform Apply
       inputs:
         provider: 'azurerm'
-        environmentServiceNameAzureRM: 'Keith Patton - VS Professional Sub'
+        environmentServiceNameAzureRM: $(svcConnAzureRm)
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
-        commandOptions: '-auto-approve -var-file="../shared.tfvars" -var-file="../infra.tfvars"'  
+        commandOptions: '-auto-approve -var-file="../shared.tfvars" -var-file="../infra.tfvars"'
+        backendAzureRmResourceGroupName: $(tfStateResourceGroup)
+        backendAzureRmStorageAccountName: $(tfStateStorageAccount)
+        backendAzureRmContainerName: $(tfStateContainerName)
+        backendAzureRmKey: $(tfStateFileName)
 - stage: Build
   displayName: Build image
   jobs:
   - job: Build
+    condition: eq(1,2)
     displayName: Build
     pool:
       vmImage: ubuntu-latest
