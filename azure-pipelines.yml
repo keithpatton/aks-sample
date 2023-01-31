@@ -65,8 +65,7 @@ stages:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
         buildContext: '$(Build.SourcesDirectory)'
-        tags: |
-          $(tag)   
+        tags: $(imageName)
     - task: AzureCLI@2
       displayName: 'Push Image'
       inputs:
