@@ -63,15 +63,15 @@ resource "azurerm_role_assignment" "default" {
   skip_service_principal_aad_check = true
 }
 
-resource "null_resource" "aks-creds" {
-  provisioner "local-exec" {
-    command="az aks get-credentials -g ${azurerm_resource_group.default.name} -n ${local.aks_name} --overwrite-existing"
-  }
-
-  depends_on = [
-    azurerm_kubernetes_cluster.default
-  ]
-}
+#resource "null_resource" "aks-creds" {
+#  provisioner "local-exec" {
+#    command="az aks get-credentials -g ${azurerm_resource_group.default.name} -n ${local.aks_name} --overwrite-existing"
+#  }
+#
+#  depends_on = [
+#    azurerm_kubernetes_cluster.default
+#  ]
+#}
 
 ### Azure Workload Identity - AKS 
 
