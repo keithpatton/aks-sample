@@ -2,8 +2,8 @@
 # Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
-trigger:
-- master
+#trigger:
+#- master
 
 resources:
 - repo: self
@@ -43,6 +43,7 @@ stages:
   displayName: Build image
   jobs:
   - job: Build
+    condition: eq(1,2)
     displayName: Build
     pool:
       vmImage: ubuntu-latest
