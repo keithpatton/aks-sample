@@ -23,7 +23,8 @@ variables:
   aksClusterName: 'aks-aksdemo'
   aksWorkloadIdentityName: 'sa-workload-identity-aksdemo'
   aksNamespace: 'default'
-  aksWorkloadIdentityClientId: '{TerraformOutput}'
+  aksWorkloadIdentityName: 'aks-aksdemo'
+  aksWorkloadIdentityClientId: '{dynamic}'
   helmReleaseName: 'aks-sample'
   helmChartVersion: '0.4.0'
 
@@ -93,6 +94,15 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: AzureCLI@2
+      displayName: 'Get Azure Resoure Values'
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $aksWorkloadIdentityClientId = & (az identity show --resource-group $(aksResourceGroup) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
+          Write-Output("##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId")
     - task: HelmDeploy@0
       displayName: 'Deploy Chart'
       inputs:
