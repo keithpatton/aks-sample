@@ -42,7 +42,7 @@ stages:
         provider: 'azurerm'
         backendServiceArm: 'Keith Patton - VS Professional Sub'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
     - task: TerraformTaskV3@3
       displayName: Terraform Apply
       inputs:
