@@ -1,6 +1,6 @@
-﻿ terraform {
-│   backend "local" {}
-│ }
+﻿terraform {
+  backend "local" {}
+}
 
 # Configure the Azure providers
 terraform {
