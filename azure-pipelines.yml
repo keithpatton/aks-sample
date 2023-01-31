@@ -21,7 +21,7 @@ variables:
   kvName: 'kv-aksdemo-qpe'
   aksResourceGroup: 'rg-aksdemo'
   aksClusterName: 'aks-aksdemo'
-  aksWorkloadIdentityName: 'sa-workload-identity-aksdemo'
+  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-aksdemo'
   aksNamespace: 'default'
   aksWorkloadIdentityName: 'aks-aksdemo'
   aksWorkloadIdentityClientId: '{dynamic}'
@@ -116,5 +116,5 @@ stages:
         chartPath: 'AksWorkloadIdentitySample.Api/Terraform/Deploy/aks-sample'
         chartVersion: $(helmChartVersion)
         releaseName: $(helmReleaseName)
-        overrideValues: 'aksNamespace=$(aksNamespace),workloadIdentityServiceAccountName=$(aksWorkloadIdentityName),keyVaultName=$(kvName),azureContainerRegistryName=$(acrName),workloadIdentityClientId=$(aksWorkloadIdentityClientId)'
+        overrideValues: 'aksNamespace=$(aksNamespace),workloadIdentityServiceAccountName=$(aksWorkloadIdentityServiceAccountName),keyVaultName=$(kvName),azureContainerRegistryName=$(acrName),workloadIdentityClientId=$(aksWorkloadIdentityClientId)'
         arguments: '--install --atomic'
