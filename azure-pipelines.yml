@@ -25,6 +25,6 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
-        buildContext: ./AksWorkloadIdentitySample.Api
+        buildContext: '$(Build.SourcesDirectory)'
         tags: |
           $(tag)
