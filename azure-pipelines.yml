@@ -47,7 +47,11 @@ stages:
         environmentServiceNameAzureRM: 'Keith Patton - VS Professional Sub'
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
-        commandOptions: '-auto-approve -var-file="../shared.tfvars" -var-file="../infra.tfvars"'  
+        commandOptions: '-auto-approve -var-file="../shared.tfvars" -var-file="../infra.tfvars"'
+        backendAzureRmResourceGroupName: 'rg-terraform'
+        backendAzureRmStorageAccountName: 'terraformstateakssample'
+        backendAzureRmContainerName: 'tfstate'
+        backendAzureRmKey: 'terraform.tfstate'
 - stage: Build
   displayName: Build image
   jobs:
