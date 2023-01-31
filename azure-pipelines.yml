@@ -1,6 +1,6 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+# 1. Ensure Infrastructure
+# 2. Build and Push Image
+# 4. Deploy Image
 
 trigger: none
 #- master
@@ -15,6 +15,9 @@ variables:
   tfStateStorageAccount: 'terraformstateakssample'
   tfStateContainerName: 'tfstate'
   tfStateFileName: 'terraform.tfstate'
+  acrName: 'acraksdemoqpe'
+  imageName: 'aksworkloadidentitysampleapi'
+  imageTagName: 'latest'
 
 stages:
 - stage: Infrastructure
@@ -48,12 +51,11 @@ stages:
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
         backendAzureRmKey: $(tfStateFileName)
-- stage: Build
+- stage: Build and Push
   displayName: Build image
   jobs:
   - job: Build
-    condition: eq(1,2)
-    displayName: Build
+    displayName: Build Image
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -65,3 +67,13 @@ stages:
         buildContext: '$(Build.SourcesDirectory)'
         tags: |
           $(tag)   
+    - task: AzureCLI@2
+      displayName: 'Push Image'
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az acr login --name $(acrName)
+          docker tag $(imageName):$(imageTagName) $(acrName).azurecr.io/$(imageName):$(imageTagName)
+          docker push $(acrName).azurecr.io/$(imageName):$(imageTagName)
