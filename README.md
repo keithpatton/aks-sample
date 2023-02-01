@@ -16,21 +16,13 @@ For Local Development (optional)
 - Visual Studio 2022+
 - Docker Desktop
 
-### Configure Azure AD Workload Identity (Preview)
-TODO: Move to AzD Pipeline
-```
-az extension add --name aks-preview
-az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
-az provider register --namespace Microsoft.ContainerService
-```
-
 ## Azure Devops SetUp
 TODO: Finalise Doco
 - Create new pipeline and point to azure-pipelines.yml 
 - Ensure service connection set to to Azure
 - Ensure service connection has Owner rights on subscription
 - Check over variables and update as required
-  - It is advised only to update the app_name value (keep it under 12 alphanumeric chars) within shared.tfvars.
+  - It is advised only to update the app_name value (keep it under 12 alphanumeric chars).
 
 ## Run Pipeline
 TODO: Finalise Doco
