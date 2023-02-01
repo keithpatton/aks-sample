@@ -1,6 +1,6 @@
 # 1. Ensure Infrastructure
 # 2. Build and Push Image
-# 4. Deploy Image
+# 3. Deploy Application
 
 trigger: none
 #- master
