@@ -24,7 +24,7 @@ variables:
   aksWorkloadIdentityClientId: '{dynamic}'
   aksNodeCount: 1
   aksVmSize: 'Standard_B2s'
-  infraTags: '{ Application = \"Azure AKS Sample\" }'
+  infraTags: '{ Application = ''Azure AKS Sample\'' }'
   helmReleaseName: 'aks-sample'
   helmChartVersion: '0.4.0'
   kvName: 'kv-$(appName)-$(uniqueSuffix)'
