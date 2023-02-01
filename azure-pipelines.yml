@@ -24,12 +24,11 @@ parameters:
 - name: tenants
   displayName: 'Tenant List'
   type: string
-  default: 'tenant1,tenant2'
+  default: "- tenant1 \n-tenant2\n"
 
 variables:
   appName: ${{ parameters.appName }}
-  tenants: ${{ each tenant in parameters.tenants.split(',') }}
-    - ${{ tenant }}
+  tenants: ${{ parameters.tenants }}
   location: 'australiaeast'
   svcConnAzureRm: 'Keith Patton - VS Professional Sub'
   uniqueSuffix: 'qpe'
