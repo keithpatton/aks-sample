@@ -49,7 +49,7 @@ stages:
         provider: 'azurerm'
         backendServiceArm: $(svcConnAzureRm)
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infrastructure'
         backendAzureRmResourceGroupName: $(tfStateResourceGroup)
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
@@ -60,7 +60,7 @@ stages:
         provider: 'azurerm'
         environmentServiceNameAzureRM: $(svcConnAzureRm)
         command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infrastructure'
         commandOptions: 
           --auto-approve
           -var rg_name=$(rgName)
@@ -132,7 +132,7 @@ stages:
         namespace: $(aksNamespace)
         command: 'upgrade'
         chartType: 'FilePath'
-        chartPath: '$(System.DefaultWorkingDirectory)/Terraform/Deploy/aks-sample'
+        chartPath: '$(System.DefaultWorkingDirectory)/Devops/Deploy/aks-sample'
         chartVersion: $(helmChartVersion)
         releaseName: $(helmReleaseName)
         overrideValues: |
