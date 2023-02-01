@@ -43,6 +43,16 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: AzureCLI@2
+      displayName: 'Enable Workload Identity Preview Feature'
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az extension add --name aks-preview
+          az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
+          az provider register --namespace Microsoft.ContainerService
     - task: TerraformTaskV3@3
       displayName: Terraform Init 
       inputs:
