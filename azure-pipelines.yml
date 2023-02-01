@@ -61,15 +61,15 @@ stages:
         environmentServiceNameAzureRM: $(svcConnAzureRm)
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
-        commandOptions: "
-          -auto-approve 
-          -var 'app_name=$(appName)'
-          -var 'location=$(location)'
-          -var 'aks_namespace=$(aksNamespace)'
-          -var 'unique_suffix=$(uniqueSuffix)'
-          -var 'aks_vm_size=$(aksVmSize)'
-          -var 'aks_node_count=$(aksNodeCount)'
-          -var 'tags=$(infraTags)'"
+        commandOptions: '
+          --auto-approve 
+          -var="app_name=$(appName)"
+          -var="location=$(location)"
+          -var="aks_namespace=$(aksNamespace)"
+          -var="unique_suffix=$(uniqueSuffix)"
+          -var="aks_vm_size=$(aksVmSize)"
+          -var="aks_node_count=$(aksNodeCount)"
+          -var="tags=$(infraTags)"'
         backendAzureRmResourceGroupName: $(tfStateResourceGroup)
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
