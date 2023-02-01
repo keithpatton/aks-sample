@@ -38,8 +38,8 @@ stages:
 - stage: Infrastructure
   displayName: Ensure Infrastructure
   jobs:
-  - job: Terraform
-    displayName: Terraform Azure Resources
+  - job: Infrastructure
+    displayName: Ensure Azure Resources
     pool:
       vmImage: ubuntu-latest
     steps:
