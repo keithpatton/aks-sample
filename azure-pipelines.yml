@@ -9,24 +9,30 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+  appName: 'aksdemo' 
+  location: 'australiaeast'
   svcConnAzureRm: 'Keith Patton - VS Professional Sub'
+  unique_suffix: 'qpe'
+  acrName: 'acr$(appName)$(unique_suffix)'
+  imageName: 'aksworkloadidentitysampleapi'
+  imageTagName: 'latest'
+  aksResourceGroup: 'rg-$(appName)'
+  aksClusterName: 'aks-$(appName)'
+  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-$(appName)'
+  aksNamespace: 'default'
+  aksWorkloadIdentityName: 'aks-$(appName)'
+  aksWorkloadIdentityClientId: '{dynamic}'
+  aksNodeCount: 1
+  aksVmSize: 'Standard_B2s'
+  infraTags: '{ Application = "Azure AKS Sample" }'
+  helmReleaseName: 'aks-sample'
+  helmChartVersion: '0.4.0'
+  kvName: 'kv-$(appName)-$(unique_suffix)'
+  tag: '$(Build.BuildId)'
   tfStateResourceGroup: 'rg-terraform'
   tfStateStorageAccount: 'terraformstateakssample'
   tfStateContainerName: 'tfstate'
   tfStateFileName: 'terraform.tfstate'
-  acrName: 'acraksdemoqpe'
-  imageName: 'aksworkloadidentitysampleapi'
-  imageTagName: 'latest'
-  kvName: 'kv-aksdemo-qpe'
-  aksResourceGroup: 'rg-aksdemo'
-  aksClusterName: 'aks-aksdemo'
-  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-aksdemo'
-  aksNamespace: 'default'
-  aksWorkloadIdentityName: 'aks-aksdemo'
-  aksWorkloadIdentityClientId: '{dynamic}'
-  helmReleaseName: 'aks-sample'
-  helmChartVersion: '0.4.0'
 
 stages:
 - stage: Infrastructure
@@ -55,7 +61,15 @@ stages:
         environmentServiceNameAzureRM: $(svcConnAzureRm)
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
-        commandOptions: '-auto-approve -var-file="../shared.tfvars" -var-file="../infra.tfvars"'
+        commandOptions: '
+          -auto-approve 
+          -var "app_name=$(appName)"
+          -var "location=$(location)"
+          -var "aks_namespace=$(aksNamespace)"
+          -var "unique_suffix=$(uniqueSuffix)"
+          -var "aks_vm_size=$(aksVmSize)"
+          -var "aks_node_count=$(aksNodeCount)"
+          -var "tags=$(infraTags)"'
         backendAzureRmResourceGroupName: $(tfStateResourceGroup)
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
@@ -116,5 +130,10 @@ stages:
         chartPath: '$(System.DefaultWorkingDirectory)/Terraform/Deploy/aks-sample'
         chartVersion: $(helmChartVersion)
         releaseName: $(helmReleaseName)
-        overrideValues: 'aksNamespace=$(aksNamespace),workloadIdentityServiceAccountName=$(aksWorkloadIdentityServiceAccountName),keyVaultName=$(kvName),azureContainerRegistryName=$(acrName),workloadIdentityClientId=$(aksWorkloadIdentityClientId)'
+        overrideValues: '
+          aksNamespace=$(aksNamespace),
+          workloadIdentityServiceAccountName=$(aksWorkloadIdentityServiceAccountName),
+          keyVaultName=$(kvName),
+          azureContainerRegistryName=$(acrName),
+          workloadIdentityClientId=$(aksWorkloadIdentityClientId)'
         arguments: '--install --atomic'
