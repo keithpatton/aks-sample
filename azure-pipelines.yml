@@ -23,7 +23,7 @@ parameters:
   default: 'aksdemo'
 - name: tenants
   displayName: 'Tenant List'
-  type: string
+  type: object
   default: ['tenant1', 'tenant2']
 
 variables:
