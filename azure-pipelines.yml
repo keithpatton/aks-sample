@@ -17,9 +17,10 @@ variables:
   imageName: 'aksworkloadidentitysampleapi'
   imageTagName: 'latest'
   aksResourceGroup: 'rg-$(appName)'
-  aksClusterName: 'aks-$(appName)'
+  aksName: 'aks-$(appName)'
   aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-$(appName)'
   aksNamespace: 'default'
+  aksFederatedIdentityName: 'fic-$(aksName)'
   aksWorkloadIdentityName: 'aks-$(appName)'
   aksWorkloadIdentityClientId: '{dynamic}'
   aksNodeCount: 1
@@ -38,7 +39,7 @@ stages:
   displayName: Ensure Infrastructure
   jobs:
   - job: Terraform
-    displayName: Ensure Azure Resources
+    displayName: Terraform Azure Resources
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -62,12 +63,16 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
         commandOptions: 
           --auto-approve
-          -var app_name=$(appName)
-          -var location=$(location)
-          -var unique_suffix=$(uniqueSuffix)
+          -var rg_name=$(aksResourceGroup)
+          -var acr_name=$(acrName)
+          -var aks_name=$(aksName)
+          -var aks_workload_identity_name=$(aksWorkloadIdentityName)
+          -var aks_federated_identity_name=$(aksFederatedIdentityName)
+          -var aks_namespace=$(aksNamespace)
+          -var aks_workload_identity_service_account_name=$(aksWorkloadIdentityServiceAccountName)
           -var aks_vm_size=$(aksVmSize)
           -var aks_node_count=$(aksNodeCount)
-          -var aks_namespace=$(aksNamespace)
+          -var kv_name=$(kvName)      
         backendAzureRmResourceGroupName: $(tfStateResourceGroup)
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
@@ -75,7 +80,7 @@ stages:
 - stage: Image
   displayName: Build and Push Image
   jobs:
-  - job: Build
+  - job: BuildAndPush
     displayName: Build Image
     pool:
       vmImage: ubuntu-latest
@@ -107,7 +112,7 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - task: AzureCLI@2
-      displayName: 'Get Azure Resoure Values'
+      displayName: 'Get Azure Resource Values'
       inputs:
         azureSubscription: $(svcConnAzureRm)
         scriptType: 'pscore'
@@ -116,12 +121,12 @@ stages:
           $aksWorkloadIdentityClientId = (az identity show --resource-group $(aksResourceGroup) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
           Write-Output("##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId")
     - task: HelmDeploy@0
-      displayName: 'Deploy Chart'
+      displayName: 'Deploy Helm Chart'
       inputs:
         connectionType: 'Azure Resource Manager'
         azureSubscription: $(svcConnAzureRm)
         azureResourceGroup: $(aksResourceGroup)
-        kubernetesCluster: $(aksClusterName)
+        kubernetesCluster: $(aksName)
         namespace: $(aksNamespace)
         command: 'upgrade'
         chartType: 'FilePath'
