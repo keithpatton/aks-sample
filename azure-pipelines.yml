@@ -176,7 +176,8 @@ stages:
         enableTransforms: false
         enableRecursion: false
         useLegacyPattern: false
-        enableTelemetry: true      
+        enableTelemetry: true   
+        verbosity: 'detailed'   
     - task: HelmDeploy@0
       displayName: 'Deploy Helm Chart'
       inputs:
