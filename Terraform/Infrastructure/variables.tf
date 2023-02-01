@@ -3,6 +3,11 @@
   description = "The name of the resource group to be used to provision core Azure resources."
 }
 
+variable "rg_aks_nodes_name" {
+  type        = string
+  description = "The name of the resource group to be used to provision AKS Node resources."
+}
+
 variable "location" {
   type        = string
   description = "The location to create azure resources within."
