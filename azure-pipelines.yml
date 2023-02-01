@@ -60,7 +60,7 @@ stages:
         environmentServiceNameAzureRM: $(svcConnAzureRm)
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
-        commandOptions: |
+        commandOptions: 
           --auto-approve
           -var app_name=$(appName)
           -var location=$(location)
