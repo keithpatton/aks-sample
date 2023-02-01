@@ -3,6 +3,11 @@
   description = "The name of the resource group to be used to provision core Azure resources."
 }
 
+variable "location" {
+  type        = string
+  description = "The location to create azure resources within."
+}
+
 variable "acr_name" { 
   description = "The name of the Azure Container Registry instance."
   type        = string
