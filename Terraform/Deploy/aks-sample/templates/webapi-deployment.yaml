@@ -19,7 +19,7 @@ spec:
       serviceAccountName: {{ .Values.workloadIdentityServiceAccountName }}
       containers:
         - name: webapi
-          image: {{ .Values.azureContainerRegistryName }}.azurecr.io/aksworkloadidentitysampleapi:latest
+          image: {{ .Values.azureContainerRegistryName }}.azurecr.io/aksworkloadidentitysampleapi:{{ .Values.imageTag }}
           imagePullPolicy: Always
           ports:
             - containerPort: 80
