@@ -129,9 +129,9 @@ stages:
         chartVersion: $(helmChartVersion)
         releaseName: $(helmReleaseName)
         overrideValues: |
-          aksNamespace=$(aksNamespace),
-          workloadIdentityServiceAccountName=$(aksWorkloadIdentityServiceAccountName),
-          keyVaultName=$(kvName),
-          azureContainerRegistryName=$(acrName),
+          aksNamespace=$(aksNamespace)
+          workloadIdentityServiceAccountName=$(aksWorkloadIdentityServiceAccountName)
+          keyVaultName=$(kvName)
+          azureContainerRegistryName=$(acrName)
           workloadIdentityClientId=$(aksWorkloadIdentityClientId)
         arguments: '--atomic'
