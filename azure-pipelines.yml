@@ -64,6 +64,7 @@ stages:
         commandOptions: 
           --auto-approve
           -var rg_name=$(aksResourceGroup)
+          -var location=$(location)
           -var acr_name=$(acrName)
           -var aks_name=$(aksName)
           -var aks_workload_identity_name=$(aksWorkloadIdentityName)
