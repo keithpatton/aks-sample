@@ -21,7 +21,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
   dns_prefix          = "${var.aks_name}"
-  node_resource_group = "$var.rg_aks_nodes_name}"
+  node_resource_group = "${var.rg_aks_nodes_name}"
 
   storage_profile {
     blob_driver_enabled = true
