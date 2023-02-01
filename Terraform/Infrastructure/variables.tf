@@ -27,8 +27,3 @@ variable "aks_node_count" {
   description = "Number of nodes to deploy for Kubernetes"
   type        = number
 }
-
-variable "tags" {
-  description = "Tags to add to resources"
-  type        = map(string)
-}

@@ -5,8 +5,8 @@ storageClassBlobName: "azureblob-nfs-standard"
 pvcBlobName: "azure-blob"
 
 # dynamic values (set via Terraform, see main.tf)
-aksNamespace: "dynamic"
-workloadIdentityServiceAccountName: "dynamic"
+aksNamespace: "default"
+workloadIdentityServiceAccountName: ""
 workloadIdentityClientId: "dynamic"
 keyVaultName: "dynamic"
 azureContainerRegistryName: "dynamic"

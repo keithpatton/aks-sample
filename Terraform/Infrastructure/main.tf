@@ -13,7 +13,6 @@ locals {
 resource "azurerm_resource_group" "default" {
   name     = "${local.rg_name}"
   location = var.location
-  tags     = var.tags
 }
 
 ### Azure Container Registry
@@ -51,8 +50,6 @@ resource "azurerm_kubernetes_cluster" "default" {
   identity {
     type = "SystemAssigned"
   }
-
-  tags = var.tags
 
 }
 
@@ -103,8 +100,6 @@ resource "azurerm_key_vault" "default" {
   purge_protection_enabled   = false
 
   sku_name = "standard"
-
-  tags = var.tags
 }
 
 ### Key Vault Access Policy - AKS
