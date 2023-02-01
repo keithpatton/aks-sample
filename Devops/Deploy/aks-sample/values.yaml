@@ -3,7 +3,7 @@ tenants: #{tenants}#
 storageClassBlobName: #{aksStorageClassBlobName}#
 pvcBlobName: #{aksPvcBlobName}#
 aksNamespace: #{aksNamespace}#
-workloadIdentityServiceAccountName: #{aksWorkloadIdentityServiceAccountName}
-workloadIdentityClientId: #{aksWorkloadIdentityClientId}
-keyVaultName: #{kvName}
-azureContainerRegistryName: #{acrName}
+workloadIdentityServiceAccountName: #{aksWorkloadIdentityServiceAccountName}#
+workloadIdentityClientId: #{aksWorkloadIdentityClientId}#
+keyVaultName: #{kvName}#
+azureContainerRegistryName: #{acrName}#
