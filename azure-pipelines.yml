@@ -24,11 +24,13 @@ parameters:
 - name: tenants
   displayName: 'Tenant List'
   type: object
-  default: ['tenant1', 'tenant2']
+  default: 
+    - tenant1
+    - tenant2
 
 variables:
   appName: ${{ parameters.appName }}
-  helmTenants: replace(${{ parameters.appName }},'[','{').replace(${{ parameters.appName }},']','}')
+  tenants: ${{ parameters.tenants }}
   location: 'australiaeast'
   svcConnAzureRm: 'Keith Patton - VS Professional Sub'
   uniqueSuffix: 'qpe'
@@ -44,6 +46,8 @@ variables:
   aksWorkloadIdentityName: 'aks-$(appName)'
   aksWorkloadIdentityClientId: '{dynamic}'
   aksNodeCount: 1
+  aksPvcBlobName: 'azure-blob'
+  aksStorageClassBlobName: 'azureblob-nfs-standard'
   aksVmSize: 'Standard_B2s'
   helmReleaseName: 'aks-sample'
   helmChartVersion: '0.5.0'
@@ -161,7 +165,20 @@ stages:
         inlineScript: |
           $aksWorkloadIdentityClientId = (az identity show --resource-group $(rgName) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
           echo '##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId'
-          echo $helmTenants
+    - task: replacetokens@5
+      inputs:
+        targetFiles: |
+          **/values.yaml
+        encoding: 'auto'
+        tokenPattern: 'default'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
+        actionOnNoFiles: 'warn'
+        enableTransforms: false
+        enableRecursion: false
+        useLegacyPattern: false
+        enableTelemetry: true      
     - task: HelmDeploy@0
       displayName: 'Deploy Helm Chart'
       inputs:
@@ -175,12 +192,4 @@ stages:
         chartPath: '$(System.DefaultWorkingDirectory)/Devops/Deploy/aks-sample'
         chartVersion: $(helmChartVersion)
         releaseName: $(helmReleaseName)
-        overrideValues: |
-          imageTag=$(imageTag)
-          aksNamespace=$(aksNamespace)
-          workloadIdentityServiceAccountName=$(aksWorkloadIdentityServiceAccountName)
-          keyVaultName=$(kvName)
-          azureContainerRegistryName=$(acrName)
-          workloadIdentityClientId=$(aksWorkloadIdentityClientId)
-          tenants=$(helmTenants)
         arguments: '--atomic'
