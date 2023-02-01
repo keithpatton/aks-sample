@@ -15,7 +15,7 @@ variables:
   uniqueSuffix: 'qpe'
   acrName: 'acr$(appName)$(uniqueSuffix)'
   imageName: 'aksworkloadidentitysampleapi'
-  imageTagName: 'latest'
+  imageTag: '$(Build.BuildId)'
   rgName: 'rg-$(appName)'
   rgAksNodesName: 'rg-k8s-$(appName)'
   aksName: 'aks-$(appName)'
@@ -29,7 +29,6 @@ variables:
   helmReleaseName: 'aks-sample'
   helmChartVersion: '0.5.0'
   kvName: 'kv-$(appName)-$(uniqueSuffix)'
-  tag: '$(Build.BuildId)'
   tfStateResourceGroup: 'rg-terraform'
   tfStateStorageAccount: 'terraformstateakssample'
   tfStateContainerName: 'tfstate'
@@ -95,7 +94,7 @@ stages:
         repository: $(imageName)
         dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
         buildContext: '$(Build.SourcesDirectory)'
-        tags: $(imageTagName)
+        tags: $(imageTag)
     - task: AzureCLI@2
       displayName: 'Push Image'
       inputs:
@@ -104,8 +103,8 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az acr login --name $(acrName)
-          docker tag $(imageName):$(imageTagName) $(acrName).azurecr.io/$(imageName):$(imageTagName)
-          docker push $(acrName).azurecr.io/$(imageName):$(imageTagName)
+          docker tag $(imageName):$(imageTag) $(acrName).azurecr.io/$(imageName):$(imageTag)
+          docker push $(acrName).azurecr.io/$(imageName):$(imageTag)
 - stage: Deploy
   displayName: Deploy Application
   jobs:
@@ -137,6 +136,7 @@ stages:
         chartVersion: $(helmChartVersion)
         releaseName: $(helmReleaseName)
         overrideValues: |
+          imageTag=$(imageTag)
           aksNamespace=$(aksNamespace)
           workloadIdentityServiceAccountName=$(aksWorkloadIdentityServiceAccountName)
           keyVaultName=$(kvName)
