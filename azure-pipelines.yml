@@ -23,14 +23,13 @@ parameters:
   default: 'aksdemo'
 - name: tenants
   displayName: 'Tenant List'
-  type: object
-  default: 
-    - tenant1
-    - tenant2
+  type: string
+  default: 'tenant1,tenant2'
 
 variables:
   appName: ${{ parameters.appName }}
-  tenants: ${{ parameters.tenants }}
+  tenants: ${{ each tenant in parameters.tenants.split(',') }}
+    - ${{ tenant }}
   location: 'australiaeast'
   svcConnAzureRm: 'Keith Patton - VS Professional Sub'
   uniqueSuffix: 'qpe'
