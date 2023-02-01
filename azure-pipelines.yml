@@ -1,6 +1,6 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+# 1. Ensure Infrastructure
+# 2. Build and Push Image
+# 4. Deploy Image
 
 trigger: none
 #- master
@@ -9,8 +9,26 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+  appName: 'aksdemo' 
+  location: 'australiaeast'
   svcConnAzureRm: 'Keith Patton - VS Professional Sub'
+  uniqueSuffix: 'qpe'
+  acrName: 'acr$(appName)$(uniqueSuffix)'
+  imageName: 'aksworkloadidentitysampleapi'
+  imageTagName: 'latest'
+  aksResourceGroup: 'rg-$(appName)'
+  aksClusterName: 'aks-$(appName)'
+  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-$(appName)'
+  aksNamespace: 'default'
+  aksWorkloadIdentityName: 'aks-$(appName)'
+  aksWorkloadIdentityClientId: '{dynamic}'
+  aksNodeCount: 1
+  aksVmSize: 'Standard_B2s'
+  infraTags: '{ Application = ''Azure AKS Sample'' }'
+  helmReleaseName: 'aks-sample'
+  helmChartVersion: '0.4.0'
+  kvName: 'kv-$(appName)-$(uniqueSuffix)'
+  tag: '$(Build.BuildId)'
   tfStateResourceGroup: 'rg-terraform'
   tfStateStorageAccount: 'terraformstateakssample'
   tfStateContainerName: 'tfstate'
@@ -43,17 +61,24 @@ stages:
         environmentServiceNameAzureRM: $(svcConnAzureRm)
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
-        commandOptions: '-auto-approve -var-file="../shared.tfvars" -var-file="../infra.tfvars"'
+        commandOptions: "
+          --auto-approve 
+          -var 'app_name=$(appName)'
+          -var 'location=$(location)'
+          -var 'aks_namespace=$(aksNamespace)'
+          -var 'unique_suffix=$(uniqueSuffix)'
+          -var 'aks_vm_size=$(aksVmSize)'
+          -var 'aks_node_count=$(aksNodeCount)'
+          -var \"tags=$(infraTags)\""
         backendAzureRmResourceGroupName: $(tfStateResourceGroup)
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
         backendAzureRmKey: $(tfStateFileName)
-- stage: Build
-  displayName: Build image
+- stage: Image
+  displayName: Build and Push Image
   jobs:
   - job: Build
-    condition: eq(1,2)
-    displayName: Build
+    displayName: Build Image
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -61,7 +86,54 @@ stages:
       displayName: Build Image
       inputs:
         command: build
+        repository: $(imageName)
         dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
         buildContext: '$(Build.SourcesDirectory)'
-        tags: |
-          $(tag)   
+        tags: $(imageTagName)
+    - task: AzureCLI@2
+      displayName: 'Push Image'
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az acr login --name $(acrName)
+          docker tag $(imageName):$(imageTagName) $(acrName).azurecr.io/$(imageName):$(imageTagName)
+          docker push $(acrName).azurecr.io/$(imageName):$(imageTagName)
+- stage: Deploy
+  displayName: Deploy Application
+  jobs:
+  - job: Deploy
+    displayName: Deploy Application
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Get Azure Resoure Values'
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $aksWorkloadIdentityClientId = (az identity show --resource-group $(aksResourceGroup) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
+          Write-Output("##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId")
+    - task: HelmDeploy@0
+      displayName: 'Deploy Chart'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscription: $(svcConnAzureRm)
+        azureResourceGroup: $(aksResourceGroup)
+        kubernetesCluster: $(aksClusterName)
+        namespace: $(aksNamespace)
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: '$(System.DefaultWorkingDirectory)/Terraform/Deploy/aks-sample'
+        chartVersion: $(helmChartVersion)
+        releaseName: $(helmReleaseName)
+        overrideValues: '
+          aksNamespace=$(aksNamespace),
+          workloadIdentityServiceAccountName=$(aksWorkloadIdentityServiceAccountName),
+          keyVaultName=$(kvName),
+          azureContainerRegistryName=$(acrName),
+          workloadIdentityClientId=$(aksWorkloadIdentityClientId)'
+        arguments: '--install --atomic'
