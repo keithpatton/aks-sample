@@ -42,7 +42,7 @@ stages:
     displayName: Ensure Azure Resources
     pool:
       vmImage: ubuntu-latest
-    steps:
+    steps:    
     - task: AzureCLI@2
       displayName: 'Enable Workload Identity Preview Feature'
       inputs:
@@ -53,6 +53,16 @@ stages:
           az extension add --name aks-preview
           az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
           az provider register --namespace Microsoft.ContainerService
+    - task: AzureCLI@2
+      displayName: 'Ensure Storage Account and Container for Terraform State'
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az group create --location $(location) --name $(tfStateResourceGroup)
+          az storage account create -n $(tfStateStorageAccount) -g $(tfStateResourceGroup) -l $(location) --sku Standard_LRS
+          az storage container create -n $(tfStateContainerName) --account-name $(tfStateStorageAccount) -g $(tfStateResourceGroup)
     - task: TerraformTaskV3@3
       displayName: Terraform Init 
       inputs:
