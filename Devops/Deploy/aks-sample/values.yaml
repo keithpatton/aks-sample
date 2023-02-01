@@ -1,13 +1,10 @@
-imageTag: latest
+imageTag: #{imageTag}#
 tenants: 
-  - tenant1
-  - tenant2
-storageClassBlobName: "azureblob-nfs-standard"
-pvcBlobName: "azure-blob"
-
-# dynamic values
-aksNamespace: "default"
-workloadIdentityServiceAccountName: ""
-workloadIdentityClientId: "dynamic"
-keyVaultName: "dynamic"
-azureContainerRegistryName: "dynamic"
+  #{tenants}#
+storageClassBlobName: #{aksStorageClassBlobName}#
+pvcBlobName: #{aksPvcBlobName}#
+aksNamespace: #{aksNamespace}#
+workloadIdentityServiceAccountName: #{aksWorkloadIdentityServiceAccountName}
+workloadIdentityClientId: #{aksWorkloadIdentityClientId}
+keyVaultName: #{kvName}
+azureContainerRegistryName: #{acrName}
