@@ -24,7 +24,7 @@ parameters:
 - name: tenants
   displayName: 'Tenant List'
   type: string
-  default: "- tenant1 \n-tenant2\n"
+  default: "\n  - tenant1\n  - tenant2\n"
 
 variables:
   appName: ${{ parameters.appName }}
@@ -38,7 +38,7 @@ variables:
   rgName: 'rg-$(appName)'
   rgAksNodesName: 'rg-k8s-$(appName)'
   aksName: 'aks-$(appName)'
-  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-$(appName)'
+  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-aksdemo'
   aksNamespace: 'default'
   aksFederatedIdentityName: 'fic-$(aksName)'
   aksWorkloadIdentityName: 'aks-$(appName)'
@@ -174,7 +174,7 @@ stages:
         keepToken: false
         actionOnNoFiles: 'warn'
         enableTransforms: false
-        enableRecursion: false
+        enableRecursion: true
         useLegacyPattern: false
         enableTelemetry: true   
         verbosity: 'detailed'   
