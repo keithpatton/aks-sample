@@ -16,8 +16,14 @@ trigger:
 resources:
 - repo: self
 
+parameters:
+- name: appName
+  displayName: App Name (Up to 12 alphanumeric chars)
+  type: string
+  default: 'aksdemo'
+
 variables:
-  appName: 'aksdemo' 
+  appName: ${{ parameters.appName }}
   location: 'australiaeast'
   svcConnAzureRm: 'Keith Patton - VS Professional Sub'
   uniqueSuffix: 'qpe'
