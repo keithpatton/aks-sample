@@ -54,7 +54,7 @@ stages:
           az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
           az provider register --namespace Microsoft.ContainerService
     - task: AzureCLI@2
-      displayName: 'Ensure Storage Account and Container for Terraform State'
+      displayName: 'Ensure Terraform State Storage Account and Container'
       inputs:
         azureSubscription: $(svcConnAzureRm)
         scriptType: 'pscore'
