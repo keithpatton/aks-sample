@@ -16,7 +16,8 @@ variables:
   acrName: 'acr$(appName)$(uniqueSuffix)'
   imageName: 'aksworkloadidentitysampleapi'
   imageTagName: 'latest'
-  aksResourceGroup: 'rg-$(appName)'
+  rgName: 'rg-$(appName)'
+  rgAksNodesName: 'rg-k8s-$(appName)'
   aksName: 'aks-$(appName)'
   aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-$(appName)'
   aksNamespace: 'default'
@@ -63,7 +64,8 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Infrastructure'
         commandOptions: 
           --auto-approve
-          -var rg_name=$(aksResourceGroup)
+          -var rg_name=$(rgName)
+          -var rg_aks_nodes_name=$(rgAksNodesName)
           -var location=$(location)
           -var acr_name=$(acrName)
           -var aks_name=$(aksName)
@@ -119,14 +121,14 @@ stages:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          $aksWorkloadIdentityClientId = (az identity show --resource-group $(aksResourceGroup) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
+          $aksWorkloadIdentityClientId = (az identity show --resource-group $(rgName) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
           Write-Output("##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId")
     - task: HelmDeploy@0
       displayName: 'Deploy Helm Chart'
       inputs:
         connectionType: 'Azure Resource Manager'
         azureSubscription: $(svcConnAzureRm)
-        azureResourceGroup: $(aksResourceGroup)
+        azureResourceGroup: $(rgName)
         kubernetesCluster: $(aksName)
         namespace: $(aksNamespace)
         command: 'upgrade'
