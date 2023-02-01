@@ -48,7 +48,7 @@ variables:
   aksStorageClassBlobName: 'azureblob-nfs-standard'
   aksVmSize: 'Standard_B2s'
   helmReleaseName: 'aks-sample'
-  helmChartVersion: '0.6.0'
+  helmChartVersion: '0.6.1'
   kvName: 'kv-$(appName)-$(uniqueSuffix)'
   tfStateResourceGroup: 'rg-terraform'
   tfStateStorageAccount: 'terraformstateakssample'
