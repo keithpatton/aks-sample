@@ -27,7 +27,7 @@ variables:
   aksNodeCount: 1
   aksVmSize: 'Standard_B2s'
   helmReleaseName: 'aks-sample'
-  helmChartVersion: '0.4.0'
+  helmChartVersion: '0.5.0'
   kvName: 'kv-$(appName)-$(uniqueSuffix)'
   tag: '$(Build.BuildId)'
   tfStateResourceGroup: 'rg-terraform'
