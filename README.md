@@ -5,51 +5,38 @@ Provides a working example of :
 - AKS Workload Identity using the Asp.Net Core Api project template with minor modifications. 
 - Dynamically provisioned Persistent Volumes backed by Azure Blob Storage
 
-Uses Terraform to provision infrastructure and deploy the application using the Azure and Helm Providers.
+Uses Azure Devops Pipelines to provision infrastructure with Terraform and deploy the application using Helm.
 
 ## Pre-requisites
-- Azure Account to create/manage resources on Azure Subscription and Azure AD tenancy
+- Azure Account (owner of an Azure Subscription)
+- Azure Devops Account (Free version is fine)
+- Azure CLI (Cloud Shell is fine)
+
+For Local Development (optional)
 - Visual Studio 2022+
 - Docker Desktop
-- Azure CLI
-- Terraform - Ensure [Authenticated for Azure](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs#authenticating-to-azure)
-- Helm
 
 ### Configure Azure AD Workload Identity (Preview)
+TODO: Move to AzD Pipeline
 ```
 az extension add --name aks-preview
 az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
 az provider register --namespace Microsoft.ContainerService
 ```
 
-## Check Variables
-Terraform is used to provision infrastructure and deploy the application (using the Helm Provider).
+## Azure Devops SetUp
+TODO: Finalise Doco
+- Create new pipeline and point to azure-pipelines.yml 
+- Ensure service connection set to to Azure
+- Ensure service connection has Owner rights on subscription
+- Check over variables and update as required
+  - It is advised only to update the app_name value (keep it under 12 alphanumeric chars) within shared.tfvars.
 
-Within the Terraform folder:
-- shared.tfvars - values used for infrastructure and application deployment. 
-- infra.tfvars - values used only as part of the infrastructure provisioning
-
-It is advised only to update the app_name value (keep it under 12 alphanumeric chars) within shared.tfvars.
-
-## Create Infrastructure
-Run from from repo root:
-```
-terraform -chdir="Terraform/Infrastructure" init
-terraform -chdir="Terraform/Infrastructure" apply -auto-approve -var-file="..\shared.tfvars" -var-file="..\infra.tfvars"
-```
-
-## Publish Application Image to the Container Registry
-- Right-click the project in Visual Studio and select 'Publish'.
-- Select Docker Container Registry > Azure Container Registry.
-- Select the resource group used during setup and then the name of the ACR that was created with terraform earlier
-- Click on Publish button which will build and deploy your application image to the ACR.
-
-## Deploy Application to AKS Cluster
-Run from from repo root:
-```
-terraform -chdir="Terraform/Deploy" init
-terraform -chdir="Terraform/Deploy" apply -auto-approve -var-file="..\shared.tfvars" 
-```
+## Run Pipeline
+TODO: Finalise Doco
+ - Creates/Updates Infrastructure (Terraform)
+ - Builds and Publishes Image
+ - Deploys to AKS (Helm)
 
 ## Verify Application is Working
 - Execute the following to watch for the EXTERNAL_IP value to be published for the pod: ```watch kubectl get services```
@@ -64,15 +51,11 @@ terraform -chdir="Terraform/Deploy" apply -auto-approve -var-file="..\shared.tfv
 - Azure Blob Storage is used with dynamically provisioned Persitent Volumes which allow for persisent storage which can be shared between pods.
 
 ## Clean Up
-To clean up all resourcs, run from from within the project directory:
- ```
-terraform -chdir="Terraform/Deploy" destroy -auto-approve -var-file="..\shared.tfvars"
-terraform -chdir="Terraform/Infrastructure" destroy -auto-approve -var-file="..\shared.tfvars" -var-file="..\infra.tfvars"
-```
+ - TODO - TF Destroy Pipeline
 
 ## Running Locally 
 
-You can also run things locally with a few steps:
+You can also run things locally afer the pipeline has run successfully the first time with a few steps:
 
  Configure Key Vault for User:
  - Confirm your account via Tools > Options > Azure Service Authentication > Account Selection.
