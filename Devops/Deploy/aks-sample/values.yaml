@@ -1,5 +1,6 @@
 imageTag: #{imageTag}#
-tenants: #{tenantsYaml}#
+tenants: 
+  #{tenantsYaml}#
 storageClassBlobName: #{aksStorageClassBlobName}#
 pvcBlobName: #{aksPvcBlobName}#
 aksNamespace: #{aksNamespace}#
