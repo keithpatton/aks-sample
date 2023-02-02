@@ -203,7 +203,7 @@ stages:
         releaseName: $(helmReleaseName)
         arguments: '--debug --atomic --reset-values'
   - ${{ each tenant in parameters.tenantsObj }}:
-    - job: TenantSpecificWork-${{ tenant }}
+    - job: TenantSpecificWork_${{ tenant }}
       displayName: ${{ tenant }}
       pool:
         vmImage: ubuntu-latest
