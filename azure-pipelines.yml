@@ -186,8 +186,9 @@ stages:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          Install-Module powershell-yaml
-          $tenants= ConvertFrom-Json -InputObject ${{ convertToJson(parameters.tenantsObj) }}
+          Install-Module powershell-yaml -Force
+          $tenantsJson = ${{ parameters.tenantsObj }}
+          $tenants = ConvertFrom-Json -InputObject $tenantsJson
           $tenantsYaml = ConvertTo-Yaml $tenants
           Write-Host $tenantsYaml
           Write-Host "##vso[task.setvariable variable=tenantsYaml;]$tenantsYaml"          
