@@ -31,6 +31,7 @@ parameters:
 variables:
   appName: ${{ parameters.appName }}
   appVersion: "0.1.1"
+  tenantsString: "\n  - tenant1\n  - tenant2"
   tenantsYaml: '{dynamic}'
   location: 'australiaeast'
   svcConnAzureRm: 'Keith Patton - VS Professional Sub'
