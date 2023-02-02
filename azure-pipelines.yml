@@ -215,8 +215,8 @@ stages:
   - job: DeployComplete
     displayName: Complete Deployment After Tenant Specific Work
     dependsOn: 
-      - ${{ each tenant in parameters.tenantsObj }}:
-        TenantWork_${{ tenant }}
+    - ${{ each tenant in parameters.tenantsObj }}:
+      - TenantWork_${{ tenant }}
     pool:
       vmImage: ubuntu-latest
     steps:
