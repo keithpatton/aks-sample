@@ -204,7 +204,8 @@ stages:
         arguments: '--debug --atomic --reset-values'
   - ${{ each tenant in parameters.tenantsObj }}:
     - job: TenantSpecificWork_${{ tenant }}
-      displayName: ${{ tenant }}
+      displayName: ${{ tenant }} Specific Work 
+      dependsOn: Deploy
       pool:
         vmImage: ubuntu-latest
       steps:
