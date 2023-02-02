@@ -47,8 +47,11 @@ variables:
   aksPvcBlobName: 'azure-blob'
   aksStorageClassBlobName: 'azureblob-nfs-standard'
   aksVmSize: 'Standard_B2s'
+  helmChartDescription: 'AKS Sample App'
   helmReleaseName: 'aks-sample'
+  helmChartName: 'aks-sample'  
   helmChartVersion: '0.6.1'
+  helmAppVersion: '1.0.0'
   kvName: 'kv-$(appName)-$(uniqueSuffix)'
   tfStateResourceGroup: 'rg-terraform'
   tfStateStorageAccount: 'terraformstateakssample'
@@ -164,8 +167,10 @@ stages:
           $aksWorkloadIdentityClientId = (az identity show --resource-group $(rgName) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
           Write-Host "##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId"
     - task: replacetokens@5
+      displayName: 'Replace tokens with variables'
       inputs:
         targetFiles: |
+          **/Chart.yaml
           **/values.yaml
         encoding: 'auto'
         tokenPattern: 'default'
@@ -189,6 +194,5 @@ stages:
         command: 'upgrade'
         chartType: 'FilePath'
         chartPath: '$(System.DefaultWorkingDirectory)/Devops/Deploy/aks-sample'
-        chartVersion: $(helmChartVersion)
         releaseName: $(helmReleaseName)
         arguments: '--atomic'
