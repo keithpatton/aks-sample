@@ -22,7 +22,7 @@ parameters:
   type: string
   default: 'aksdemo'
 - name: tenants
-  displayName: 'Tenant List (Objects)'
+  displayName: 'Tenant List'
   type: object
   default: 
     - tenant1
