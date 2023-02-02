@@ -25,6 +25,12 @@ parameters:
   displayName: 'Tenant List'
   type: string
   default: "\n  - tenant1\n  - tenant2"
+- name: tenantsObj
+  displayName: 'Tenant List (Objects)'
+  type: object
+  default: 
+    - tenant1
+    - tenant2
 
 variables:
   appName: ${{ parameters.appName }}
@@ -196,3 +202,10 @@ stages:
         chartPath: '$(System.DefaultWorkingDirectory)/Devops/Deploy/aks-sample'
         releaseName: $(helmReleaseName)
         arguments: '--debug --atomic --reset-values'
+  - ${{ each tenant in parameters.tenantsObj }}:
+    - job: TenantSpecificWork
+      displayName: ${{ tenant }}
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+      - script: echo ${{ tenant }}
