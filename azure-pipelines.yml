@@ -183,7 +183,7 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           Install-Module powershell-yaml -Force
-          $tenantsYaml = (ConvertTo-Yaml (ConvertFrom-Json -InputObject '${{ convertToJson(parameters.tenants) }}')).ReplaceLineEndings('\n')
+          $tenantsYaml = (ConvertTo-Yaml (ConvertFrom-Json -InputObject '${{ convertToJson(parameters.tenants) }}')).ReplaceLineEndings("\\n")
           Write-Host "##vso[task.setvariable variable=tenantsYaml;]$tenantsYaml"
     - task: replacetokens@5
       displayName: 'Replace tokens with variables'
