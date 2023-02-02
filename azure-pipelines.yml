@@ -53,12 +53,14 @@ variables:
   aksPvcBlobName: 'azure-blob'
   aksStorageClassBlobName: 'azureblob-nfs-standard'
   aksVmSize: 'Standard_B2s'
+  kvName: 'kv-$(appName)-$(uniqueSuffix)'
+  
   helmChartDescription: 'AKS Sample App'
   helmReleaseName: 'aks-sample'
   helmChartName: 'aks-sample'  
   helmChartVersion: '0.6.1'
   helmAppVersion: '1.0.0'
-  kvName: 'kv-$(appName)-$(uniqueSuffix)'
+
   tfStateResourceGroup: 'rg-terraform'
   tfStateStorageAccount: 'terraformstateakssample'
   tfStateContainerName: 'tfstate'
@@ -203,10 +205,18 @@ stages:
         releaseName: $(helmReleaseName)
         arguments: '--debug --atomic --reset-values'
   - ${{ each tenant in parameters.tenantsObj }}:
-    - job: TenantSpecificWork_${{ tenant }}
+    - job: TenantWork_${{ tenant }}
       displayName: ${{ tenant }} Specific Work 
       dependsOn: Deploy
       pool:
         vmImage: ubuntu-latest
       steps:
       - script: echo ${{ tenant }}
+  - job: DeployComplete
+    displayName: Complete Deployment After Tenant Specific Work
+    - ${{ each tenant in parameters.tenantsObj }}:
+      dependsOn: TenantWork_${{ tenant }}
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - script: echo 'Completed Deployment After Tenant Specific Work'
