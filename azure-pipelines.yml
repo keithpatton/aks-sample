@@ -214,7 +214,7 @@ stages:
       - script: echo ${{ tenant }}
   - job: DeployComplete
     displayName: Complete Deployment After Tenant Specific Work
-    - ${{ each tenant in parameters.tenantsObj }}:
+  - ${{ each tenant in parameters.tenantsObj }}:
       dependsOn: TenantWork_${{ tenant }}
     pool:
       vmImage: ubuntu-latest
