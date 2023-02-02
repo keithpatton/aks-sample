@@ -187,7 +187,7 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           Install-Module powershell-yaml -Force
-          $tenantsJson = ${{ parameters.tenantsObj }}
+          $tenantsJson = ConvertTo-Json ${{ parameters.tenantsObj }}
           $tenants = ConvertFrom-Json -InputObject $tenantsJson
           $tenantsYaml = ConvertTo-Yaml $tenants
           Write-Host $tenantsYaml
