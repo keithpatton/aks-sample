@@ -95,6 +95,22 @@ stages:
           az group create --location $(location) --name $(tfStateResourceGroup)
           az storage account create -n $(tfStateStorageAccount) -g $(tfStateResourceGroup) -l $(location) --sku Standard_LRS
           az storage container create -n $(tfStateContainerName) --account-name $(tfStateStorageAccount) -g $(tfStateResourceGroup)
+    - task: replacetokens@5
+      displayName: 'Replace tokens with variables'
+      inputs:
+        targetFiles: |
+          **/variables.tf
+        encoding: 'auto'
+        tokenPattern: 'default'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
+        actionOnNoFiles: 'warn'
+        enableTransforms: false
+        enableRecursion: false
+        useLegacyPattern: false
+        enableTelemetry: true   
+        verbosity: 'detailed'   
     - task: TerraformTaskV3@3
       displayName: Terraform Init 
       inputs:
@@ -115,18 +131,6 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infrastructure'
         commandOptions: 
           --auto-approve
-          -var rg_name=$(rgName)
-          -var rg_aks_nodes_name=$(rgAksNodesName)
-          -var location=$(location)
-          -var acr_name=$(acrName)
-          -var aks_name=$(aksName)
-          -var aks_workload_identity_name=$(aksWorkloadIdentityName)
-          -var aks_federated_identity_name=$(aksFederatedIdentityName)
-          -var aks_namespace=$(aksNamespace)
-          -var aks_workload_identity_service_account_name=$(aksWorkloadIdentityServiceAccountName)
-          -var aks_vm_size=$(aksVmSize)
-          -var aks_node_count=$(aksNodeCount)
-          -var kv_name=$(kvName)      
         backendAzureRmResourceGroupName: $(tfStateResourceGroup)
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
