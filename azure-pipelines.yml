@@ -24,7 +24,7 @@ parameters:
 - name: tenants
   displayName: 'Tenant List'
   type: string
-  default: "\n  - tenant1\n  - tenant2\n"
+  default: "\n  - tenant1\n  - tenant2"
 
 variables:
   appName: ${{ parameters.appName }}
@@ -195,4 +195,4 @@ stages:
         chartType: 'FilePath'
         chartPath: '$(System.DefaultWorkingDirectory)/Devops/Deploy/aks-sample'
         releaseName: $(helmReleaseName)
-        arguments: '--atomic'
+        arguments: '--debug --atomic --reset-values'
