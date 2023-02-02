@@ -24,7 +24,13 @@ parameters:
 - name: tenants
   displayName: 'Tenant List'
   type: string
-  default: "\n  - tenant1\n  - tenant2\n"
+  default: "\n  - tenant1\n  - tenant2"
+- name: tenantsObj
+  displayName: 'Tenant List (Objects)'
+  type: object
+  default: 
+    - tenant1
+    - tenant2
 
 variables:
   appName: ${{ parameters.appName }}
@@ -47,12 +53,14 @@ variables:
   aksPvcBlobName: 'azure-blob'
   aksStorageClassBlobName: 'azureblob-nfs-standard'
   aksVmSize: 'Standard_B2s'
+  kvName: 'kv-$(appName)-$(uniqueSuffix)'
+  
   helmChartDescription: 'AKS Sample App'
   helmReleaseName: 'aks-sample'
   helmChartName: 'aks-sample'  
   helmChartVersion: '0.6.1'
   helmAppVersion: '1.0.0'
-  kvName: 'kv-$(appName)-$(uniqueSuffix)'
+
   tfStateResourceGroup: 'rg-terraform'
   tfStateStorageAccount: 'terraformstateakssample'
   tfStateContainerName: 'tfstate'
@@ -195,4 +203,21 @@ stages:
         chartType: 'FilePath'
         chartPath: '$(System.DefaultWorkingDirectory)/Devops/Deploy/aks-sample'
         releaseName: $(helmReleaseName)
-        arguments: '--atomic'
+        arguments: '--debug --atomic --reset-values'
+  - ${{ each tenant in parameters.tenantsObj }}:
+    - job: TenantWork_${{ tenant }}
+      displayName: ${{ tenant }} Specific Work 
+      dependsOn: Deploy
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+      - script: echo ${{ tenant }}
+  - job: DeployComplete
+    displayName: Complete Deployment After Tenant Specific Work
+    dependsOn: 
+    - ${{ each tenant in parameters.tenantsObj }}:
+      - TenantWork_${{ tenant }}
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - script: echo 'Completed Deployment After Tenant Specific Work'
