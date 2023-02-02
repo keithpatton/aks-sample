@@ -34,13 +34,14 @@ parameters:
 
 variables:
   appName: ${{ parameters.appName }}
+  appVersion: "0.1.1"
   tenants: ${{ parameters.tenants }}
   location: 'australiaeast'
   svcConnAzureRm: 'Keith Patton - VS Professional Sub'
   uniqueSuffix: 'qpe'
   acrName: 'acr$(appName)$(uniqueSuffix)'
   imageName: 'aksworkloadidentitysampleapi'
-  imageTag: '$(Build.BuildId)'
+  imageTag: '$(appVersion)'
   rgName: 'rg-$(appName)'
   rgAksNodesName: 'rg-k8s-$(appName)'
   aksName: 'aks-$(appName)'
@@ -59,7 +60,7 @@ variables:
   helmReleaseName: 'aks-sample'
   helmChartName: 'aks-sample'  
   helmChartVersion: '0.6.1'
-  helmAppVersion: '1.0.0'
+  helmAppVersion: '$(appVersion)'
 
   tfStateResourceGroup: 'rg-terraform'
   tfStateStorageAccount: 'terraformstateakssample'
@@ -178,6 +179,18 @@ stages:
         inlineScript: |
           $aksWorkloadIdentityClientId = (az identity show --resource-group $(rgName) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
           Write-Host "##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId"
+    - task: AzureCLI@2
+      displayName: 'Get Tenants YAML'
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          Install-Module powershell-yaml
+          $tenants= ConvertFrom-Json -InputObject ${{ convertToJson(parameters.tenantsObj) }}
+          $tenantsYaml = ConvertTo-Yaml $tenants
+          Write-Host $tenantsYaml
+          Write-Host "##vso[task.setvariable variable=tenantsYaml;]$tenantsYaml"          
     - task: replacetokens@5
       displayName: 'Replace tokens with variables'
       inputs:
