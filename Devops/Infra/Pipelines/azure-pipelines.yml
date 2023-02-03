@@ -14,11 +14,11 @@ parameters:
     - tenant2
 - name: destroy
   displayName: 'Destroy Infra (Before Apply)'
-  type: object
+  type: boolean
   default: false
 - name: apply
   displayName: 'Apply Infra'
-  type: object
+  type: boolean
   default: true
 
 variables:
