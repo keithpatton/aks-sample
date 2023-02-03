@@ -115,7 +115,7 @@ resource "azurerm_key_vault_access_policy" "aks" {
   ]
 }
 
-### Passwords
+### Azure SQL Elastic Pool
 
 resource "random_password" "sql" {
   length           = 20
@@ -128,8 +128,6 @@ resource "azurerm_key_vault_secret" "sql" {
   key_vault_id = azurerm_key_vault.default.id
   depends_on = [ azurerm_key_vault.default ]
 }
-
-### Azure SQL Elastic Pool
 
 data "azuread_user" "sql" {
   user_principal_name = var.sql_ad_admin_username

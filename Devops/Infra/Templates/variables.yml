@@ -19,6 +19,7 @@ variables:
   sqlServerName: "sql-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
   sqlElasticPoolName: "elp-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
   sqlAdAdminUsername: "keith.d.patton@vista.co"
+  sqlAdminUsername: "sql-admin"
 
   tfStateResourceGroup: 'rg-${{ parameters.region }}-${{ parameters.env }}-terraform'
   tfStateStorageAccount: 'stg${{ parameters.region }}${{ parameters.env }}tfstate'
