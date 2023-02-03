@@ -1,7 +1,10 @@
 name: $(Date:yyyyMMdd)$(Rev:.r)_${{ parameters.region }}_${{ parameters.env }}
+steps:
+  - script: echo '$(Build.BuildNumber)'
 
 trigger: none
 
+resources:
 - repo: self
 
 parameters:
