@@ -30,10 +30,7 @@ variables:
   aksNamespace: 'default'
   aksFederatedIdentityName: 'fic-$(aksName)'
   aksWorkloadIdentityName: 'aks-$(appName)'
-  aksWorkloadIdentityClientId: '{dynamic}'
   aksNodeCount: 1
-  aksPvcBlobName: 'azure-blob'
-  aksStorageClassBlobName: 'azureblob-nfs-standard'
   aksVmSize: 'Standard_B2s'
   kvName: 'kv-$(appName)-$(uniqueSuffix)'
   
