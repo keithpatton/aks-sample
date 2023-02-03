@@ -14,11 +14,11 @@ parameters:
     - tenant2
 - name: destroy
   displayName: 'Destroy Infra (Before Apply)'
-  type: object
+  type: boolean
   default: false
 - name: apply
   displayName: 'Apply Infra'
-  type: object
+  type: boolean
   default: true
 
 variables:
@@ -85,7 +85,7 @@ stages:
         backendAzureRmKey: $(tfStateFileName)
     - task: TerraformTaskV3@3
       displayName: Terraform Destroy
-      condition: and(succeeded(), eq("${{ parameters.destroy }}", 'true'))
+      condition: and(succeeded(), eq('${{ parameters.destroy }}', 'true'))
       inputs:
         provider: 'azurerm'
         environmentServiceNameAzureRM: $(svcConnAzureRm)
@@ -99,7 +99,7 @@ stages:
         backendAzureRmKey: $(tfStateFileName)        
     - task: TerraformTaskV3@3
       displayName: Terraform Apply
-      condition: and(succeeded(), eq("${{ parameters.apply }}", 'true'))
+      condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
       inputs:
         provider: 'azurerm'
         environmentServiceNameAzureRM: $(svcConnAzureRm)
