@@ -21,6 +21,10 @@ parameters:
   displayName: App Name (Up to 12 alphanumeric chars)
   type: string
   default: 'aksdemo'
+- name: destroyInfra
+  displayName: Destroy Infrastructure First
+  type: boolean
+  default: false
 - name: tenants
   displayName: 'Tenant List'
   type: object
@@ -106,14 +110,26 @@ stages:
         enableTransforms: false
         enableRecursion: false
         useLegacyPattern: false
-        enableTelemetry: true   
-        verbosity: 'detailed'   
+        enableTelemetry: true
+        verbosity: 'detailed'
     - task: TerraformTaskV3@3
       displayName: Terraform Init 
       inputs:
         provider: 'azurerm'
         backendServiceArm: $(svcConnAzureRm)
         command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infrastructure'
+        backendAzureRmResourceGroupName: $(tfStateResourceGroup)
+        backendAzureRmStorageAccountName: $(tfStateStorageAccount)
+        backendAzureRmContainerName: $(tfStateContainerName)
+        backendAzureRmKey: $(tfStateFileName)
+    - task: TerraformTaskV3@3
+      displayName: Terraform Destroy 
+      condition: and(succeeded(), eq('${{ parameters.destroyInfra }}', 'true'))
+      inputs:
+        provider: 'azurerm'
+        backendServiceArm: $(svcConnAzureRm)
+        command: 'destroy'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infrastructure'
         backendAzureRmResourceGroupName: $(tfStateResourceGroup)
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
