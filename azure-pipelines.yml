@@ -31,8 +31,7 @@ parameters:
 variables:
   appName: ${{ parameters.appName }}
   appVersion: "0.1.1"
-  tenantsString: "\n  - tenant1\n  - tenant2"
-  tenantsYaml: '{dynamic}'
+  tenantsJson: '${{ convertToJson(parameters.appName) }}'
   location: 'australiaeast'
   svcConnAzureRm: 'Keith Patton - VS Professional Sub'
   uniqueSuffix: 'qpe'
@@ -176,19 +175,6 @@ stages:
         inlineScript: |
           $aksWorkloadIdentityClientId = (az identity show --resource-group $(rgName) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
           Write-Host "##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId"
-    - task: AzureCLI@2
-      displayName: 'Get Tenants YAML'
-      inputs:
-        azureSubscription: $(svcConnAzureRm)
-        scriptType: 'pscore'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          #Install-Module powershell-yaml -Force
-          #$tenantsYaml = ConvertTo-Yaml (ConvertFrom-Json -InputObject '${{ convertToJson(parameters.tenants) }}')
-          #$tenantsYaml = $tenantsYaml.Replace("`n", "%0D%0A")
-          $tenantsYaml = '$(tenantsString)'
-          Write-Host $tenantsYaml
-          Write-Host "##vso[task.setvariable variable=tenantsYaml;]$tenantsYaml"
     - task: replacetokens@5
       displayName: 'Replace tokens with variables'
       inputs:
