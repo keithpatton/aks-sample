@@ -9,12 +9,16 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "3.40.0"
     }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 2.15.0"
+    }
   }
 
   required_version = ">= 1.1.0"
 }
 
-# Configure the Azure Provider
+# Configure the Azure Providers
 
 provider "azurerm" {
   features {
@@ -25,9 +29,4 @@ provider "azurerm" {
       purge_soft_delete_on_destroy = true
     }
   }
-}
-
-azuread = {
-  source  = "hashicorp/azuread"
-  version = "~> 2.14.0"
 }
