@@ -19,14 +19,10 @@ parameters:
 
 variables:
   appName: ${{ parameters.appName }}
-  appVersion: "0.1.1"
-  tenantsJson: '${{ convertToJson(parameters.tenants) }}'
   location: 'australiaeast'
   svcConnAzureRm: 'Keith Patton - VS Professional Sub'
   uniqueSuffix: 'qpe'
   acrName: 'acr$(appName)$(uniqueSuffix)'
-  imageName: 'aksworkloadidentitysampleapi'
-  imageTag: '$(appVersion)'
   rgName: 'rg-$(appName)'
   rgAksNodesName: 'rg-k8s-$(appName)'
   aksName: 'aks-$(appName)'
@@ -41,12 +37,6 @@ variables:
   aksVmSize: 'Standard_B2s'
   kvName: 'kv-$(appName)-$(uniqueSuffix)'
   
-  helmChartDescription: 'AKS Sample App'
-  helmReleaseName: 'aks-sample'
-  helmChartName: 'aks-sample'  
-  helmChartVersion: '0.6.1'
-  helmAppVersion: '$(appVersion)'
-
   tfStateResourceGroup: 'rg-terraform'
   tfStateStorageAccount: 'terraformstateakssample'
   tfStateContainerName: 'tfstate'
