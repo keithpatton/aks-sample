@@ -36,7 +36,7 @@ variables:
 - name: aksName
   value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
 - name: aksNamespace
-  value: '$(appName)'
+  value: 'default'
 - name: aksWorkloadIdentityName
   value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
 - name: aksWorkloadIdentityServiceAccountName
