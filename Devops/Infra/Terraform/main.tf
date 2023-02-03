@@ -32,7 +32,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   oidc_issuer_enabled = true
 
   default_node_pool {
-    name       = var.aks_name
+    name       = var.aks_namespace
     node_count = var.aks_node_count
     vm_size    = var.aks_vm_size
   }
