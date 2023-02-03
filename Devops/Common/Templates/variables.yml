@@ -1,4 +1,17 @@
+# common variables
+
 parameters:
+- name: region
+  displayName: 'Region'
+  type: string
+  values:
+  - au1
+  default: au1
+- name: env
+  displayName: 'Environment'
+  type: string
+  values:
+  - dev
 - name: tenants
   displayName: 'Tenant List'
   type: object
@@ -7,15 +20,16 @@ parameters:
     - tenant2
 
 variables:
+- template: region-env/${{ parameters.region }}-${{ parameters.env }}/variables.yml  
+- template: region/${{ parameters.region }}/variables.yml 
+- template: env/${{ parameters.env }}/variables.yml  
+
   appName: 'aksdemo'
-  location: 'australiaeast'
   tenantsJson: '${{ convertToJson(parameters.tenants) }}'
-  svcConnAzureRm: 'Keith Patton - VS Professional Sub'
-  uniqueSuffix: 'qpe'
-  acrName: 'acr$(appName)$(uniqueSuffix)'
-  rgName: 'rg-$(appName)'
-  aksName: 'aks-$(appName)'
-  aksWorkloadIdentityName: 'aks-$(appName)'
-  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-$(appName)'
-  aksNamespace: 'default'
-  kvName: 'kv-$(appName)-$(uniqueSuffix)'
+  acrName: 'acr${{ parameters.region }}${{ parameters.env }}$(appName)$(uniqueSuffix)'
+  rgName: 'rg-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+  aksName: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+  aksNamespace: '$(appName)'
+  aksWorkloadIdentityName: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+  kvName: 'kv-$(appName)-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)'
