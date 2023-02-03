@@ -100,6 +100,10 @@ stages:
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
         backendAzureRmKey: $(tfStateFileName)
+    - script: |
+        echo "Environment variables:"
+        printenv
+      displayName: Show environment variables
     - task: TerraformTaskV3@3
       displayName: Terraform Destroy
       condition: and(succeeded(), eq('${{ parameters.destroy }}', 'true'))
