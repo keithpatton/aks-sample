@@ -23,12 +23,21 @@ variables:
 - template: region-env/${{ parameters.region }}-${{ parameters.env }}/variables.yml  
 - template: region/${{ parameters.region }}/variables.yml 
 - template: env/${{ parameters.env }}/variables.yml  
-  appName: 'aksdemo'
-  tenantsJson: '${{ convertToJson(parameters.tenants) }}'
-  rgName: 'rg-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
-  acrName: 'acr${{ parameters.region }}${{ parameters.env }}$(appName)$(uniqueSuffix)'
-  kvName: 'kv-${{ parameters.region }}-${{ parameters.env }}-$(appName)-$(uniqueSuffix)'
-  aksName: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
-  aksNamespace: '$(appName)'
-  aksWorkloadIdentityName: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
-  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+- name: appName
+  value: 'aksdemo'
+- name: tenantsJson
+  value: '${{ convertToJson(parameters.tenants) }}'
+- name: rgName
+  value: 'rg-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+- name: acrName
+  value: 'acr${{ parameters.region }}${{ parameters.env }}$(appName)$(uniqueSuffix)'
+- name: kvName
+  value: 'kv-${{ parameters.region }}-${{ parameters.env }}-$(appName)-$(uniqueSuffix)'
+- name: aksName
+  value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+- name: aksNamespace
+  value: '$(appName)'
+- name: aksWorkloadIdentityName
+  value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+- name: aksWorkloadIdentityServiceAccountName
+  value: 'sa-workload-identity-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
