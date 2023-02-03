@@ -1,6 +1,19 @@
+parameters:
+- name: region
+  displayName: 'Region'
+  type: string
+  values:
+  - au1
+  default: au1
+- name: env
+  displayName: 'Environment'
+  type: string
+  values:
+  - dev
+
 variables:
   appVersion: "0.1.1"
-  imageName: 'aksworkloadidentitysampleapi'
+  imageName: '$(appName)'
   imageTag: '$(appVersion)'
   aksWorkloadIdentityClientId: '{dynamic}'
   aksPvcBlobName: 'azure-blob'

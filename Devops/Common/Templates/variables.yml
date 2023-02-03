@@ -26,10 +26,10 @@ variables:
 
   appName: 'aksdemo'
   tenantsJson: '${{ convertToJson(parameters.tenants) }}'
-  acrName: 'acr${{ parameters.region }}${{ parameters.env }}$(appName)$(uniqueSuffix)'
   rgName: 'rg-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+  acrName: 'acr${{ parameters.region }}${{ parameters.env }}$(appName)$(uniqueSuffix)'
+  kvName: 'kv-${{ parameters.region }}-${{ parameters.env }}-$(appName)-$(uniqueSuffix)'
   aksName: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
   aksNamespace: '$(appName)'
   aksWorkloadIdentityName: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
   aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
-  kvName: 'kv-$(appName)-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)'

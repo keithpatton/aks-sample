@@ -1,9 +1,22 @@
+parameters:
+- name: region
+  displayName: 'Region'
+  type: string
+  values:
+  - au1
+  default: au1
+- name: env
+  displayName: 'Environment'
+  type: string
+  values:
+  - dev
+
 variables:
-  rgAksNodesName: 'rg-k8s-$(appName)'
-  aksFederatedIdentityName: 'fic-$(aksName)'
+  rgAksNodesName: '$(rgName)-k8s'
+  aksFederatedIdentityName: 'fic-${{ parameters.region }}-${{ parameters.env }}-$(aksName)'
   aksNodeCount: 1
   aksVmSize: 'Standard_B2s'
-  tfStateResourceGroup: 'rg-terraform'
-  tfStateStorageAccount: 'terraformstateakssample'
+  tfStateResourceGroup: 'rg-${{ parameters.region }}-${{ parameters.env }}-terraform'
+  tfStateStorageAccount: 'stg${{ parameters.region }}${{ parameters.env }}tfstate'
   tfStateContainerName: 'tfstate'
   tfStateFileName: 'terraform.tfstate'
