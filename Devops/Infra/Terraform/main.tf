@@ -129,8 +129,15 @@ resource "azurerm_key_vault_secret" "sql" {
   depends_on = [ azurerm_key_vault.default ]
 }
 
+resource "null_resource" "login" {
+  provisioner "local-exec" {
+    command = "az login --allow-no-subscriptions" 
+  }
+}
+
 data "azuread_user" "sql" {
   user_principal_name = var.sql_ad_admin_username
+  depends_on = [ null_resource.login ]
 }
 
 resource "azurerm_mssql_server" "default" {
@@ -150,6 +157,7 @@ resource "azurerm_mssql_server" "default" {
     login_username = var.sql_ad_admin_username
     object_id      = data.azuread_user.sql.object_id
   }
+
 }
 
 resource "azurerm_mssql_elasticpool" "default" {
