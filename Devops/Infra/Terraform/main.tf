@@ -129,6 +129,7 @@ resource "azurerm_key_vault_secret" "sql" {
   depends_on = [ azurerm_key_vault.default ]
 }
 
+# login to allow azuread provider to use azurerm provider creds
 resource "null_resource" "login" {
   provisioner "local-exec" {
     command = "az login --allow-no-subscriptions" 
@@ -198,7 +199,7 @@ resource "mssql_user" "aks" {
     host = azurerm_mssql_server.default.fully_qualified_domain_name
     login {
       username = var.sql_admin_username
-      password = azurerm_key_vault_secret.sql
+      password = azurerm_key_vault_secret.sql.value
     }
   }
 
