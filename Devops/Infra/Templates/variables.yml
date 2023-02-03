@@ -1,7 +1,6 @@
 variables:
   rgAksNodesName: 'rg-k8s-$(appName)'
   aksFederatedIdentityName: 'fic-$(aksName)'
-  aksWorkloadIdentityName: 'aks-$(appName)'
   aksNodeCount: 1
   aksVmSize: 'Standard_B2s'
   tfStateResourceGroup: 'rg-terraform'

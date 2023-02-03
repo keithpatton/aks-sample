@@ -2,9 +2,6 @@ parameters:
 - name: tenants
   displayName: 'Tenant List'
   type: object
-  default: 
-    - tenant1
-    - tenant2
 
 variables:
   appName: 'aksdemo'
@@ -15,6 +12,7 @@ variables:
   acrName: 'acr$(appName)$(uniqueSuffix)'
   rgName: 'rg-$(appName)'
   aksName: 'aks-$(appName)'
+  aksWorkloadIdentityName: 'aks-$(appName)'
   aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-$(appName)'
   aksNamespace: 'default'
   kvName: 'kv-$(appName)-$(uniqueSuffix)'
