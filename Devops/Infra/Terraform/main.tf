@@ -185,3 +185,17 @@ resource "azurerm_sql_database" "sql" {
   server_name         = azurerm_sql_server.default.name
   elastic_pool_name   = var.sql_elasticpool_name
 }
+
+resource "mssql_user" "aks" {
+  for_each = toset(var.tenants)
+  server {
+    host = azurerm_sql_server.default.name
+    azure_login {}
+  }
+
+  database  = each.name
+  username  = azurerm_user_assigned_identity.aks.name
+  object_id = azurerm_user_assigned_identity.aks.client_id
+
+  roles     = ["db_owner"]
+}

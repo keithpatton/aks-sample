@@ -1,9 +1,7 @@
 ﻿variable "tenants" {
   type = list(string)
   description = "Tenant List"
-  default = <<EOF
-    "#{tenantsJson}#"
-  EOF
+  default = #{tenantsJson}#
 }
 
 variable "rg_name" {
