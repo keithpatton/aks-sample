@@ -1,6 +1,3 @@
-# 2. Build and Push Image
-# 3. Deploy Application
-
 trigger:
   branches:
     include:
@@ -13,8 +10,20 @@ resources:
 - repo: self
 
 parameters:
+- name: region
+  displayName: 'Region'
+  type: string
+  values:
+  - au1
+  default: au1
+- name: env
+  displayName: 'Environment'
+  type: string
+  values:
+  - dev
+  default: dev  
 - name: tenants
-  displayName: 'Tenant List'
+  displayName: 'Tenants'
   type: object
   default: 
     - tenant1
