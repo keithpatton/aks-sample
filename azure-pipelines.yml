@@ -183,9 +183,11 @@ stages:
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          Install-Module powershell-yaml -Force
-          $tenantsYaml = ConvertTo-Yaml (ConvertFrom-Json -InputObject '${{ convertToJson(parameters.tenants) }}')
-          $tenantsYaml = $tenantsYaml.Replace("`n", "%0D%0A")
+          #Install-Module powershell-yaml -Force
+          #$tenantsYaml = ConvertTo-Yaml (ConvertFrom-Json -InputObject '${{ convertToJson(parameters.tenants) }}')
+          #$tenantsYaml = $tenantsYaml.Replace("`n", "%0D%0A")
+          $tenantsYaml = '$(tenantsString)'
+          Write-Host $tenantsYaml
           Write-Host "##vso[task.setvariable variable=tenantsYaml;]$tenantsYaml"
     - task: replacetokens@5
       displayName: 'Replace tokens with variables'
