@@ -188,13 +188,15 @@ resource "mssql_user" "aks" {
   for_each = toset(var.tenants)
   server {
     host = azurerm_mssql_server.default.fully_qualified_domain_name
-    azure_login {}
+    login {
+      username = var.sql_admin_username
+      password = azurerm_key_vault_secret.sql
+    }
   }
 
   database  = each.value
   username  = azurerm_user_assigned_identity.aks.name
   object_id = azurerm_user_assigned_identity.aks.client_id
-
   roles     = ["db_owner"]
 
   depends_on = [ azurerm_mssql_database.default ]
