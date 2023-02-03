@@ -123,7 +123,7 @@ resource "random_password" "sql" {
 }
 
 resource "azurerm_key_vault_secret" "sql" {
-  name         = "sqlDBAdmin"
+  name         = "sql-admin-password"
   value        = random_password.sql.result
   key_vault_id = azurerm_key_vault.default.id
   depends_on = [ azurerm_key_vault.default ]
@@ -142,7 +142,7 @@ resource "azurerm_sql_server" "default" {
   resource_group_name          = azurerm_resource_group.default.name
   location                     = azurerm_resource_group.default.location
   version                      = "12.0"
-  administrator_login          = "sqladmin"
+  administrator_login          = var.sql_admin_username
   administrator_login_password = azurerm_key_vault_secret.sql
 
   identity {

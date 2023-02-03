@@ -90,6 +90,12 @@ variable "sql_elasticpool_name" {
   default = "#{sqlElasticPoolName}#"
 }
 
+variable "sql_admin_username" { 
+  description = "The username of the Sql Administrator."
+  type        = string
+  default = "#{sqlAdminUsername}#"
+}
+
 variable "sql_ad_admin_username" { 
   description = "The username of the Azure AD Sql Administrator."
   type        = string
