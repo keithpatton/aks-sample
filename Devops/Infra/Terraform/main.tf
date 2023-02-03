@@ -178,10 +178,8 @@ resource "azurerm_mssql_elasticpool" "default" {
 resource "azurerm_mssql_database" "default" {
   for_each = toset(var.tenants)
   name                = each.value
-  resource_group_name = azurerm_resource_group.default.name
-  location            = azurerm_resource_group.default.location
-  server_id         = azurerm_mssql_server.default.id
-  elastic_pool_name   = var.sql_elasticpool_name
+  server_id           = azurerm_mssql_server.default.id
+  elastic_pool_id   = azurerm_mssql_elasticpool.default.id
 
   depends_on = [ azurerm_mssql_elasticpool.default ]
 }
