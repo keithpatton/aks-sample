@@ -3,7 +3,6 @@ variables:
   aksFederatedIdentityName: 'fic-$(aksName)'
   aksNodeCount: 1
   aksVmSize: 'Standard_B2s'
-  tfDestroyBeforeApply: false
   tfStateResourceGroup: 'rg-terraform'
   tfStateStorageAccount: 'terraformstateakssample'
   tfStateContainerName: 'tfstate'
