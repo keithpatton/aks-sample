@@ -24,7 +24,12 @@ variables:
 - template: ../../Common/Templates/variables.yml  
   parameters:
       tenants: ${{ parameters.tenants }}
+      region: ${{ parameters.region }}
+      env: ${{ parameters.env }}
 - template: ../Templates/variables.yml
+  parameters:
+    region: ${{ parameters.region }}
+    env: ${{ parameters.env }}
 
 stages:
 - stage: Image
