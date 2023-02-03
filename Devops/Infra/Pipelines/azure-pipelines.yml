@@ -1,5 +1,7 @@
 name: $(Date:yyyyMMdd)$(Rev:.r)_${{ parameters.region }}_${{ parameters.env }}
 
+trigger: none
+
 - repo: self
 
 parameters:
