@@ -5,39 +5,9 @@ trigger: none
 resources:
 - repo: self
 
-parameters:
-- name: appName
-  displayName: App Name (Up to 12 alphanumeric chars)
-  type: string
-  default: 'aksdemo'
-- name: tenants
-  displayName: 'Tenant List'
-  type: object
-  default: 
-    - tenant1
-    - tenant2
-
 variables:
-  appName: ${{ parameters.appName }}
-  location: 'australiaeast'
-  svcConnAzureRm: 'Keith Patton - VS Professional Sub'
-  uniqueSuffix: 'qpe'
-  acrName: 'acr$(appName)$(uniqueSuffix)'
-  rgName: 'rg-$(appName)'
-  rgAksNodesName: 'rg-k8s-$(appName)'
-  aksName: 'aks-$(appName)'
-  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-$(appName)'
-  aksNamespace: 'default'
-  aksFederatedIdentityName: 'fic-$(aksName)'
-  aksWorkloadIdentityName: 'aks-$(appName)'
-  aksNodeCount: 1
-  aksVmSize: 'Standard_B2s'
-  kvName: 'kv-$(appName)-$(uniqueSuffix)'
-  
-  tfStateResourceGroup: 'rg-terraform'
-  tfStateStorageAccount: 'terraformstateakssample'
-  tfStateContainerName: 'tfstate'
-  tfStateFileName: 'terraform.tfstate'
+- template: ../../Common/Templates/variables.yml  
+- template: ../Templates/variables.yml
 
 stages:
 - stage: Infrastructure
