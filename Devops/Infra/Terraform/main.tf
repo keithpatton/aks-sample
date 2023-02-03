@@ -1,4 +1,6 @@
-﻿### Resource Group
+﻿data "azurerm_client_config" "current" {}
+
+### Resource Group
 
 resource "azurerm_resource_group" "default" {
   name     = "${var.rg_name}"
@@ -69,8 +71,6 @@ resource "azurerm_federated_identity_credential" "aks" {
 
 ### Key Vault
 
-data "azurerm_client_config" "current" {}
-
 resource "azurerm_key_vault" "default" {
   name                       = "${var.kv_name}"
   resource_group_name        = azurerm_resource_group.default.name
@@ -130,8 +130,6 @@ resource "azurerm_key_vault_secret" "sql" {
 }
 
 ### Azure SQL Elastic Pool
-
-data "azurerm_client_config" "current" {}
 
 data "azuread_user" "sql" {
   user_principal_name = var.sql_ad_admin_username
