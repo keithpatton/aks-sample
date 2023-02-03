@@ -148,7 +148,7 @@ resource "azurerm_mssql_server" "default" {
   azuread_administrator {
     azuread_authentication_only = true
     login_username = var.sql_ad_admin_username
-    object_id      = azuread_user.sql.object_id
+    object_id      = data.azuread_user.sql.object_id
   }
 }
 
@@ -156,7 +156,7 @@ resource "azurerm_mssql_elasticpool" "default" {
   name                = var.sql_elasticpool_name
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
-  server_name         = azurerm_sql_server.default.name
+  server_name         = azurerm_mssql_server.default.name
   license_type        = "LicenseIncluded"
   max_size_gb         = 5
 
@@ -171,21 +171,25 @@ resource "azurerm_mssql_elasticpool" "default" {
     min_capacity = 0.25
     max_capacity = 2
   }
+
+  depends_on = [ azurerm_mssql_server.default ]
 }
 
-resource "azurerm_sql_database" "sql" {
+resource "azurerm_sql_database" "default" {
   for_each = toset(var.tenants)
   name                = each.name
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
-  server_name         = azurerm_sql_server.default.name
+  server_name         = azurerm_mssql_server.default.name
   elastic_pool_name   = var.sql_elasticpool_name
+
+  depends_on = [ azurerm_mssql_elasticpool.default ]
 }
 
 resource "mssql_user" "aks" {
   for_each = toset(var.tenants)
   server {
-    host = azurerm_sql_server.default.name
+    host = azurerm_mssql_server.default.name
     azure_login {}
   }
 
@@ -194,4 +198,6 @@ resource "mssql_user" "aks" {
   object_id = azurerm_user_assigned_identity.aks.client_id
 
   roles     = ["db_owner"]
+
+  depends_on = [ azurerm_sql_database.default ]
 }
