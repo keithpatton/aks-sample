@@ -1,0 +1,12 @@
+variables:
+  appVersion: "0.1.1"
+  imageName: 'aksworkloadidentitysampleapi'
+  imageTag: '$(appVersion)'
+  aksWorkloadIdentityClientId: '{dynamic}'
+  aksPvcBlobName: 'azure-blob'
+  aksStorageClassBlobName: 'azureblob-nfs-standard'
+  helmChartDescription: 'AKS Sample App'
+  helmReleaseName: 'aks-sample'
+  helmChartName: 'aks-sample'  
+  helmChartVersion: '0.6.1'
+  helmAppVersion: '$(appVersion)'
