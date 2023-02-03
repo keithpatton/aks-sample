@@ -88,6 +88,30 @@ variable "sql_elasticpool_name" {
   default = "#{sqlElasticPoolName}#"
 }
 
+variable "sql_elasticpool_sku_name" { 
+  description = "The sku name of the Azure SQL Elastic Pool."
+  type        = string
+  default = "#{sqlElasticPoolSkuName}#"
+}
+
+variable "sql_elasticpool_sku_tier" { 
+  description = "The sku tier of the Azure SQL Elastic Pool."
+  type        = string
+  default = "#{sqlElasticPoolSkuTeir}#"
+}
+
+variable "sql_elasticpool_sku_family" { 
+  description = "The sku family of the Azure SQL Elastic Pool."
+  type        = string
+  default = "#{sqlElasticPoolSkuFamily}#"
+}
+
+variable "sql_elasticpool_sku_capacity" { 
+  description = "The sku capacity of the Azure SQL Elastic Pool."
+  type        = integer
+  default = #{sqlElasticPoolSkuCapacity}#
+}
+
 variable "sql_admin_username" { 
   description = "The username of the Sql Administrator."
   type        = string

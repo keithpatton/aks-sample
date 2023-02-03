@@ -177,7 +177,7 @@ resource "azurerm_mssql_elasticpool" "default" {
 
 resource "azurerm_sql_database" "default" {
   for_each = toset(var.tenants)
-  name                = each.name
+  name                = each.value
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
   server_name         = azurerm_mssql_server.default.name
@@ -193,7 +193,7 @@ resource "mssql_user" "aks" {
     azure_login {}
   }
 
-  database  = each.name
+  database  = each.value
   username  = azurerm_user_assigned_identity.aks.name
   object_id = azurerm_user_assigned_identity.aks.client_id
 

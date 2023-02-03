@@ -18,6 +18,10 @@ variables:
   aksVmSize: 'Standard_B2s'
   sqlServerName: "sql-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
   sqlElasticPoolName: "elp-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
+  sqlElasticPoolSkuName:  'GP_Gen5'
+  sqlElasticPoolSkuTier:  'GeneralPurpose'
+  sqlElasticPoolSkuFamily:  'Gen5'
+  sqlElasticPoolSkuCapacity:  2
   sqlAdAdminUsername: "keith.d.patton@vista.co"
   sqlAdminUsername: "sql-admin"
 
