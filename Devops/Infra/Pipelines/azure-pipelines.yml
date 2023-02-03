@@ -85,7 +85,7 @@ stages:
         backendAzureRmKey: $(tfStateFileName)
     - task: TerraformTaskV3@3
       displayName: Terraform Destroy
-      condition: and(succeeded(), eq("${{ parameters.destroy }}", 'true'))
+      condition: and(succeeded(), eq('${{ parameters.destroy }}', 'true'))
       inputs:
         provider: 'azurerm'
         environmentServiceNameAzureRM: $(svcConnAzureRm)
@@ -99,7 +99,7 @@ stages:
         backendAzureRmKey: $(tfStateFileName)        
     - task: TerraformTaskV3@3
       displayName: Terraform Apply
-      condition: and(succeeded(), eq("${{ parameters.apply }}", 'true'))
+      condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
       inputs:
         provider: 'azurerm'
         environmentServiceNameAzureRM: $(svcConnAzureRm)
