@@ -146,7 +146,7 @@ resource "azurerm_mssql_server" "default" {
   location                     = azurerm_resource_group.default.location
   version                      = "12.0"
   administrator_login          = var.sql_admin_username
-  administrator_login_password = azurerm_key_vault_secret.sql
+  administrator_login_password = azurerm_key_vault_secret.sql.value
 
   identity {
     type = "SystemAssigned"
