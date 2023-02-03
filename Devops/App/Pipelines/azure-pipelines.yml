@@ -17,6 +17,10 @@ parameters:
   displayName: App Name (Up to 12 alphanumeric chars)
   type: string
   default: 'aksdemo'
+- name: destroyInfra
+  displayName: Destroy Infrastructure First
+  type: boolean
+  default: false
 - name: tenants
   displayName: 'Tenant List'
   type: object
