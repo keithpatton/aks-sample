@@ -1,3 +1,4 @@
+imageName: #{imageName}#
 imageTag: #{imageTag}#
 tenants: #{tenantsJson}#
 storageClassBlobName: #{aksStorageClassBlobName}#
