@@ -31,7 +31,7 @@ parameters:
 variables:
   appName: ${{ parameters.appName }}
   appVersion: "0.1.1"
-  tenantsJson: '${{ convertToJson(parameters.appName) }}'
+  tenantsJson: '${{ convertToJson(parameters.tenants) }}'
   location: 'australiaeast'
   svcConnAzureRm: 'Keith Patton - VS Professional Sub'
   uniqueSuffix: 'qpe'
