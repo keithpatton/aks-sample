@@ -1,17 +1,6 @@
 # 1. Ensure Infrastructure
-# 2. Build and Push Image
-# 3. Deploy Application
 
-trigger:
-  branches:
-    include:
-    - master
-  paths:
-    include:
-    - AksWorkloadIdentitySample.Api
-    exclude:
-    - Devops
-    - README.md
+trigger: none
 
 resources:
 - repo: self
@@ -114,7 +103,7 @@ stages:
         provider: 'azurerm'
         backendServiceArm: $(svcConnAzureRm)
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infrastructure'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
         backendAzureRmResourceGroupName: $(tfStateResourceGroup)
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
@@ -125,100 +114,10 @@ stages:
         provider: 'azurerm'
         environmentServiceNameAzureRM: $(svcConnAzureRm)
         command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infrastructure'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
         commandOptions: 
           --auto-approve
         backendAzureRmResourceGroupName: $(tfStateResourceGroup)
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
         backendAzureRmKey: $(tfStateFileName)
-- stage: Image
-  displayName: Build and Push Image
-  jobs:
-  - job: BuildAndPush
-    displayName: Build and Push Image
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build Image
-      inputs:
-        command: build
-        repository: $(imageName)
-        dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
-        buildContext: '$(Build.SourcesDirectory)'
-        tags: $(imageTag)
-    - task: AzureCLI@2
-      displayName: 'Push Image'
-      inputs:
-        azureSubscription: $(svcConnAzureRm)
-        scriptType: 'pscore'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az acr login --name $(acrName)
-          docker tag $(imageName):$(imageTag) $(acrName).azurecr.io/$(imageName):$(imageTag)
-          docker push $(acrName).azurecr.io/$(imageName):$(imageTag)
-- stage: Deploy
-  displayName: Deploy Application
-  jobs:
-  - job: Deploy
-    displayName: Deploy Application
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: AzureCLI@2
-      displayName: 'Get Azure Resource Values'
-      inputs:
-        azureSubscription: $(svcConnAzureRm)
-        scriptType: 'pscore'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          $aksWorkloadIdentityClientId = (az identity show --resource-group $(rgName) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
-          Write-Host "##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId"
-    - task: replacetokens@5
-      displayName: 'Replace tokens with variables'
-      inputs:
-        targetFiles: |
-          **/Chart.yaml
-          **/values.yaml
-        encoding: 'auto'
-        tokenPattern: 'default'
-        writeBOM: true
-        actionOnMissing: 'warn'
-        keepToken: false
-        actionOnNoFiles: 'warn'
-        enableTransforms: false
-        enableRecursion: false
-        useLegacyPattern: false
-        enableTelemetry: true   
-        verbosity: 'detailed'   
-    - task: HelmDeploy@0
-      displayName: 'Deploy Helm Chart'
-      inputs:
-        connectionType: 'Azure Resource Manager'
-        azureSubscription: $(svcConnAzureRm)
-        azureResourceGroup: $(rgName)
-        kubernetesCluster: $(aksName)
-        namespace: $(aksNamespace)
-        command: 'upgrade'
-        chartType: 'FilePath'
-        chartPath: '$(System.DefaultWorkingDirectory)/Devops/Deploy/aks-sample'
-        releaseName: $(helmReleaseName)
-        arguments: '--debug --atomic --reset-values'
-  - ${{ each tenant in parameters.tenants }}:
-    - job: TenantWork_${{ tenant }}
-      displayName: ${{ tenant }} Specific Work 
-      dependsOn: Deploy
-      pool:
-        vmImage: ubuntu-latest
-      steps:
-      - script: echo ${{ tenant }}
-  - job: DeployComplete
-    displayName: Complete Deployment After Tenant Specific Work
-    dependsOn: 
-    - ${{ each tenant in parameters.tenants }}:
-      - TenantWork_${{ tenant }}
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - script: echo 'Completed Deployment After Tenant Specific Work'

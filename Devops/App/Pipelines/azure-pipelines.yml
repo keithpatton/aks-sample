@@ -1,0 +1,152 @@
+# 2. Build and Push Image
+# 3. Deploy Application
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - AksWorkloadIdentitySample.Api
+
+resources:
+- repo: self
+
+parameters:
+- name: appName
+  displayName: App Name (Up to 12 alphanumeric chars)
+  type: string
+  default: 'aksdemo'
+- name: tenants
+  displayName: 'Tenant List'
+  type: object
+  default: 
+    - tenant1
+    - tenant2
+
+variables:
+  appName: ${{ parameters.appName }}
+  appVersion: "0.1.1"
+  tenantsJson: '${{ convertToJson(parameters.tenants) }}'
+  location: 'australiaeast'
+  svcConnAzureRm: 'Keith Patton - VS Professional Sub'
+  uniqueSuffix: 'qpe'
+  acrName: 'acr$(appName)$(uniqueSuffix)'
+  imageName: 'aksworkloadidentitysampleapi'
+  imageTag: '$(appVersion)'
+  rgName: 'rg-$(appName)'
+  rgAksNodesName: 'rg-k8s-$(appName)'
+  aksName: 'aks-$(appName)'
+  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-$(appName)'
+  aksNamespace: 'default'
+  aksFederatedIdentityName: 'fic-$(aksName)'
+  aksWorkloadIdentityName: 'aks-$(appName)'
+  aksWorkloadIdentityClientId: '{dynamic}'
+  aksNodeCount: 1
+  aksPvcBlobName: 'azure-blob'
+  aksStorageClassBlobName: 'azureblob-nfs-standard'
+  aksVmSize: 'Standard_B2s'
+  kvName: 'kv-$(appName)-$(uniqueSuffix)'
+  
+  helmChartDescription: 'AKS Sample App'
+  helmReleaseName: 'aks-sample'
+  helmChartName: 'aks-sample'  
+  helmChartVersion: '0.6.1'
+  helmAppVersion: '$(appVersion)'
+
+  tfStateResourceGroup: 'rg-terraform'
+  tfStateStorageAccount: 'terraformstateakssample'
+  tfStateContainerName: 'tfstate'
+  tfStateFileName: 'terraform.tfstate'
+
+stages:
+- stage: Image
+  displayName: Build and Push Image
+  jobs:
+  - job: BuildAndPush
+    displayName: Build and Push Image
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build Image
+      inputs:
+        command: build
+        repository: $(imageName)
+        dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)'
+        tags: $(imageTag)
+    - task: AzureCLI@2
+      displayName: 'Push Image'
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az acr login --name $(acrName)
+          docker tag $(imageName):$(imageTag) $(acrName).azurecr.io/$(imageName):$(imageTag)
+          docker push $(acrName).azurecr.io/$(imageName):$(imageTag)
+- stage: Deploy
+  displayName: Deploy Application
+  jobs:
+  - job: Deploy
+    displayName: Deploy Application
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Get Azure Resource Values'
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $aksWorkloadIdentityClientId = (az identity show --resource-group $(rgName) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
+          Write-Host "##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId"
+    - task: replacetokens@5
+      displayName: 'Replace tokens with variables'
+      inputs:
+        targetFiles: |
+          **/Chart.yaml
+          **/values.yaml
+        encoding: 'auto'
+        tokenPattern: 'default'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
+        actionOnNoFiles: 'warn'
+        enableTransforms: false
+        enableRecursion: false
+        useLegacyPattern: false
+        enableTelemetry: true   
+        verbosity: 'detailed'   
+    - task: HelmDeploy@0
+      displayName: 'Deploy Helm Chart'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscription: $(svcConnAzureRm)
+        azureResourceGroup: $(rgName)
+        kubernetesCluster: $(aksName)
+        namespace: $(aksNamespace)
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample'
+        releaseName: $(helmReleaseName)
+        arguments: '--debug --atomic --reset-values'
+  - ${{ each tenant in parameters.tenants }}:
+    - job: TenantWork_${{ tenant }}
+      displayName: ${{ tenant }} Specific Work 
+      dependsOn: Deploy
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+      - script: echo ${{ tenant }}
+  - job: DeployComplete
+    displayName: Complete Deployment After Tenant Specific Work
+    dependsOn: 
+    - ${{ each tenant in parameters.tenants }}:
+      - TenantWork_${{ tenant }}
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - script: echo 'Completed Deployment After Tenant Specific Work'
