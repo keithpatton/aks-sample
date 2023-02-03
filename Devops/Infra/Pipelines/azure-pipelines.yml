@@ -71,7 +71,7 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az group create --location $(location) --name $(tfStateResourceGroup)
-          az storage account create -n $(tfStateStorageAccount) -g $(tfStateResourceGroup) -l $(location) --sku Standard_LRS
+          az storage account create -n $(tfStateStorageAccount) -g $(tfStateResourceGroup) -l $(location) --sku Standard_LRS --encryption-services blob
           az storage container create -n $(tfStateContainerName) --account-name $(tfStateStorageAccount) -g $(tfStateResourceGroup)
     - task: replacetokens@5
       displayName: 'Replace tokens with variables'
