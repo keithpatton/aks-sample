@@ -12,9 +12,6 @@ trigger:
 resources:
 - repo: self
 
-extends:
-  template: ../../Common/Templates/variables.yml 
-
 variables:
 - template: ../../Common/Templates/variables.yml  
 - template: ../Templates/variables.yml
