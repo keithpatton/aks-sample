@@ -12,56 +12,9 @@ trigger:
 resources:
 - repo: self
 
-parameters:
-- name: appName
-  displayName: App Name (Up to 12 alphanumeric chars)
-  type: string
-  default: 'aksdemo'
-- name: destroyInfra
-  displayName: Destroy Infrastructure First
-  type: boolean
-  default: false
-- name: tenants
-  displayName: 'Tenant List'
-  type: object
-  default: 
-    - tenant1
-    - tenant2
-
 variables:
-  appName: ${{ parameters.appName }}
-  appVersion: "0.1.1"
-  tenantsJson: '${{ convertToJson(parameters.tenants) }}'
-  location: 'australiaeast'
-  svcConnAzureRm: 'Keith Patton - VS Professional Sub'
-  uniqueSuffix: 'qpe'
-  acrName: 'acr$(appName)$(uniqueSuffix)'
-  imageName: 'aksworkloadidentitysampleapi'
-  imageTag: '$(appVersion)'
-  rgName: 'rg-$(appName)'
-  rgAksNodesName: 'rg-k8s-$(appName)'
-  aksName: 'aks-$(appName)'
-  aksWorkloadIdentityServiceAccountName: 'sa-workload-identity-$(appName)'
-  aksNamespace: 'default'
-  aksFederatedIdentityName: 'fic-$(aksName)'
-  aksWorkloadIdentityName: 'aks-$(appName)'
-  aksWorkloadIdentityClientId: '{dynamic}'
-  aksNodeCount: 1
-  aksPvcBlobName: 'azure-blob'
-  aksStorageClassBlobName: 'azureblob-nfs-standard'
-  aksVmSize: 'Standard_B2s'
-  kvName: 'kv-$(appName)-$(uniqueSuffix)'
-  
-  helmChartDescription: 'AKS Sample App'
-  helmReleaseName: 'aks-sample'
-  helmChartName: 'aks-sample'  
-  helmChartVersion: '0.6.1'
-  helmAppVersion: '$(appVersion)'
-
-  tfStateResourceGroup: 'rg-terraform'
-  tfStateStorageAccount: 'terraformstateakssample'
-  tfStateContainerName: 'tfstate'
-  tfStateFileName: 'terraform.tfstate'
+- template: ../../Common/Templates/variables.yml  
+- template: ../Templates/variables.yml
 
 stages:
 - stage: Image
