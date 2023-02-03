@@ -2,6 +2,9 @@ parameters:
 - name: tenants
   displayName: 'Tenant List'
   type: object
+  default: 
+    - tenant1
+    - tenant2
 
 variables:
   appName: 'aksdemo'
