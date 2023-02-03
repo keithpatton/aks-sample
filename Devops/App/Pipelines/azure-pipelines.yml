@@ -1,3 +1,5 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)_${{ parameters.region }}_${{ parameters.env }}
+
 trigger:
   branches:
     include:
