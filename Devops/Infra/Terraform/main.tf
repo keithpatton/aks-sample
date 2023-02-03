@@ -114,3 +114,74 @@ resource "azurerm_key_vault_access_policy" "aks" {
     "Set"
   ]
 }
+
+### Passwords
+
+resource "random_password" "sql" {
+  length           = 16
+  special          = true
+}
+
+resource "azurerm_key_vault_secret" "sql" {
+  name         = "sqlDBAdmin"
+  value        = random_password.sql.result
+  key_vault_id = azurerm_key_vault.default.id
+  depends_on = [ azurerm_key_vault.default ]
+}
+
+### Azure SQL Elastic Pool
+
+data "azurerm_client_config" "current" {}
+
+data "azuread_user" "sql" {
+  user_principal_name = var.sql_ad_admin_username
+}
+
+resource "azurerm_sql_server" "default" {
+  name                         = var.sql_server_name
+  resource_group_name          = azurerm_resource_group.default.name
+  location                     = azurerm_resource_group.default.location
+  version                      = "12.0"
+  administrator_login          = "sqladmin"
+  administrator_login_password = azurerm_key_vault_secret.sql
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  azuread_administrator {
+    azuread_authentication_only = true
+    login_username = var.sql_ad_admin_username
+    object_id      = azuread_user.sql.object_id
+  }
+}
+
+resource "azurerm_mssql_elasticpool" "default" {
+  name                = var.sql_elasticpool_name
+  resource_group_name = azurerm_resource_group.default.name
+  location            = azurerm_resource_group.default.location
+  server_name         = azurerm_sql_server.default.name
+  license_type        = "LicenseIncluded"
+  max_size_gb         = 5
+
+  sku {
+    name     = "GP_Gen5"
+    tier     = "GeneralPurpose"
+    family   = "Gen5"
+    capacity = 2
+  }
+
+  per_database_settings {
+    min_capacity = 0.25
+    max_capacity = 2
+  }
+}
+
+resource "azurerm_sql_database" "sql" {
+  for_each = toset(var.tenants)
+  name                = each.name
+  resource_group_name = azurerm_resource_group.default.name
+  location            = azurerm_resource_group.default.location
+  server_name         = azurerm_sql_server.default.name
+  elastic_pool_name   = var.sql_elasticpool_name
+}

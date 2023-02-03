@@ -26,3 +26,8 @@ provider "azurerm" {
     }
   }
 }
+
+azuread = {
+  source  = "hashicorp/azuread"
+  version = "~> 2.14.0"
+}

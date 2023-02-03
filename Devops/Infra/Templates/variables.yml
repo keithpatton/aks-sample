@@ -16,6 +16,10 @@ variables:
   aksFederatedIdentityName: 'fic-${{ parameters.region }}-${{ parameters.env }}-$(aksName)'
   aksNodeCount: 1
   aksVmSize: 'Standard_B2s'
+  sqlServerName: "sql-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
+  sqlElasticPoolName: "elp-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
+  sqlAdAdminUsername: "keith.d.patton@vista.co"
+
   tfStateResourceGroup: 'rg-${{ parameters.region }}-${{ parameters.env }}-terraform'
   tfStateStorageAccount: 'stg${{ parameters.region }}${{ parameters.env }}tfstate'
   tfStateContainerName: 'tfstate'
