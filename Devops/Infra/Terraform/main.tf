@@ -118,7 +118,7 @@ resource "azurerm_key_vault_access_policy" "aks" {
 ### Passwords
 
 resource "random_password" "sql" {
-  length           = 16
+  length           = 20
   special          = true
 }
 
