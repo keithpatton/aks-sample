@@ -5,8 +5,18 @@ trigger: none
 resources:
 - repo: self
 
+parameters:
+- name: tenants
+  displayName: 'Tenant List'
+  type: object
+  default: 
+    - tenant1
+    - tenant2
+
 variables:
 - template: ../../Common/Templates/variables.yml  
+  parameters:
+      tenants: ${{ parameters.tenants }}
 - template: ../Templates/variables.yml
 
 stages:
