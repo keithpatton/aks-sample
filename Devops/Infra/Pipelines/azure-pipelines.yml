@@ -1,13 +1,23 @@
-# 1. Ensure Infrastructure
-
 trigger: none
 
 resources:
 - repo: self
 
 parameters:
+- name: region
+  displayName: 'Region'
+  type: string
+  values:
+  - au1
+  default: au1
+- name: env
+  displayName: 'Environment'
+  type: string
+  values:
+  - dev
+  default: dev  
 - name: tenants
-  displayName: 'Tenant List'
+  displayName: 'Tenants'
   type: object
   default: 
     - tenant1
@@ -25,7 +35,12 @@ variables:
 - template: ../../Common/Templates/variables.yml  
   parameters:
       tenants: ${{ parameters.tenants }}
+      region: ${{ parameters.region }}
+      env: ${{ parameters.env }}
 - template: ../Templates/variables.yml
+  parameters:
+    region: ${{ parameters.region }}
+    env: ${{ parameters.env }}
 
 stages:
 - stage: Infrastructure
