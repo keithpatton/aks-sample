@@ -124,11 +124,11 @@ stages:
         backendAzureRmContainerName: $(tfStateContainerName)
         backendAzureRmKey: $(tfStateFileName)
     - task: TerraformTaskV3@3
-      displayName: Terraform Destroy 
+      displayName: Terraform Destroy (Conditional)
       condition: and(succeeded(), eq('${{ parameters.destroyInfra }}', 'true'))
       inputs:
         provider: 'azurerm'
-        backendServiceArm: $(svcConnAzureRm)
+        environmentServiceNameAzureRM: $(svcConnAzureRm)
         command: 'destroy'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infrastructure'
         backendAzureRmResourceGroupName: $(tfStateResourceGroup)
