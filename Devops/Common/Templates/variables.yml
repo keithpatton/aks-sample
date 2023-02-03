@@ -23,7 +23,6 @@ variables:
 - template: region-env/${{ parameters.region }}-${{ parameters.env }}/variables.yml  
 - template: region/${{ parameters.region }}/variables.yml 
 - template: env/${{ parameters.env }}/variables.yml  
-
   appName: 'aksdemo'
   tenantsJson: '${{ convertToJson(parameters.tenants) }}'
   rgName: 'rg-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
