@@ -97,7 +97,7 @@ variable "sql_elasticpool_sku_name" {
 variable "sql_elasticpool_sku_tier" { 
   description = "The sku tier of the Azure SQL Elastic Pool."
   type        = string
-  default     = "#{sqlElasticPoolSkuTeir}#"
+  default     = "#{sqlElasticPoolSkuTier}#"
 }
 
 variable "sql_elasticpool_sku_family" { 
@@ -119,7 +119,7 @@ variable "sql_admin_username" {
 }
 
 variable "sql_ad_admin_username" { 
-  description = "The username of the Azure AD Sql Administrator."
+  description = "The username of the Azure AD Sql Administrator. Should have at least Directory Readers role in Azure AD"
   type        = string
   default     = "#{sqlAdAdminUsername}#"
 }

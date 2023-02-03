@@ -161,10 +161,10 @@ resource "azurerm_mssql_elasticpool" "default" {
   max_size_gb         = 5
 
   sku {
-    name     = "GP_Gen5"
-    tier     = "GeneralPurpose"
-    family   = "Gen5"
-    capacity = 2
+    name     = var.sql_elasticpool_sku_name
+    tier     = var.sql_elasticpool_sku_tier
+    family   = var.sql_elasticpool_sku_family
+    capacity = var.sql_elasticpool_sku_capacity
   }
 
   per_database_settings {
@@ -175,12 +175,12 @@ resource "azurerm_mssql_elasticpool" "default" {
   depends_on = [ azurerm_mssql_server.default ]
 }
 
-resource "azurerm_sql_database" "default" {
+resource "azurerm_mssql_database" "default" {
   for_each = toset(var.tenants)
   name                = each.value
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
-  server_name         = azurerm_mssql_server.default.name
+  server_id         = azurerm_mssql_server.default.id
   elastic_pool_name   = var.sql_elasticpool_name
 
   depends_on = [ azurerm_mssql_elasticpool.default ]
@@ -189,7 +189,7 @@ resource "azurerm_sql_database" "default" {
 resource "mssql_user" "aks" {
   for_each = toset(var.tenants)
   server {
-    host = azurerm_mssql_server.default.name
+    host = azurerm_mssql_server.default.fully_qualified_domain_name
     azure_login {}
   }
 
@@ -199,5 +199,5 @@ resource "mssql_user" "aks" {
 
   roles     = ["db_owner"]
 
-  depends_on = [ azurerm_sql_database.default ]
+  depends_on = [ azurerm_mssql_database.default ]
 }
