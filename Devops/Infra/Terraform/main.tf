@@ -181,6 +181,17 @@ resource "azurerm_mssql_database" "default" {
   depends_on = [ azurerm_mssql_elasticpool.default ]
 }
 
+data "http" "myip" {
+  url = "https://ipv4.icanhazip.com/"
+}
+
+resource "azurerm_mssql_firewall_rule" "default" {
+  name                = "Azure Devops"
+  server_id           = azurerm_mssql_server.default.id
+  start_ip_address    = ${chomp(data.http.myip.body)}
+  end_ip_address      = ${chomp(data.http.myip.body)}
+}
+
 resource "mssql_user" "aks" {
   for_each = toset(var.tenants)
   server {
@@ -196,5 +207,5 @@ resource "mssql_user" "aks" {
   object_id = azurerm_user_assigned_identity.aks.client_id
   roles     = ["db_owner"]
 
-  depends_on = [ azurerm_mssql_database.default ]
+  depends_on = [ azurerm_mssql_database.default,azurerm_mssql_firewall_rule.default ]
 }
