@@ -23,6 +23,7 @@ variables:
   sqlElasticPoolSkuCapacity:  2
   sqlAdAdminUsername: "keith.d.patton@vista.co"
   sqlAdminUsername: "sql-admin"
+  sqlFirewallRuleBuildAgentName: "allow-build-agent"
 
   tfStateResourceGroup: 'rg-${{ parameters.region }}-${{ parameters.env }}-terraform'
   tfStateStorageAccount: 'stg${{ parameters.region }}${{ parameters.env }}tfstate'

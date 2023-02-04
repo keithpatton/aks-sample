@@ -129,3 +129,9 @@ variable "sql_ad_admin_object_id" {
   type        = string
   default     = "#{sqlAdAdminObjectId}#"
 }
+
+variable "sql_firewall_rule_build_agent_name" { 
+  description = "The name of the sql firewall rule applying for the build agent."
+  type        = string
+  default     = "#{sqlFirewallRuleBuildAgentName}#"
+}

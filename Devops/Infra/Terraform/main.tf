@@ -177,7 +177,7 @@ data "http" "myip" {
 }
 
 resource "azurerm_mssql_firewall_rule" "default" {
-  name                = "Azure Devops"
+  name                = var.sql_firewall_rule_build_agent_name
   server_id           = azurerm_mssql_server.default.id
   start_ip_address    = "${chomp(data.http.myip.response_body)}"
   end_ip_address      = "${chomp(data.http.myip.response_body)}"
