@@ -185,6 +185,15 @@ resource "azurerm_mssql_firewall_rule" "default" {
   depends_on = [ data.http.myip ]
 }
 
+resource "azurerm_mssql_firewall_rule" "aks" {
+  name                = "allow-${azurerm_kubernetes_cluster.default.name}"
+  server_id           = azurerm_mssql_server.default.id
+  start_ip_address    = "${split(",",azurerm_kubernetes_cluster.default.network_profile.podf_cidr)[0]}"
+  end_ip_address      = "${split(",",azurerm_kubernetes_cluster.default.network_profile.podf_cidr)[1]}"
+
+  depends_on = [ azurerm_kubernetes_cluster, azurerm_mssql_server.default ]
+}
+
 resource "azurerm_mssql_database" "default" {
   for_each = toset(var.tenants)
   name                = each.value
