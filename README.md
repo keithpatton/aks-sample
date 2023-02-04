@@ -38,6 +38,7 @@ All variables are stored in source control:
 - Variables common to all pipelines are held in /Devops/Common/Templates
 - Variables specific to the infra pipeline are held in /Devops/Infra/Templates
 - Variables specific to the app pipeline are held in /Devops/App/Templates
+
 A structure is employed to afford deploymen stamp control with region/environment variable combinations:
 - Devops/Common/Templates/env/dev/variables/yml
 - Devops/Common/Templates/region/au1/variables.yml
