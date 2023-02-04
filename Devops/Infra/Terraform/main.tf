@@ -131,6 +131,7 @@ resource "azurerm_key_vault_secret" "sql" {
 
 data "azuread_user" "sql" {
   user_principal_name = var.sql_ad_admin_username
+  depends_on = [ azurerm_key_vault.default ]
 }
 
 resource "azurerm_mssql_server" "default" {
