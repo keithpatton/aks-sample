@@ -1,6 +1,7 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace AksWorkloadIdentitySample.Api.Controllers
 {
@@ -26,8 +27,18 @@ namespace AksWorkloadIdentitySample.Api.Controllers
             // Write To persistent volume storage
             WriteToPersistentStorage();
 
+            // Access DB Using Managed Identity
+            var sqlServerName = Environment.GetEnvironmentVariable("sql_server_name");
+            if (String.IsNullOrWhiteSpace(sqlServerName))
+                sqlServerName = "sql-au1-dev-01"; // update for local dev        
+            var connString = $"Data Source={sqlServerName}.database.windows.net; Initial Catalog=tenant1; Encrypt=True";
+            using SqlConnection conn = new SqlConnection(connString);
+            var credential = new Azure.Identity.DefaultAzureCredential();
+            var token = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" }));
+            conn.AccessToken = token.Token;
+            conn.Open();
+
             // Use Azure AD Identity to create and retrieve a new secret, then use it within the response within Summary
-            // This proves the Azure AD Identity flow is working 
             var keyVaultName = Environment.GetEnvironmentVariable("aks_keyvault");
             if (String.IsNullOrWhiteSpace(keyVaultName))
                 keyVaultName = "kv-aksdemo-qpe"; // update for local dev
