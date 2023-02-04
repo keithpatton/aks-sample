@@ -142,7 +142,7 @@ resource "azurerm_mssql_server" "default" {
   }
 
   azuread_administrator {
-    azuread_authentication_only = true
+    azuread_authentication_only = false
     login_username = var.sql_ad_admin_username
     object_id      = var.sql_ad_admin_object_id
   }
