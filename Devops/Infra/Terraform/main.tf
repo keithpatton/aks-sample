@@ -190,6 +190,8 @@ resource "azurerm_mssql_firewall_rule" "default" {
   server_id           = azurerm_mssql_server.default.id
   start_ip_address    = "${chomp(data.http.myip.response_body)}"
   end_ip_address      = "${chomp(data.http.myip.response_body)}"
+
+  depends_on = [ data.http.myip ]
 }
 
 resource "mssql_user" "aks" {
