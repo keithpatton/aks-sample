@@ -172,15 +172,6 @@ resource "azurerm_mssql_elasticpool" "default" {
   depends_on = [ azurerm_mssql_server.default ]
 }
 
-resource "azurerm_mssql_database" "default" {
-  for_each = toset(var.tenants)
-  name                = each.value
-  server_id           = azurerm_mssql_server.default.id
-  elastic_pool_id   = azurerm_mssql_elasticpool.default.id
-
-  depends_on = [ azurerm_mssql_elasticpool.default ]
-}
-
 data "http" "myip" {
   url = "https://ipv4.icanhazip.com/"
 }
@@ -192,6 +183,15 @@ resource "azurerm_mssql_firewall_rule" "default" {
   end_ip_address      = "${chomp(data.http.myip.response_body)}"
 
   depends_on = [ data.http.myip ]
+}
+
+resource "azurerm_mssql_database" "default" {
+  for_each = toset(var.tenants)
+  name                = each.value
+  server_id           = azurerm_mssql_server.default.id
+  elastic_pool_id     = azurerm_mssql_elasticpool.default.id
+
+  depends_on = [ azurerm_mssql_elasticpool.default, azurerm_mssql_firewall_rule.default ]
 }
 
 resource "mssql_user" "aks" {
@@ -209,5 +209,5 @@ resource "mssql_user" "aks" {
   object_id = azurerm_user_assigned_identity.aks.client_id
   roles     = ["db_owner"]
 
-  depends_on = [ azurerm_mssql_database.default,azurerm_mssql_firewall_rule.default ]
+  depends_on = [ azurerm_mssql_database.default ]
 }
