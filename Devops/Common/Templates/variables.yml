@@ -41,3 +41,5 @@ variables:
   value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
 - name: aksWorkloadIdentityServiceAccountName
   value: 'sa-workload-identity-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+- name: sqlServerName
+  value: 'sql-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)'

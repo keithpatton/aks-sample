@@ -16,7 +16,6 @@ variables:
   aksFederatedIdentityName: 'fic-${{ parameters.region }}-${{ parameters.env }}-$(aksName)'
   aksNodeCount: 1
   aksVmSize: 'Standard_B2s'
-  sqlServerName: "sql-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
   sqlElasticPoolName: "elp-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
   sqlElasticPoolSkuName:  'GP_Gen5'
   sqlElasticPoolSkuTier:  'GeneralPurpose'
