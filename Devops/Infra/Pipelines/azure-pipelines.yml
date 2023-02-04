@@ -129,7 +129,7 @@ stages:
         backendAzureRmContainerName: $(tfStateContainerName)
         backendAzureRmKey: $(tfStateFileName)
     - task: TerraformTaskV3@3
-      displayName: Terraform Cleanup
+      displayName: Terraform Destroy - Temp Resources Only
       condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
       inputs:
         provider: 'azurerm'
