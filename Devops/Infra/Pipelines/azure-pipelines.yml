@@ -128,3 +128,17 @@ stages:
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
         backendAzureRmKey: $(tfStateFileName)
+    - task: TerraformTaskV3@3
+      displayName: Terraform Cleanup
+      condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
+      inputs:
+        provider: 'azurerm'
+        environmentServiceNameAzureRM: $(svcConnAzureRm)
+        command: 'destroy'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
+        commandOptions: 
+          --auto-approve -target=azurerm_mssql_firewall_rule.default
+        backendAzureRmResourceGroupName: $(tfStateResourceGroup)
+        backendAzureRmStorageAccountName: $(tfStateStorageAccount)
+        backendAzureRmContainerName: $(tfStateContainerName)
+        backendAzureRmKey: $(tfStateFileName)          
