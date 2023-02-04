@@ -129,12 +129,6 @@ resource "azurerm_key_vault_secret" "sql" {
   depends_on = [ azurerm_key_vault.default ]
 }
 
-data "azuread_user" "sql" {
-  user_principal_name = var.sql_ad_admin_username
-  # wait for azurerm resource to use the same security context
-  depends_on = [ azurerm_key_vault.default ]
-}
-
 resource "azurerm_mssql_server" "default" {
   name                         = var.sql_server_name
   resource_group_name          = azurerm_resource_group.default.name
