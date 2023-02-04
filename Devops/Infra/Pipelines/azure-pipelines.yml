@@ -64,6 +64,20 @@ stages:
           az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
           az provider register --namespace Microsoft.ContainerService
     - task: AzureCLI@2
+      displayName: 'Ensure Build Agent Access to Resources'
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: bash
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          build_agent_ip=$(curl ifconfig.co)
+          if az sql db show --name $(sqlServerName) &> /dev/null; then
+            echo "Azure SQL Server '$(sqlServerName)' requires firewall pinhole for MS SQL Terraform Provider State Refresh"
+            az sql server firewall-rule create --name "$(sqlFirewallRuleBuildAgentName)" --server $(sqlServerName) --start-ip-address $build_agent_ip --end-ip-address $build_agent_ip
+          else
+            echo "Azure SQL Server '$(sqlServerName)' does not exist"
+          fi
+    - task: AzureCLI@2
       displayName: 'Ensure Terraform State Storage Account and Container'
       inputs:
         azureSubscription: $(svcConnAzureRm)
@@ -128,3 +142,18 @@ stages:
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
         backendAzureRmKey: $(tfStateFileName)
+    - task: AzureCLI@2
+      displayName: 'Remove Build Agent Access to Resources'
+      condition: always()
+      inputs:
+        azureSubscription: $(svcConnAzureRm)
+        scriptType: bash
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          firewall_rule_name=$(az sql server firewall-rule list --server $azure_sql_server_name --query [].name -o tsv)
+          if [[ $firewall_rule_name == "$(sqlFirewallRuleBuildAgentName)" ]]; then
+            echo "Azure SQL Server '$(sqlServerName)' requires removal of firewall pinhole for MS SQL Terraform Provider"
+            az sql server firewall-rule delete --name "allow-build-agent" --server $(sqlServerName)
+          else
+            echo "Firewall rule '$(sqlFirewallRuleBuildAgentName)' does not exist on server '$(sqlServerName)'"
+          fi
