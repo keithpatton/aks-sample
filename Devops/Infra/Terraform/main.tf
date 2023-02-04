@@ -191,7 +191,7 @@ resource "azurerm_mssql_firewall_rule" "aks" {
   start_ip_address    = "${cidrhost(azurerm_kubernetes_cluster.default.network_profile.0.pod_cidr, 0)}"
   end_ip_address      = "${cidrhost(azurerm_kubernetes_cluster.default.network_profile.0.pod_cidr, -1)}"
 
-  depends_on = [ azurerm_kubernetes_cluster, azurerm_mssql_server.default ]
+  depends_on = [ azurerm_kubernetes_cluster.default, azurerm_mssql_server.default ]
 }
 
 resource "azurerm_mssql_database" "default" {
