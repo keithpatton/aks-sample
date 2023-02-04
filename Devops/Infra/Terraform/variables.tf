@@ -123,3 +123,9 @@ variable "sql_ad_admin_username" {
   type        = string
   default     = "#{sqlAdAdminUsername}#"
 }
+
+variable "sql_ad_admin_object_id" { 
+  description = "The object id of the Azure AD Sql Administrator."
+  type        = string
+  default     = "#{sqlAdAdminObjectId}#"
+}

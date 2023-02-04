@@ -132,7 +132,7 @@ resource "azurerm_key_vault_secret" "sql" {
 data "azuread_user" "sql" {
   user_principal_name = var.sql_ad_admin_username
   # wait for azurerm resource to use the same security context
-  depends_on = [ azurerm_resource_group.default ]
+  depends_on = [ azurerm_key_vault.default ]
 }
 
 resource "azurerm_mssql_server" "default" {
@@ -150,7 +150,7 @@ resource "azurerm_mssql_server" "default" {
   azuread_administrator {
     azuread_authentication_only = true
     login_username = var.sql_ad_admin_username
-    object_id      = data.azuread_user.sql.object_id
+    object_id      = var.sql_ad_admin_object_id
   }
 
 }

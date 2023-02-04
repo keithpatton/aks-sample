@@ -9,10 +9,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.40.0"
     }
-    azuread = {
-      source  = "hashicorp/azuread"
-      version = "~> 2.15.0"
-    }
     mssql = {
       source = "betr-io/mssql"
       version = "~> 0.2.7"
@@ -33,9 +29,4 @@ provider "azurerm" {
       purge_soft_delete_on_destroy = true
     }
   }
-}
-
-# Configure the Azure Active Directory Provider
-provider "azuread" {
-  tenant_id = data.azurerm_client_config.current.tenant_id
 }
