@@ -186,7 +186,7 @@ resource "azurerm_private_endpoint" "sql" {
   name                           = var.sql_private_endpoint_name
   location                       = azurerm_resource_group.default.location
   resource_group_name            = azurerm_resource_group.default.name
-  subnet_id                      = azurerm_subnet.aks.id
+  subnet_id                      = data.azurerm_subnet.aks.id
   custom_network_interface_name  = var.sql_private_endpoint_nic_name
 
   private_service_connection {
