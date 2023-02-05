@@ -41,32 +41,32 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 }
 
-data "azurerm_kubernetes_cluster" "aks" {
-  name                = var.aks_name
-  resource_group_name = azurerm_resource_group.default.name
-}
+# data "azurerm_kubernetes_cluster" "aks" {
+#   name                = var.aks_name
+#   resource_group_name = azurerm_resource_group.default.name
+# }
 
-data "azurerm_lb" "aks" {
-  name                = "kubernetes"
-  resource_group_name = var.rg_aks_nodes_name
-}
+# data "azurerm_lb" "aks" {
+#   name                = "kubernetes"
+#   resource_group_name = var.rg_aks_nodes_name
+# }
 
-data "azurerm_lb_backend_address_pool" "aks" {
-  name            = "kubernetes"
-  loadbalancer_id = data.azurerm_lb.aks.id
-}
+# data "azurerm_lb_backend_address_pool" "aks" {
+#   name            = "kubernetes"
+#   loadbalancer_id = data.azurerm_lb.aks.id
+# }
 
-output "azurerm_lb" {
-  value = data.azurerm_lb.aks
-}
+# output "azurerm_lb" {
+#   value = data.azurerm_lb.aks
+# }
 
-output "azurerm_lb_backend_address_pool" {
-  value = data.azurerm_lb_backend_address_pool.aks
-}
+# output "azurerm_lb_backend_address_pool" {
+#   value = data.azurerm_lb_backend_address_pool.aks
+# }
 
-output "aks_vnet_id" {
-  value = data.azurerm_lb_backend_address_pool.aks.backend_address.0.virtual_network_id
-}
+# output "aks_vnet_id" {
+#   value = data.azurerm_lb_backend_address_pool.aks.backend_address.0.virtual_network_id
+# }
 
 
 # data "azurerm_virtual_network" "aks" {
@@ -75,10 +75,7 @@ output "aks_vnet_id" {
 #   depends_on = [azurerm_kubernetes_cluster.default]
 # }
 
-output "aks_subnetid" {
-  description = "Subnet ID of AKS Cluster Agent Pool"
-  value       = data.azurerm_kubernetes_cluster.aks.agent_pool_profile[0].vnet_subnet_id
-}
+
 
 # locals {
 #   aks_vnet_id = data.azurerm_kubernetes_cluster.aks.agent_pool_profile[0].vnet_subnet_id
@@ -86,12 +83,16 @@ output "aks_subnetid" {
 #   aks_vnet_name = data.azurerm_virtual_network.aks.name[0]
 # }
 
-# data "external" "aks_vnet_id" {
-#   program = [
-#     "bash",
-#     "-c",
-#     "az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].id' -o tsv"
-#   ]
+data "external" "aks_vnet_id" {
+  program = [
+    "az","network","vnet","list","--resource-group","${var.rg_aks_nodes_name}","--query","'[0].id'","-o","tsv"
+  ]
+}
+
+output "aks_vnet_id" {
+  description = "VNet ID of AKS Cluster"
+  value       = data.external.aks_vnet_id.result
+}
 
 #   depends_on = [azurerm_kubernetes_cluster.default]
 # }
