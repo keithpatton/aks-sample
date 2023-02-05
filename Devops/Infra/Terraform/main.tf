@@ -84,7 +84,7 @@ resource "azurerm_role_assignment" "acr" {
 resource "azurerm_role_assignment" "stg" {
   principal_id                     = azurerm_kubernetes_cluster.default.kubelet_identity[0].object_id
   role_definition_name             = "Storage Account Contributor"
-  scope                            = azurerm_storage_account.default.id
+  scope                            = azurerm_storage_account.aks.id
   skip_service_principal_aad_check = true
 }
 
