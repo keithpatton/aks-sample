@@ -6,7 +6,7 @@ metadata:
 provisioner: blob.csi.azure.com
 parameters:
   storageAccount: stgau1devaksdemoaks
-  containerName: common
+  resourceGroup: rg-au1-dev-aksdemo
   protocol: nfs
 volumeBindingMode: Immediate
 allowVolumeExpansion: true
