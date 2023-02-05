@@ -84,7 +84,6 @@ resource "azurerm_kubernetes_cluster" "default" {
 resource "null_resource" "aks_network" {
   provisioner "local-exec" {
     command = <<-EOT
-      az login
       az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].id' -o tsv"
     EOT
   }
@@ -93,6 +92,7 @@ resource "null_resource" "aks_network" {
     azurerm_kubernetes_cluster.default
   ]
 }
+
 
 # output "aks_vnet_id" {
 #   value = "${local-exec.stdout}"
