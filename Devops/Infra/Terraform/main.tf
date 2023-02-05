@@ -219,7 +219,7 @@ data "azurerm_private_endpoint_connection" "sql" {
 
 resource "azurerm_private_dns_zone" "sql" {
   name                = "privatelink.database.windows.net"
-  resource_group_name = azurerm_resource_group.default.location
+  resource_group_name = azurerm_resource_group.default.name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "sql" {
