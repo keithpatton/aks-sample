@@ -178,7 +178,7 @@ data "azurerm_kubernetes_cluster" "default" {
 }
 
 data "azurerm_virtual_network" "aks" {
-  name                = regex("^.*/virtualNetworks/(.*)/subnets/.*$", data.azurerm_kubernetes_cluster.default.agent_pool_profile.vnet_subnet_id).matches[1]
+  name                = regex("^.*/virtualNetworks/(.*)/subnets/.*$", data.azurerm_kubernetes_cluster.default.agent_pool_profile.0.vnet_subnet_id).matches[1]
   resource_group_name = azurerm_resource_group.default.name
 
   depends_on = [azurerm_kubernetes_cluster.default]
@@ -188,7 +188,7 @@ resource "azurerm_private_endpoint" "sql" {
   name                           = var.sql_private_endpoint_name
   location                       = azurerm_resource_group.default.location
   resource_group_name            = azurerm_resource_group.default.name
-  subnet_id                      = data.azurerm_kubernetes_cluster.default.vnet_subnet_id
+  subnet_id                      = data.azurerm_kubernetes_cluster.default.agent_pool_profile.0.vnet_subnet_id
   custom_network_interface_name  = var.sql_private_endpoint_nic_name
 
   private_service_connection {
@@ -217,7 +217,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "sql" {
   name                  = "vnet-private-zone-link"
   resource_group_name   = azurerm_resource_group.default.name
   private_dns_zone_name = azurerm_private_dns_zone.sql.name
-  virtual_network_id    = azurerm_virtual_network.aks.data.id
+  virtual_network_id    = data.azurerm_virtual_network.aks.id
   registration_enabled  = true
 }
 
