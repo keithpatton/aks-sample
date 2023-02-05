@@ -83,10 +83,18 @@ resource "azurerm_kubernetes_cluster" "default" {
 #   aks_vnet_name = data.azurerm_virtual_network.aks.name[0]
 # }
 
-
- provisioner "local-exec" {
+resource "null_resource" "aks_network" {
+  provisioner "local-exec" {
     command = "az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].id' -o tsv"
   }
+
+  depends_on = [
+    azurerm_kubernetes_cluster.default
+  ]
+}
+
+
+
 
 # output "aks_vnet_id" {
 #   value = "${local-exec.stdout}"
