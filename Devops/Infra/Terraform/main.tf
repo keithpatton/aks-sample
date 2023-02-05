@@ -35,6 +35,8 @@ resource "azurerm_subnet" "aks" {
     resource_group_name         = azurerm_resource_group.default.name
     virtual_network_name        = azurerm_virtual_network.aks.name
     address_prefixes            = [var.aks_subnet_address_space]
+
+    depends_on = [ azurerm_virtual_network.aks ]
 }
 
 resource "azurerm_kubernetes_cluster" "default" {
@@ -62,6 +64,8 @@ resource "azurerm_kubernetes_cluster" "default" {
   identity {
     type = "SystemAssigned"
   }
+
+  depends_on = [ azurerm_subnet.aks ]
 
 }
 
@@ -192,7 +196,6 @@ resource "azurerm_mssql_elasticpool" "default" {
   depends_on = [ azurerm_mssql_server.default ]
 }
 
-
 resource "azurerm_private_endpoint" "sql" {
   name                           = var.sql_private_endpoint_name
   location                       = azurerm_resource_group.default.location
@@ -206,15 +209,11 @@ resource "azurerm_private_endpoint" "sql" {
     private_connection_resource_id = azurerm_mssql_server.default.id
     subresource_names              = ["sqlServer"]
   }
-
-  depends_on = [azurerm_kubernetes_cluster.default]
 }
 
 data "azurerm_private_endpoint_connection" "sql" {
   name                = azurerm_private_endpoint.sql.name
   resource_group_name = azurerm_resource_group.default.name
-
-  depends_on          = [azurerm_private_endpoint.sql]
 }
 
 resource "azurerm_private_dns_zone" "sql" {
@@ -257,7 +256,7 @@ resource "azurerm_mssql_database" "default" {
   server_id           = azurerm_mssql_server.default.id
   elastic_pool_id     = azurerm_mssql_elasticpool.default.id
 
-  depends_on = [ azurerm_mssql_elasticpool.default, azurerm_mssql_firewall_rule.default ]
+  depends_on = [ azurerm_mssql_firewall_rule.default ]
 }
 
 resource "mssql_user" "aks" {
