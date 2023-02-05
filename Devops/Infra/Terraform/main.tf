@@ -74,14 +74,14 @@ resource "azurerm_storage_account" "aks" {
   depends_on = [ azurerm_kubernetes_cluster.default ]
 }
 
-resource "azurerm_role_assignment" "default" {
+resource "azurerm_role_assignment" "acr" {
   principal_id                     = azurerm_kubernetes_cluster.default.kubelet_identity[0].object_id
   role_definition_name             = "AcrPull"
   scope                            = azurerm_container_registry.default.id
   skip_service_principal_aad_check = true
 }
 
-resource "azurerm_role_assignment" "default" {
+resource "azurerm_role_assignment" "stg" {
   principal_id                     = azurerm_kubernetes_cluster.default.kubelet_identity[0].object_id
   role_definition_name             = "Storage Account Contributor"
   scope                            = azurerm_storage_account.default.id
