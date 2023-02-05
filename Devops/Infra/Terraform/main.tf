@@ -45,7 +45,7 @@ data "external" "aks_vnet_id" {
   program = [
     "bash",
     "-c",
-    "az network vnet list --resource-group $(var.rg_aks_nodes_name) --query '[0].id' -o tsv"
+    "az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].id' -o tsv"
   ]
 
   depends_on = [azurerm_kubernetes_cluster.default]
