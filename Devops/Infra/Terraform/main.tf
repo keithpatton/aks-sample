@@ -154,7 +154,6 @@ resource "azurerm_mssql_server" "default" {
     login_username = var.sql_ad_admin_username
     object_id      = var.sql_ad_admin_object_id
   }
-
 }
 
 resource "azurerm_mssql_elasticpool" "default" {
@@ -176,8 +175,6 @@ resource "azurerm_mssql_elasticpool" "default" {
     min_capacity = 0.25
     max_capacity = 2
   }
-
-  depends_on = [ azurerm_mssql_server.default ]
 }
 
 resource "azurerm_private_endpoint" "sql" {

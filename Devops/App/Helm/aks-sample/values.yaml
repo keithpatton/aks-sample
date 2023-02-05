@@ -8,4 +8,4 @@ workloadIdentityServiceAccountName: #{aksWorkloadIdentityServiceAccountName}#
 workloadIdentityClientId: #{aksWorkloadIdentityClientId}#
 keyVaultName: #{kvName}#
 azureContainerRegistryName: #{acrName}#
-sqlServerName: #${sqlServerName}#
+sqlServerName: #{sqlServerName}#
