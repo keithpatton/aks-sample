@@ -1,6 +1,6 @@
 ﻿data "azurerm_client_config" "current" {}
 
-### Resource Group
+### Core Resource Group
 
 resource "azurerm_resource_group" "default" {
   name     = "${var.rg_name}"
@@ -32,11 +32,9 @@ resource "azurerm_virtual_network" "aks" {
 
 resource "azurerm_subnet" "aks" {
     name                        = var.aks_subnet_name
-    resource_group_name         = azurerm_resource_group.default.name
+    resource_group_name         = azurerm_resource_group.aks.name
     virtual_network_name        = azurerm_virtual_network.aks.name
     address_prefixes            = [var.aks_subnet_address_space]
-
-    depends_on = [ azurerm_virtual_network.aks ]
 }
 
 resource "azurerm_kubernetes_cluster" "default" {
@@ -45,14 +43,12 @@ resource "azurerm_kubernetes_cluster" "default" {
   location            = azurerm_resource_group.default.location
   dns_prefix          = "${var.aks_name}"
   node_resource_group = azurerm_resource_group.aks.name
+  workload_identity_enabled = true
+  oidc_issuer_enabled = true
 
   storage_profile {
     blob_driver_enabled = true
   }
-
-  workload_identity_enabled = true
-
-  oidc_issuer_enabled = true
 
   default_node_pool {
     name            = var.aks_namespace
@@ -64,9 +60,6 @@ resource "azurerm_kubernetes_cluster" "default" {
   identity {
     type = "SystemAssigned"
   }
-
-  depends_on = [ azurerm_subnet.aks ]
-
 }
 
 resource "azurerm_role_assignment" "default" {
@@ -75,8 +68,6 @@ resource "azurerm_role_assignment" "default" {
   scope                            = azurerm_container_registry.default.id
   skip_service_principal_aad_check = true
 }
-
-### Azure Workload Identity - AKS 
 
 resource "azurerm_user_assigned_identity" "aks" {
   location            = azurerm_resource_group.default.location
@@ -105,8 +96,6 @@ resource "azurerm_key_vault" "default" {
 
   sku_name = "standard"
 }
-
-### Key Vault Access Policy - AKS
 
 resource "azurerm_key_vault_access_policy" "superadmin" {
   key_vault_id = azurerm_key_vault.default.id
