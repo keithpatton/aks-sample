@@ -38,7 +38,7 @@ variables:
 - name: aksNamespace
   value: 'default'
 - name: aksStorageAccountName
-  value: 'stg{{ parameters.region }}${{ parameters.env }}$(appName)aks'
+  value: 'stg${{ parameters.region }}${{ parameters.env }}$(appName)aks'
 - name: aksWorkloadIdentityName
   value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
 - name: aksWorkloadIdentityServiceAccountName
