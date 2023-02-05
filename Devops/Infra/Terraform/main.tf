@@ -75,8 +75,6 @@ resource "azurerm_kubernetes_cluster" "default" {
 #   depends_on = [azurerm_kubernetes_cluster.default]
 # }
 
-
-
 # locals {
 #   aks_vnet_id = data.azurerm_kubernetes_cluster.aks.agent_pool_profile[0].vnet_subnet_id
 #   aks_subnet_id = data.azurerm_virtual_network.aks.subnets[0].id[0]
@@ -85,16 +83,16 @@ resource "azurerm_kubernetes_cluster" "default" {
 
 resource "null_resource" "aks_network" {
   provisioner "local-exec" {
-    command = "az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].id' -o tsv"
+    command = <<-EOT
+      az login
+      az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].id' -o tsv"
+    EOT
   }
 
   depends_on = [
     azurerm_kubernetes_cluster.default
   ]
 }
-
-
-
 
 # output "aks_vnet_id" {
 #   value = "${local-exec.stdout}"
