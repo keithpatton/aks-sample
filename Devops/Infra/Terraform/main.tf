@@ -18,6 +18,20 @@ resource "azurerm_container_registry" "default" {
 
 ### AKS Cluster
 
+resource "azurerm_virtual_network" "aks" {
+    name                        = var.aks_vnet_name
+    location                    = azurerm_resource_group.default.location
+    resource_group_name         = azurerm_resource_group.default.name
+    address_space               = [var.aks_vnet_address_space] 
+}
+
+resource "azurerm_subnet" "aks" {
+    name                        = var.aks_subnet_name
+    resource_group_name         = azurerm_resource_group.default.name
+    virtual_network_name        = azurerm_virtual_network.aks.name
+    address_prefix              = var.aks_subnet_address_prefix
+}
+
 resource "azurerm_kubernetes_cluster" "default" {
   name                = "${var.aks_name}"
   resource_group_name = azurerm_resource_group.default.name
@@ -34,9 +48,10 @@ resource "azurerm_kubernetes_cluster" "default" {
   oidc_issuer_enabled = true
 
   default_node_pool {
-    name       = var.aks_namespace
-    node_count = var.aks_node_count
-    vm_size    = var.aks_vm_size
+    name            = var.aks_namespace
+    node_count      = var.aks_node_count
+    vm_size         = var.aks_vm_size
+    vnet_subnet_id  = azurerm_subnet.aks.id
   }
 
   identity {
@@ -172,24 +187,12 @@ resource "azurerm_mssql_elasticpool" "default" {
   depends_on = [ azurerm_mssql_server.default ]
 }
 
-data "azurerm_kubernetes_cluster" "default" {
-  name                = "${var.aks_name}"
-  resource_group_name = azurerm_resource_group.default.name
-}
-
-data "azurerm_virtual_network" "aks" {
-
-  name                = (regex("^.*/virtualNetworks/(.*)/subnets/.*$", data.azurerm_kubernetes_cluster.default.agent_pool_profile.0.vnet_subnet_id))[0]
-  resource_group_name = azurerm_resource_group.default.name
-
-  depends_on = [azurerm_kubernetes_cluster.default]
-}
 
 resource "azurerm_private_endpoint" "sql" {
   name                           = var.sql_private_endpoint_name
   location                       = azurerm_resource_group.default.location
   resource_group_name            = azurerm_resource_group.default.name
-  subnet_id                      = data.azurerm_kubernetes_cluster.default.agent_pool_profile.0.vnet_subnet_id
+  subnet_id                      = azurerm_subnet.aks.id
   custom_network_interface_name  = var.sql_private_endpoint_nic_name
 
   private_service_connection {
@@ -218,7 +221,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "sql" {
   name                  = "vnet-private-zone-link"
   resource_group_name   = azurerm_resource_group.default.name
   private_dns_zone_name = azurerm_private_dns_zone.sql.name
-  virtual_network_id    = data.azurerm_virtual_network.aks.id
+  virtual_network_id    = azurerm_virtual_network.aks.id
   registration_enabled  = true
 }
 

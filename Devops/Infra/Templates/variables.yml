@@ -13,9 +13,14 @@ parameters:
 
 variables:
   rgAksNodesName: '$(rgName)-k8s'
-  aksFederatedIdentityName: 'fic-${{ parameters.region }}-${{ parameters.env }}-$(aksName)'
+  aksFederatedIdentityName: 'fic-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
   aksNodeCount: 1
   aksVmSize: 'Standard_B2s'
+  aksVNetName: vnet-${{ parameters.region }}-${{ parameters.env }}-$(appName)
+  aksSubnetName: snet-${{ parameters.region }}-${{ parameters.env }}-$(appName)
+  aksVNetAddressSpace: "10.224.0.0/12"
+  aksSubnetAddressPrefix: "10.224.0.0/16"
+
   sqlElasticPoolName: "elp-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
   sqlElasticPoolSkuName:  'GP_Gen5'
   sqlElasticPoolSkuTier:  'GeneralPurpose'

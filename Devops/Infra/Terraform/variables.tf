@@ -70,6 +70,31 @@ variable "aks_node_count" {
   default     = #{aksNodeCount}#
 }
 
+variable "aks_vnet_name" {
+  description = "Name of VNet for AKS"
+  type        = string
+  default     = #{aksVNetName}#
+}
+
+variable "aks_subnet_name" {
+  description = "Name of Subnet for AKS"
+  type        = string
+  default     = #{aksSubnetName}#
+}
+
+variable "aks_vnet_address_space" {
+  description = "IP Address Space for AKS Vnet"
+  type        = string
+  default     = #{aksVNetAddressSpace}#
+}
+
+variable "aks_subnet_address_prefix" {
+  description = "IP Address Prefix for AKS Subnet"
+  type        = string
+  default     = #{aksSubnetAddressPrefix}#
+}
+
+
 variable "kv_name" { 
   description = "The name of the Key Vault instance."
   type        = string
