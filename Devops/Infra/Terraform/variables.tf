@@ -73,7 +73,7 @@ variable "aks_node_count" {
 variable "aks_vnet_name" {
   description = "Name of VNet for AKS"
   type        = string
-  default     = #{aksVNetName}#
+  default     = "#{aksVNetName}#"
 }
 
 variable "aks_subnet_name" {
