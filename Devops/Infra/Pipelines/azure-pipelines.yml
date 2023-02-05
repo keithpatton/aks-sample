@@ -55,6 +55,7 @@ stages:
     steps:    
     - task: AzureCLI@2
       displayName: 'Enable Workload Identity Preview Feature'
+      condition: eq(1,2)
       inputs:
         azureSubscription: $(svcConnAzureRm)
         scriptType: 'pscore'
@@ -80,6 +81,7 @@ stages:
           fi
     - task: AzureCLI@2
       displayName: 'Ensure Terraform State Storage Account and Container'
+      condition: eq(1,2)
       inputs:
         azureSubscription: $(svcConnAzureRm)
         scriptType: 'pscore'
