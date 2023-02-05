@@ -74,7 +74,7 @@ resource "azurerm_storage_account" "aks" {
   depends_on = [ azurerm_kubernetes_cluster.default ]
 }
 
-resource "azurerm_role_assignment" "acr" {
+resource "azurerm_role_assignment" "default" {
   principal_id                     = azurerm_kubernetes_cluster.default.kubelet_identity[0].object_id
   role_definition_name             = "AcrPull"
   scope                            = azurerm_container_registry.default.id
