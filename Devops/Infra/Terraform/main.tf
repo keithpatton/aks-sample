@@ -46,6 +46,21 @@ data "azurerm_kubernetes_cluster" "aks" {
   resource_group_name = azurerm_resource_group.default.name
 }
 
+data "azurerm_lb" "aks" {
+  name                = "kubernetes"
+  resource_group_name = var.rg_aks_nodes_name
+}
+
+data "azurerm_lb_backend_address_pool" "aks" {
+  name            = "kubernetes"
+  loadbalancer_id = data.azurerm_lb.aks.id
+}
+
+output "aks_vnet_id" {
+  value = data.azurerm_lb_backend_address_pool.aks.backend_address[0].virtual_network_id
+}
+
+
 # data "azurerm_virtual_network" "aks" {
 #   resource_group_name = var.rg_aks_nodes_name
 
