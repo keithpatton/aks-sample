@@ -41,28 +41,37 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 }
 
-data "external" "aks_vnet_id" {
-  program = [
-    "bash",
-    "-c",
-    "az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].id' -o tsv"
-  ]
+data "azurerm_virtual_network" "aks" {
+  resource_group_name = var.rg_aks_nodes_name
 
   depends_on = [azurerm_kubernetes_cluster.default]
 }
 
 locals {
-  aks_vnet_id = data.external.aks_vnet_id.result
-  aks_vnet_name = regex(data.external.aks_vnet_id.result, "virtualNetworks/(.*)")
+  aks_vnet_id = data.azurerm_virtual_network.aks.id[0]
+  aks_subnet_id = data.azurerm_virtual_network.aks.subnets[0].id[0]
+  aks_vnet_name = data.azurerm_virtual_network.aks.name[0]
 }
 
-data "azurerm_subnet" "aks" {
-  name                 = "aks-subnet"
-  virtual_network_name = local.aks_vnet_name
-  resource_group_name  = var.rg_aks_nodes_name
+# data "external" "aks_vnet_id" {
+#   program = [
+#     "bash",
+#     "-c",
+#     "az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].id' -o tsv"
+#   ]
 
-  depends_on = [data.external.aks_vnet_id]
-}
+#   depends_on = [azurerm_kubernetes_cluster.default]
+# }
+
+
+
+# data "azurerm_subnet" "aks" {
+#   name                 = "aks-subnet"
+#   virtual_network_name = local.aks_vnet_name
+#   resource_group_name  = var.rg_aks_nodes_name
+
+#   depends_on = [data.external.aks_vnet_id]
+# }
 
 resource "azurerm_role_assignment" "default" {
   principal_id                     = azurerm_kubernetes_cluster.default.kubelet_identity[0].object_id
@@ -186,7 +195,7 @@ resource "azurerm_private_endpoint" "sql" {
   name                           = var.sql_private_endpoint_name
   location                       = azurerm_resource_group.default.location
   resource_group_name            = azurerm_resource_group.default.name
-  subnet_id                      = data.azurerm_subnet.aks.id
+  subnet_id                      = local.aks_subnet_id
   custom_network_interface_name  = var.sql_private_endpoint_nic_name
 
   private_service_connection {
