@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.aksNamespace }}
 provisioner: blob.csi.azure.com
 parameters:
-  skuName: Standard_ZRS
+  storageAccount: {{ .Values.aksStorageAccountName }}
   containerName: common
   protocol: nfs
 volumeBindingMode: Immediate
@@ -22,7 +22,7 @@ metadata:
   namespace: {{ $aksNamespace }}
 provisioner: blob.csi.azure.com
 parameters:
-  skuName: Standard_ZRS
+  storageAccount: {{ .Values.aksStorageAccountName }}
   containerName: {{ . }}
   protocol: nfs
 volumeBindingMode: Immediate

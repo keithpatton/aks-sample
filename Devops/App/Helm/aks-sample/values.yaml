@@ -2,6 +2,7 @@ imageName: #{imageName}#
 imageTag: #{imageTag}#
 tenants: #{tenantsJson}#
 storageClassBlobName: #{aksStorageClassBlobName}#
+aksStorageAccountName: #{aksStorageAccountName}#
 pvcBlobName: #{aksPvcBlobName}#
 aksNamespace: #{aksNamespace}#
 workloadIdentityServiceAccountName: #{aksWorkloadIdentityServiceAccountName}#
