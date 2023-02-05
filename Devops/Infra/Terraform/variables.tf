@@ -79,19 +79,19 @@ variable "aks_vnet_name" {
 variable "aks_subnet_name" {
   description = "Name of Subnet for AKS"
   type        = string
-  default     = #{aksSubnetName}#
+  default     = "#{aksSubnetName}#"
 }
 
 variable "aks_vnet_address_space" {
   description = "IP Address Space for AKS Vnet"
   type        = string
-  default     = #{aksVNetAddressSpace}#
+  default     = "#{aksVNetAddressSpace}#"
 }
 
 variable "aks_subnet_address_prefix" {
   description = "IP Address Prefix for AKS Subnet"
   type        = string
-  default     = #{aksSubnetAddressPrefix}#
+  default     = "#{aksSubnetAddressPrefix}#"
 }
 
 variable "kv_name" { 
