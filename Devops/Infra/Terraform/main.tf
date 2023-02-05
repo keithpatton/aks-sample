@@ -67,6 +67,10 @@ resource "azurerm_storage_account" "aks" {
   is_hns_enabled           = true
   nfsv3_enabled            = true
 
+  network_rules {
+    default_action = "Deny"
+  }
+
   depends_on = [ azurerm_kubernetes_cluster.default ]
 }
 
