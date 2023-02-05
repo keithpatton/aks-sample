@@ -58,6 +58,12 @@ variable "aks_workload_identity_service_account_name" {
   default     = "#{aksWorkloadIdentityServiceAccountName}#"
 }
 
+variable "aks_storage_account_name" {
+  description = "Name of the storage account to use with AKS."
+  type        = string
+  default     = "#{aksStorageAccountName}#"
+}
+
 variable "aks_vm_size" {
   description = "Kubernetes VM size."
   type        = string

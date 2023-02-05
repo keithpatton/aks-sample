@@ -58,7 +58,7 @@ resource "azurerm_kubernetes_cluster" "default" {
 }
 
 resource "azurerm_storage_account" "aks" {
-  name                     = var.aksStorageAccountName
+  name                     = var.aks_storage_account_name
   resource_group_name      = var.rg_aks_nodes_name
   location                 = azurerm_resource_group.default.location
   account_kind             = "StorageV2"
