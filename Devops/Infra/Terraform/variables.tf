@@ -88,10 +88,10 @@ variable "aks_vnet_address_space" {
   default     = "#{aksVNetAddressSpace}#"
 }
 
-variable "aks_subnet_address_prefix" {
-  description = "IP Address Prefix for AKS Subnet"
+variable "aks_subnet_address_space" {
+  description = "IP Address Space for AKS Subnet"
   type        = string
-  default     = "#{aksSubnetAddressPrefix}#"
+  default     = "#{aksSubnetAddressSpace}#"
 }
 
 variable "kv_name" { 

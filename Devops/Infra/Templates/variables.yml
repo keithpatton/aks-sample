@@ -19,7 +19,7 @@ variables:
   aksVNetName: vnet-${{ parameters.region }}-${{ parameters.env }}-$(appName)
   aksSubnetName: snet-${{ parameters.region }}-${{ parameters.env }}-$(appName)
   aksVNetAddressSpace: "10.224.0.0/12"
-  aksSubnetAddressPrefix: "10.224.0.0/16"
+  aksSubnetAddressSpace: "10.224.0.0/16"
 
   sqlElasticPoolName: "elp-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
   sqlElasticPoolSkuName:  'GP_Gen5'

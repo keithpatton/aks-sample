@@ -29,7 +29,7 @@ resource "azurerm_subnet" "aks" {
     name                        = var.aks_subnet_name
     resource_group_name         = azurerm_resource_group.default.name
     virtual_network_name        = azurerm_virtual_network.aks.name
-    address_prefix              = var.aks_subnet_address_prefix
+    address_prefixes            = [var.aks_subnet_address_space]
 }
 
 resource "azurerm_kubernetes_cluster" "default" {
