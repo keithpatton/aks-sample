@@ -32,17 +32,6 @@ resource "azurerm_subnet" "aks" {
     address_prefixes            = [var.aks_subnet_address_space]
 }
 
-resource "azurerm_storage_account" "aks" {
-  name                     = var.aksStorageAccountName
-  resource_group_name      = azurerm_resource_group.default.name
-  location                 = azurerm_resource_group.default.location
-  account_kind             = "StorageV2"
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  is_hns_enabled           = true
-  nfsv3_enabled            = true
-}
-
 resource "azurerm_kubernetes_cluster" "default" {
   name                = "${var.aks_name}"
   resource_group_name = azurerm_resource_group.default.name
@@ -66,6 +55,19 @@ resource "azurerm_kubernetes_cluster" "default" {
   identity {
     type = "SystemAssigned"
   }
+}
+
+resource "azurerm_storage_account" "aks" {
+  name                     = var.aksStorageAccountName
+  resource_group_name      = var.rg_aks_nodes_name
+  location                 = azurerm_resource_group.default.location
+  account_kind             = "StorageV2"
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+  is_hns_enabled           = true
+  nfsv3_enabled            = true
+
+  depends_on = [ azurerm_kubernetes_cluster.default ]
 }
 
 resource "azurerm_role_assignment" "default" {
@@ -99,7 +101,6 @@ resource "azurerm_key_vault" "default" {
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days = 7
   purge_protection_enabled   = false
-
   sku_name = "standard"
 }
 
