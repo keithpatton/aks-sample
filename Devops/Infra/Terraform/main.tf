@@ -56,8 +56,16 @@ data "azurerm_lb_backend_address_pool" "aks" {
   loadbalancer_id = data.azurerm_lb.aks.id
 }
 
+output "azurerm_lb" {
+  value = data.azurerm_lb.aks
+}
+
+output "azurerm_lb_backend_address_pool" {
+  value = data.azurerm_lb_backend_address_pool.aks
+}
+
 output "aks_vnet_id" {
-  value = data.azurerm_lb_backend_address_pool.aks.backend_address[0].virtual_network_id
+  value = data.azurerm_lb_backend_address_pool.aks.backend_address.0.virtual_network_id
 }
 
 
