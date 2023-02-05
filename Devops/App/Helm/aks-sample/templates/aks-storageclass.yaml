@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.aksNamespace }}
 provisioner: blob.csi.azure.com
 parameters:
-  storageAccount: {{ .Values.aksStorageAccountName }}
+  storageAccount: stgau1devaksdemoaks
   containerName: common
   protocol: nfs
 volumeBindingMode: Immediate
@@ -22,7 +22,7 @@ metadata:
   namespace: {{ $aksNamespace }}
 provisioner: blob.csi.azure.com
 parameters:
-  storageAccount: {{ .Values.aksStorageAccountName }}
+  storageAccount: stgau1devaksdemoaks
   containerName: {{ . }}
   protocol: nfs
 volumeBindingMode: Immediate
