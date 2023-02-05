@@ -94,7 +94,6 @@ variable "aks_subnet_address_prefix" {
   default     = #{aksSubnetAddressPrefix}#
 }
 
-
 variable "kv_name" { 
   description = "The name of the Key Vault instance."
   type        = string
