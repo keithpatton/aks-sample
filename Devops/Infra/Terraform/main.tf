@@ -178,7 +178,7 @@ data "azurerm_kubernetes_cluster" "default" {
 }
 
 data "azurerm_virtual_network" "aks" {
-  name                = regex("^.*/virtualNetworks/(.*)/subnets/.*$", data.azurerm_kubernetes_cluster.default.vnet_subnet_id).matches[1]
+  name                = regex("^.*/virtualNetworks/(.*)/subnets/.*$", data.azurerm_kubernetes_cluster.default.vnet_subnet_id).matches[1])
   resource_group_name = azurerm_resource_group.default.name
 
   depends_on = [azurerm_kubernetes_cluster.default]
@@ -217,16 +217,16 @@ resource "azurerm_private_dns_zone_virtual_network_link" "sql" {
   name                  = "vnet-private-zone-link"
   resource_group_name   = azurerm_resource_group.default.name
   private_dns_zone_name = azurerm_private_dns_zone.sql.name
-  virtual_network_id    = azurerm_virtual_network.aks.id
+  virtual_network_id    = azurerm_virtual_network.aks.data.id
   registration_enabled  = true
 }
 
 resource "azurerm_private_dns_a_record" "sql" {
   name                = azurerm_mssql_server.default.name
-  zone_name           = azurerm_private_dns_zone.sql.0.name
+  zone_name           = azurerm_private_dns_zone.sql.name
   resource_group_name = azurerm_resource_group.default.name
   ttl                 = 300
-  records             = [data.azurerm_private_endpoint_connection.private-ip1.0.private_service_connection.0.private_ip_address]
+  records             = [data.azurerm_private_endpoint_connection.sql.private_service_connection.0.private_ip_address]
 }
 
 data "http" "myip" {
