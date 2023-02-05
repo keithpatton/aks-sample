@@ -83,16 +83,27 @@ resource "azurerm_kubernetes_cluster" "default" {
 #   aks_vnet_name = data.azurerm_virtual_network.aks.name[0]
 # }
 
-data "external" "aks_vnet_id" {
-  program = [
-    "az","network","vnet","list","--resource-group","${var.rg_aks_nodes_name}","--query","'[0].id'","-o","tsv"
-  ]
-}
 
-output "aks_vnet_id" {
-  description = "VNet ID of AKS Cluster"
-  value       = data.external.aks_vnet_id.result
-}
+ provisioner "local-exec" {
+    command = "az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].id' -o tsv"
+  }
+
+# output "aks_vnet_id" {
+#   value = "${local-exec.stdout}"
+# }
+
+# data "external" "aks_vnet_id" {
+#   program = [
+#     "az","network","vnet","list","--resource-group","${var.rg_aks_nodes_name}","--query","'[0].id'","-o","tsv"
+#   ]
+# }
+
+# output "aks_vnet_id" {
+#   description = "VNet ID of AKS Cluster"
+#   value       = data.external.aks_vnet_id.result
+# }
+
+
 
 #   depends_on = [azurerm_kubernetes_cluster.default]
 # }
