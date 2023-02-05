@@ -18,21 +18,16 @@ resource "azurerm_container_registry" "default" {
 
 ### AKS Cluster
 
-resource "azurerm_resource_group" "aks" {
-  name     = var.rg_aks_nodes_name
-  location = var.location
-}
-
 resource "azurerm_virtual_network" "aks" {
     name                        = var.aks_vnet_name
     location                    = azurerm_resource_group.default.location
-    resource_group_name         = azurerm_resource_group.aks.name
+    resource_group_name         = azurerm_resource_group.default.name
     address_space               = [var.aks_vnet_address_space] 
 }
 
 resource "azurerm_subnet" "aks" {
     name                        = var.aks_subnet_name
-    resource_group_name         = azurerm_resource_group.aks.name
+    resource_group_name         = azurerm_resource_group.default.name
     virtual_network_name        = azurerm_virtual_network.aks.name
     address_prefixes            = [var.aks_subnet_address_space]
 }
@@ -42,6 +37,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
   dns_prefix          = "${var.aks_name}"
+  node_resource_group = var.rg_aks_nodes_name
   workload_identity_enabled = true
   oidc_issuer_enabled = true
 
