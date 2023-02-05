@@ -178,7 +178,7 @@ data "azurerm_kubernetes_cluster" "default" {
 }
 
 data "azurerm_virtual_network" "aks" {
-  name                = regex("^.*/virtualNetworks/(.*)/subnets/.*$", data.azurerm_kubernetes_cluster.default.vnet_subnet_id).matches[1])
+  name                = regex("^.*/virtualNetworks/(.*)/subnets/.*$", data.azurerm_kubernetes_cluster.default.agent_pool_profile.vnet_subnet_id).matches[1]
   resource_group_name = azurerm_resource_group.default.name
 
   depends_on = [azurerm_kubernetes_cluster.default]
