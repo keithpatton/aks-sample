@@ -53,15 +53,15 @@ data "external" "aks_vnet_id" {
 
 locals {
   aks_vnet_id = data.external.aks_vnet_id.result
-  aks_vnet_name = regex(locals.aks_vnet_id, "virtualNetworks/(.*)")
+  aks_vnet_name = regex(data.external.aks_vnet_id.result, "virtualNetworks/(.*)")
 }
 
 data "azurerm_subnet" "aks" {
   name                 = "aks-subnet"
-  virtual_network_name = locals.aks_vnet_name
+  virtual_network_name = local.aks_vnet_name
   resource_group_name  = var.rg_aks_nodes_name
 
-  depends_on = [data.external.aks_vnet_name]
+  depends_on = [data.external.aks_vnet_id]
 }
 
 resource "azurerm_role_assignment" "default" {
@@ -211,7 +211,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "sql" {
   name                  = "vnet-private-zone-link"
   resource_group_name   = azurerm_resource_group.default.name
   private_dns_zone_name = azurerm_private_dns_zone.sql.name
-  virtual_network_id    = locals.aks_vnet_id
+  virtual_network_id    = local.aks_vnet_id
   registration_enabled  = true
 }
 
