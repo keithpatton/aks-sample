@@ -135,3 +135,15 @@ variable "sql_firewall_rule_build_agent_name" {
   type        = string
   default     = "#{sqlFirewallRuleBuildAgentName}#"
 }
+
+variable "sql_private_endpoint_name" { 
+  description = "The name of the sql private endpoint."
+  type        = string
+  default     = "#{sqlPrivateEndpointName}#"
+}
+
+variable "sql_private_endpoint_nic_name" { 
+  description = "The name of the sql private endpoint network interface."
+  type        = string
+  default     = "#{sqlPrivateEndpointNicName}#"
+}

@@ -115,7 +115,7 @@ resource "azurerm_key_vault_access_policy" "aks" {
   ]
 }
 
-### Azure SQL Elastic Pool
+### Azure SQL Server
 
 resource "random_password" "sql" {
   length           = 20
@@ -172,6 +172,63 @@ resource "azurerm_mssql_elasticpool" "default" {
   depends_on = [ azurerm_mssql_server.default ]
 }
 
+data "azurerm_kubernetes_cluster" "default" {
+  name                = "${var.aks_name}"
+  resource_group_name = azurerm_resource_group.default.name
+}
+
+data "azurerm_virtual_network" "aks" {
+  name                = regex("^.*/virtualNetworks/(.*)/subnets/.*$", data.azurerm_kubernetes_cluster.default.vnet_subnet_id).matches[1]
+  resource_group_name = azurerm_resource_group.default.name
+
+  depends_on = [azurerm_kubernetes_cluster.default]
+}
+
+resource "azurerm_private_endpoint" "sql" {
+  name                           = var.sql_private_endpoint_name
+  location                       = azurerm_resource_group.default.location
+  resource_group_name            = azurerm_resource_group.default.name
+  subnet_id                      = data.azurerm_kubernetes_cluster.default.vnet_subnet_id
+  custom_network_interface_name  = var.sql_private_endpoint_nic_name
+
+  private_service_connection {
+    name                           = var.sql_private_endpoint_name
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_mssql_server.default.id
+    subresource_names              = ["sqlServer"]
+  }
+
+  depends_on = [azurerm_kubernetes_cluster.default]
+}
+
+data "azurerm_private_endpoint_connection" "sql" {
+  name                = azurerm_private_endpoint.sql.name
+  resource_group_name = azurerm_resource_group.default.name
+
+  depends_on          = [azurerm_private_endpoint.sql]
+}
+
+resource "azurerm_private_dns_zone" "sql" {
+  name                = "privatelink.database.windows.net"
+  resource_group_name = azurerm_resource_group.default.location
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "sql" {
+  name                  = "vnet-private-zone-link"
+  resource_group_name   = azurerm_resource_group.default.name
+  private_dns_zone_name = azurerm_private_dns_zone.sql.name
+  virtual_network_id    = azurerm_virtual_network.aks.id
+  registration_enabled  = true
+}
+
+resource "azurerm_private_dns_a_record" "sql" {
+  name                = azurerm_mssql_server.default.name
+  zone_name           = azurerm_private_dns_zone.sql.0.name
+  resource_group_name = azurerm_resource_group.default.name
+  ttl                 = 300
+  records             = [data.azurerm_private_endpoint_connection.private-ip1.0.private_service_connection.0.private_ip_address]
+}
+
 data "http" "myip" {
   url = "https://ipv4.icanhazip.com/"
 }
@@ -183,15 +240,6 @@ resource "azurerm_mssql_firewall_rule" "default" {
   end_ip_address      = "${chomp(data.http.myip.response_body)}"
 
   depends_on = [ data.http.myip ]
-}
-
-resource "azurerm_mssql_firewall_rule" "aks" {
-  name                = "allow-${azurerm_kubernetes_cluster.default.name}"
-  server_id           = azurerm_mssql_server.default.id
-  start_ip_address    = "${cidrhost(azurerm_kubernetes_cluster.default.network_profile.0.pod_cidr, 0)}"
-  end_ip_address      = "${cidrhost(azurerm_kubernetes_cluster.default.network_profile.0.pod_cidr, -1)}"
-
-  depends_on = [ azurerm_kubernetes_cluster.default, azurerm_mssql_server.default ]
 }
 
 resource "azurerm_mssql_database" "default" {
