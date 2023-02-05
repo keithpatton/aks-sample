@@ -66,6 +66,7 @@ stages:
           az provider register --namespace Microsoft.ContainerService
     - task: AzureCLI@2
       displayName: 'Ensure Build Agent Access to Resources'
+      continueOnError: true
       inputs:
         azureSubscription: $(svcConnAzureRm)
         scriptType: bash
