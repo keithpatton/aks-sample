@@ -46,11 +46,11 @@ data "azurerm_kubernetes_cluster" "aks" {
   resource_group_name = azurerm_resource_group.default.name
 }
 
-data "azurerm_virtual_network" "aks" {
-  resource_group_name = var.rg_aks_nodes_name
+# data "azurerm_virtual_network" "aks" {
+#   resource_group_name = var.rg_aks_nodes_name
 
-  depends_on = [azurerm_kubernetes_cluster.default]
-}
+#   depends_on = [azurerm_kubernetes_cluster.default]
+# }
 
 output "aks_subnetid" {
   description = "Subnet ID of AKS Cluster Agent Pool"
