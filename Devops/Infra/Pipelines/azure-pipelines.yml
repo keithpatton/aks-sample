@@ -72,7 +72,7 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           build_agent_ip=$(curl ifconfig.co)
-          az sql server firewall-rule create --name -g $(rgName) "$(sqlFirewallRuleBuildAgentName)-pipeline" --server $(sqlServerName) --start-ip-address $build_agent_ip --end-ip-address $build_agent_ip
+          az sql server firewall-rule create -g $(rgName) --name "$(sqlFirewallRuleBuildAgentName)-pipeline" --server $(sqlServerName) --start-ip-address $build_agent_ip --end-ip-address $build_agent_ip
     - task: AzureCLI@2
       displayName: 'Ensure Terraform State Storage Account and Container'
       condition: eq(1,2)
