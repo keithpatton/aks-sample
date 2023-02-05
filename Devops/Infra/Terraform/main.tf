@@ -18,10 +18,15 @@ resource "azurerm_container_registry" "default" {
 
 ### AKS Cluster
 
+resource "azurerm_resource_group" "aks" {
+  name     = var.rg_aks_nodes_name
+  location = var.location
+}
+
 resource "azurerm_virtual_network" "aks" {
     name                        = var.aks_vnet_name
     location                    = azurerm_resource_group.default.location
-    resource_group_name         = azurerm_resource_group.default.name
+    resource_group_name         = azurerm_resource_group.aks.name
     address_space               = [var.aks_vnet_address_space] 
 }
 
@@ -37,7 +42,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
   dns_prefix          = "${var.aks_name}"
-  node_resource_group = "${var.rg_aks_nodes_name}"
+  node_resource_group = azurerm_resource_group.aks.name
 
   storage_profile {
     blob_driver_enabled = true
