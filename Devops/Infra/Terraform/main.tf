@@ -105,6 +105,10 @@ resource "null_resource" "az_login" {
     command = "az login --service-principal --username ${data.azurerm_client_config.current.client_id} --password ${var.azClientSecret}  --tenant ${data.azurerm_client_config.current.tenant_id}"
   }
 
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
   depends_on = [azurerm_kubernetes_cluster.default]
 }
 
