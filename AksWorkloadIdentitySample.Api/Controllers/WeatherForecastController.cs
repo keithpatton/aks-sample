@@ -35,30 +35,22 @@ namespace AksWorkloadIdentitySample.Api.Controllers
             client.SetSecret(new KeyVaultSecret("kvsecret", "(Changeable)"));
             var secret = client.GetSecret("kvsecret")?.Value;
 
-            try
-            {
-                // Access DB Using Managed Identity
-                var sqlServerName = Environment.GetEnvironmentVariable("sql_server_name");
-                if (String.IsNullOrWhiteSpace(sqlServerName))
-                    sqlServerName = "sql-au1-dev-01"; // update for local dev        
-                var connString = $"Data Source={sqlServerName}.database.windows.net; Initial Catalog=tenant1; Encrypt=True";
-                using SqlConnection conn = new SqlConnection(connString);
-                var credential = new Azure.Identity.DefaultAzureCredential();
-                var token = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" }));
-                conn.AccessToken = token.Token;
-                conn.Open();
 
-                using (SqlCommand command = new SqlCommand("IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'example_table') CREATE TABLE example_table (id INT PRIMARY KEY, name VARCHAR(255), date_created DATETIME DEFAULT GETDATE());", conn))
-                command.ExecuteNonQuery();
+            // Access Tenant 1 DB Using Managed Identity and create table if not already existing
+            var sqlServerName = Environment.GetEnvironmentVariable("sql_server_name");
+            if (String.IsNullOrWhiteSpace(sqlServerName))
+                sqlServerName = "sql-au1-dev-01"; // update for local dev        
+            var connString = $"Data Source={sqlServerName}.database.windows.net; Initial Catalog=tenant1; Encrypt=True";
+            using SqlConnection conn = new SqlConnection(connString);
+            var credential = new Azure.Identity.DefaultAzureCredential();
+            var token = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" }));
+            conn.AccessToken = token.Token;
+            conn.Open();
 
-            }
-            catch (Exception ex)
-            {
-                Console.Write("Unable to connect to Azure SQL Database");
-                Console.Write(ex.ToString());
-            }
+            using (SqlCommand command = new SqlCommand("IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'example_table') CREATE TABLE example_table (id INT PRIMARY KEY, name VARCHAR(255), date_created DATETIME DEFAULT GETDATE());", conn))
+            command.ExecuteNonQuery();
 
-
+            // return result
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
