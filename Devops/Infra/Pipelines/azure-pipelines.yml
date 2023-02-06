@@ -142,3 +142,42 @@ stages:
         backendAzureRmStorageAccountName: $(tfStateStorageAccount)
         backendAzureRmContainerName: $(tfStateContainerName)
         backendAzureRmKey: $(tfStateFileName)
+        backendAWSBucketName: 
+- stage: InfrastructureApps
+  displayName: "Deploy Infra Apps"
+  jobs:
+  - job: InfrastructureApps
+    displayName: Deploy Infra Apps
+    pool:
+      vmImage: ubuntu-latest
+    steps:   
+    - task: replacetokens@5
+      displayName: 'Replace tokens with variables'
+      inputs:
+        targetFiles: |
+          **/Chart.yaml
+          **/values.yaml
+        encoding: 'auto'
+        tokenPattern: 'default'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
+        actionOnNoFiles: 'warn'
+        enableTransforms: false
+        enableRecursion: false
+        useLegacyPattern: false
+        enableTelemetry: true   
+        verbosity: 'detailed'
+    - task: HelmDeploy@0
+      displayName: 'Deploy Traefik'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscription: $(svcConnAzureRm)
+        azureResourceGroup: $(rgName)
+        kubernetesCluster: $(aksName)
+        namespace: $(aksNamespace)
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: '$(System.DefaultWorkingDirectory)/Infra/Helm/Traefik'
+        releaseName: $(traefikReleaseName)
+        arguments: '--debug --atomic --reset-values'
