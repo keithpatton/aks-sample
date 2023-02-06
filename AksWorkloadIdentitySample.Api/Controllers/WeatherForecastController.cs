@@ -2,6 +2,8 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Linq;
+using System.Text.Json;
 
 namespace AksWorkloadIdentitySample.Api.Controllers
 {
@@ -22,25 +24,32 @@ namespace AksWorkloadIdentitySample.Api.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<WeatherForecast> Get(string tenant)
         {
+
+            // get tenants
+            var tenantsString = Environment.GetEnvironmentVariable("tenants");
+            if (String.IsNullOrWhiteSpace(tenantsString))
+                tenantsString = "[\"tenant1\",\"tenant2\"]"; // update for local dev
+            var tenants = JsonSerializer.Deserialize<List<string>>(tenantsString);
+
+            if (!tenants!.Any(t => t == tenant))
+            {
+                tenant = "tenant1";
+            }
+
             // Write To persistent volume storage
-            WriteToPersistentStorage();
+            WriteToPersistentStorage(tenant);
 
             // Use Azure AD Identity to create and retrieve a new secret, then use it within the response within Summary
-            var keyVaultName = Environment.GetEnvironmentVariable("aks_keyvault");
-            if (String.IsNullOrWhiteSpace(keyVaultName))
-                keyVaultName = "kv-aksdemo-qpe"; // update for local dev
+            var keyVaultName = IsInAks() ? Environment.GetEnvironmentVariable("aks_keyvault") : "kv-au1-dev-aksdemo-01";
             var client = new SecretClient(new Uri($"https://{keyVaultName}.vault.azure.net/"), new DefaultAzureCredential());
-            client.SetSecret(new KeyVaultSecret("kvsecret", "(Changeable)"));
-            var secret = client.GetSecret("kvsecret")?.Value;
+            client.SetSecret(new KeyVaultSecret($"kvsecret{tenant}", $"({tenant} is Changeable)"));
+            var secret = client.GetSecret($"kvsecret{tenant}")?.Value;
 
-
-            // Access Tenant 1 DB Using Managed Identity and create table if not already existing
-            var sqlServerName = Environment.GetEnvironmentVariable("sql_server_name");
-            if (String.IsNullOrWhiteSpace(sqlServerName))
-                sqlServerName = "sql-au1-dev-01"; // update for local dev        
-            var connString = $"Data Source={sqlServerName}.database.windows.net; Initial Catalog=tenant1; Encrypt=True";
+            // Access Tenant DB Using Managed Identity and create table if not already existing
+            var sqlServerName = IsInAks() ? Environment.GetEnvironmentVariable("sql_server_name") : "sql-au1-dev-01";
+            var connString = $"Data Source={sqlServerName}.database.windows.net; Initial Catalog={tenant}; Encrypt=True";
             using SqlConnection conn = new SqlConnection(connString);
             var credential = new Azure.Identity.DefaultAzureCredential();
             var token = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" }));
@@ -63,39 +72,36 @@ namespace AksWorkloadIdentitySample.Api.Controllers
         /// <summary>
         /// Tests out writing to azure blob storage backed persistent volumes which map to separate azure blob containers
         /// </summary>
-        private void WriteToPersistentStorage()
+        private void WriteToPersistentStorage(string tenant)
         {
             // write to shared storage 
             var commonFolder = "common";
-            var tenant1Folder = "tenant1";
-            var tenant2Folder = "tenant2";
 
             var commonPath = $"/var/{commonFolder}/";
-            var tenant1Path = $"/var/{tenant1Folder}/";
-            var tenant2Path = $"/var/{tenant2Folder}/";
+            var tenantPath = $"/var/{tenant}/";
 
-            if (String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("KUBERNETES_SERVICE_HOST")))
+            if (!IsInAks())
             {
                 // not running in K8s, assume local windows pc
                 var localRoot = @"C:\Temp\AksWorkloadIdentitySample\";
                 commonPath = $"{localRoot}{commonFolder}";
-                tenant1Path = $"{localRoot}{tenant1Folder}";
-                tenant2Path = $"{localRoot}{tenant2Folder}";
+                tenantPath = $"{localRoot}{tenantPath}";
                 if (!Directory.Exists(commonPath))
                     Directory.CreateDirectory(commonPath);
-                if (!Directory.Exists(tenant1Path))
-                    Directory.CreateDirectory(tenant1Path);
-                if (!Directory.Exists(tenant2Path))
-                    Directory.CreateDirectory(tenant2Path);
+                if (!Directory.Exists(tenantPath))
+                    Directory.CreateDirectory(tenantPath);
             }
 
             var fileName = $"{DateTime.Now.Hour}-{DateTime.Now.Minute}-{DateTime.Now.Second}.txt";
             var commonFileName = Path.Combine(commonPath, fileName);
-            var tenant1FileName = Path.Combine(tenant1Path, fileName);
-            var tenant2FileName = Path.Combine(tenant2Path, fileName);
+            var tenant1FileName = Path.Combine(tenantPath, fileName);
             System.IO.File.WriteAllText(commonFileName, "Weather Forecast was requested - common");
-            System.IO.File.WriteAllText(tenant1FileName, "Weather Forecast was requested - tenant 1");
-            System.IO.File.WriteAllText(tenant2FileName, "Weather Forecast was requested - tenant 2");
+            System.IO.File.WriteAllText(tenant1FileName, $"Weather Forecast was requested - {tenant}");
+        }
+
+        private bool IsInAks()
+        {
+            return !String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("KUBERNETES_SERVICE_HOST"));
         }
 
     }

@@ -12,7 +12,7 @@ parameters:
   - dev
 
 variables:
-  appVersion: "0.1.8"
+  appVersion: "0.1.9"
   imageName: '$(appName)'
   imageTag: '$(appVersion)'
   aksWorkloadIdentityClientId: '{dynamic}'
@@ -21,5 +21,5 @@ variables:
   webapiChartDescription: 'AKS Sample App'
   webapiReleaseName: 'aks-sample'
   webapiChartName: 'aks-sample'  
-  webapiChartVersion: '0.6.9'
+  webapiChartVersion: '0.7.0'
   webapiAppVersion: '$(appVersion)'
