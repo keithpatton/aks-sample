@@ -120,7 +120,7 @@ data "external" "aks_vnet_id" {
 
 output "aks_vnet_id" {
   description = "VNet ID of AKS Cluster"
-  value       = data.external.aks_vnet_id.result[0].vnet_id
+  value       = data.external.aks_vnet_id.result
 }
 
 
