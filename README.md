@@ -71,17 +71,22 @@ The pipeline is triggered manually and has several parameters:
 This pipeline is fully idempotent and needs to be run at least once before the application pipeline. 
 
 
-## Run Application Pipeline (TBC)
-TODO 
+## Run Application Pipeline
+The application pipeline does the following:
  - Builds and Publishes Image
- - Deploys to AKS (Helm)
+ - Deploys to the AKS Cluster
 
-## Verify Application is Working (TBC)
+ A trigger will automatically run the pipeline if any chanages are made to the AksWorkloadIdentitySample.Api folder
+
+## Verify Application is Working
 - Execute the following to watch for the EXTERNAL_IP value to be published for the pod: ```watch kubectl get services```
-- Browse to the AKS hosted url endpoint, e.g. http://{{EXTERNAL-IP}}/WeatherForecast 
-- You should receive the forecast data in the browser with '(Changeable)' as part of every summary which is the value that is from Key Vault.
+- Browse to the AKS hosted url endpoint, e.g. http://{{EXTERNAL-IP}}/WeatherForecast?tenant=tenant1 
+- You should receive the forecast data in the browser with '(tenant1 is Changeable)' as part of every summary which is the value that is from Key Vault.
 - This proves the Azure AD Workload Identity is working correctly!
-- Files are also written to Azure Blob Containers which you can find within the dynamically provsioned azure storage account within the resource group "sandbox-aks-nodes-rg"
+- Files are also written to Azure Blob Containers which you can find within the dynamically provsioned azure storage account within the Kubernetes resource group
+- A table called 'example_table' is created if necessary for tenant1
+- You can also then change the tenant to say 'tenant2' to validate the request for a different tenant
+- (Note: Tenant would be inferred via domain and custom header or JWT token in production, TODO!)
 
 
 ## Running Locally (TBC)
