@@ -100,9 +100,7 @@ resource "azurerm_kubernetes_cluster" "default" {
 
 resource "null_resource" "az_login" {
   provisioner "local-exec" {
-    command = <<-EOT
-      az login --service-principal --username ${data.azurerm_client_config.current.client_id} --password ${var.azClientSecret}  --tenant ${data.azurerm_client_config.current.tenant_id}}
-    EOT
+    command = "az login --service-principal --username ${data.azurerm_client_config.current.client_id} --password ${var.azClientSecret}  --tenant ${data.azurerm_client_config.current.tenant_id}"
   }
 
   depends_on = [
