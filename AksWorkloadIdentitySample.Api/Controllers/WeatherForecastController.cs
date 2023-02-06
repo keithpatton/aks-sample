@@ -27,18 +27,7 @@ namespace AksWorkloadIdentitySample.Api.Controllers
         public IEnumerable<WeatherForecast> Get(string tenant)
         {
 
-            // get tenants
-            var tenantsString = Environment.GetEnvironmentVariable("tenants");
-            if (String.IsNullOrWhiteSpace(tenantsString))
-                tenantsString = "[\"tenant1\",\"tenant2\"]"; // update for local dev
-            var tenants = JsonSerializer.Deserialize<List<string>>(tenantsString);
-
-            if (!tenants!.Any(t => t == tenant))
-            {
-                tenant = "tenant1";
-            }
-
-            // Write To persistent volume storage
+            // Write to persistent volume storage
             WriteToPersistentStorage(tenant);
 
             // Use Azure AD Identity to create and retrieve a new secret, then use it within the response within Summary
