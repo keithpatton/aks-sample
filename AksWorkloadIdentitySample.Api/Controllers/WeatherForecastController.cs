@@ -27,16 +27,17 @@ namespace AksWorkloadIdentitySample.Api.Controllers
             // Write To persistent volume storage
             WriteToPersistentStorage();
 
+
             // Access DB Using Managed Identity
-            var sqlServerName = Environment.GetEnvironmentVariable("sql_server_name");
-            if (String.IsNullOrWhiteSpace(sqlServerName))
-                sqlServerName = "sql-au1-dev-01"; // update for local dev        
-            var connString = $"Data Source={sqlServerName}.database.windows.net; Initial Catalog=tenant1; Encrypt=True";
-            using SqlConnection conn = new SqlConnection(connString);
-            var credential = new Azure.Identity.DefaultAzureCredential();
-            var token = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" }));
-            conn.AccessToken = token.Token;
-            conn.Open();
+            //var sqlServerName = Environment.GetEnvironmentVariable("sql_server_name");
+            //if (String.IsNullOrWhiteSpace(sqlServerName))
+            //    sqlServerName = "sql-au1-dev-01"; // update for local dev        
+            //var connString = $"Data Source={sqlServerName}.database.windows.net; Initial Catalog=tenant1; Encrypt=True";
+            //using SqlConnection conn = new SqlConnection(connString);
+            //var credential = new Azure.Identity.DefaultAzureCredential();
+            //var token = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" }));
+            //conn.AccessToken = token.Token;
+            //conn.Open();
 
             // Use Azure AD Identity to create and retrieve a new secret, then use it within the response within Summary
             var keyVaultName = Environment.GetEnvironmentVariable("aks_keyvault");
