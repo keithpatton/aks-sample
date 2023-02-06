@@ -178,6 +178,6 @@ stages:
         namespace: $(aksNamespace)
         command: 'upgrade'
         chartType: 'FilePath'
-        chartPath: '$(System.DefaultWorkingDirectory)/Devops/Infra/Helm/Traefik'
+        chartPath: '$(System.DefaultWorkingDirectory)/Devops/Infra/Helm/traefik'
         releaseName: $(traefikReleaseName)
         arguments: '--debug --atomic --reset-values'
