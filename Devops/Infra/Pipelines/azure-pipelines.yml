@@ -75,10 +75,6 @@ stages:
           build_agent_ip=$(curl https://ipv4.icanhazip.com/)
           az sql server firewall-rule create -g $(rgName) --name "$(sqlFirewallRuleBuildAgentName)-pipeline" --server $(sqlServerName) --start-ip-address $build_agent_ip --end-ip-address $build_agent_ip
           $subscriptionId=$(az account show --query id -o tsv)
-          echo "##vso[task.setvariable variable=ARM_CLIENT_ID]$env:serviceprincipalid"
-          echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET]$env:serviceprincipalkey"
-          echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]${subscriptionId}"
-          echo "##vso[task.setvariable variable=ARM_TENANT_ID]$env:tenantid"
         addSpnToEnvironment: true
     - task: AzureCLI@2
       displayName: 'Ensure Terraform State Storage Account and Container'
