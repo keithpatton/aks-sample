@@ -43,14 +43,15 @@ resource "azurerm_kubernetes_cluster" "default" {
 
 data "azurerm_virtual_network" "aks" {
   resource_group_name = var.rg_aks_nodes_name
-  name = var.aks_vnet_name
+  name                = var.aks_vnet_name
 
   depends_on = [azurerm_kubernetes_cluster.default]
 }
 
 data "azurerm_subnet" "aks" {
-  resource_group_name = var.rg_aks_nodes_name
-  name = data.azurerm_virtual_network.aks.subnets.0
+  resource_group_name  = var.rg_aks_nodes_name
+  virtual_network_name = var.aks_vnet_name
+  name                 = data.azurerm_virtual_network.aks.subnets.0
 }
 
 resource "azurerm_role_assignment" "default" {
