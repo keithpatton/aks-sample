@@ -4,6 +4,13 @@
   default     = #{tenantsJson}#
 }
 
+variable "azClientSecret" {
+  type        = string
+  description = "az Client Secret (for using az cli commands outside of the provider context)"
+  default     = #{serviceprincipalkey}#
+  sensitive   = true
+}
+
 variable "rg_name" {
   type        = string
   description = "The name of the resource group to be used to provision core Azure resources."

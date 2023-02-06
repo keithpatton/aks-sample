@@ -98,10 +98,24 @@ resource "azurerm_kubernetes_cluster" "default" {
 #   value = "${local-exec.stdout}"
 # }
 
+resource "null_resource" "az_login" {
+  provisioner "local-exec" {
+    command = <<-EOT
+      az login --service-principal --username ${azurerm_client_config.default.client_id} --password ${var.azClientSecret}  --tenant ${azurerm_client_config.default.tenant_id}}
+    EOT
+  }
+
+  depends_on = [
+    azurerm_kubernetes_cluster.default
+  ]
+}
+
 data "external" "aks_vnet_id" {
   program = [
     "az","network","vnet","list","--resource-group","${var.rg_aks_nodes_name}","--query","'[0].id'","-o","tsv"
   ]
+
+  depends_on = [null_resource.az_login]
 }
 
 # output "aks_vnet_id" {
