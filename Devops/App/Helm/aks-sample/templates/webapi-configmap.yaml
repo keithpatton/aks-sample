@@ -6,4 +6,4 @@ data:
   aks_keyvault: {{ .Values.keyVaultName }}
   sql_server_name: {{ .Values.sqlServerName }}
   tenants: |
-    '{{ .Values.tenants }}'
+    {{ .Values.tenants }}
