@@ -111,7 +111,6 @@ resource "null_resource" "az_login" {
 
   depends_on = [azurerm_kubernetes_cluster.default]
 }
-az network vnet list --resource-group rg-au1-dev-aksdemo-k8s --query "[0].{vnet_id:id}" -o json 
 
 data "external" "aks_vnet_id" {
   program = ["az","network","vnet","list","--resource-group","${var.rg_aks_nodes_name}","--query","'[0].{vnet_id:id}'","-o","json"]
