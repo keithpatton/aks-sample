@@ -14,6 +14,7 @@ spec:
       labels:
         app: webapi
         azure.workload.identity/use: "true"
+        service: webapi
     spec:
       serviceAccountName: {{ .Values.workloadIdentityServiceAccountName }}
       containers:
