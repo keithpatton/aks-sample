@@ -65,7 +65,7 @@ stages:
           az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
           az provider register --namespace Microsoft.ContainerService
     - task: AzureCLI@2
-      displayName: 'Ensure Build Agent Access to Resources'
+      displayName: 'Ensure Build Agent Access'
       continueOnError: true
       inputs:
         azureSubscription: $(svcConnAzureRm)
