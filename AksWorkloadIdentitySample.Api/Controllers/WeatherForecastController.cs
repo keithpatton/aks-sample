@@ -27,8 +27,16 @@ namespace AksWorkloadIdentitySample.Api.Controllers
             // Write To persistent volume storage
             WriteToPersistentStorage();
 
+            // Use Azure AD Identity to create and retrieve a new secret, then use it within the response within Summary
+            var keyVaultName = Environment.GetEnvironmentVariable("aks_keyvault");
+            if (String.IsNullOrWhiteSpace(keyVaultName))
+                keyVaultName = "kv-aksdemo-qpe"; // update for local dev
+            var client = new SecretClient(new Uri($"https://{keyVaultName}.vault.azure.net/"), new DefaultAzureCredential());
+            client.SetSecret(new KeyVaultSecret("kvsecret", "(Changeable)"));
+            var secret = client.GetSecret("kvsecret")?.Value;
+
             try
-            { 
+            {
                 // Access DB Using Managed Identity
                 var sqlServerName = Environment.GetEnvironmentVariable("sql_server_name");
                 if (String.IsNullOrWhiteSpace(sqlServerName))
@@ -39,6 +47,10 @@ namespace AksWorkloadIdentitySample.Api.Controllers
                 var token = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" }));
                 conn.AccessToken = token.Token;
                 conn.Open();
+
+                using (SqlCommand command = new SqlCommand("IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'example_table') CREATE TABLE example_table (id INT PRIMARY KEY, name VARCHAR(255), date_created DATETIME DEFAULT GETDATE());", conn))
+                command.ExecuteNonQuery();
+
             }
             catch (Exception ex)
             {
@@ -46,13 +58,6 @@ namespace AksWorkloadIdentitySample.Api.Controllers
                 Console.Write(ex.ToString());
             }
 
-            // Use Azure AD Identity to create and retrieve a new secret, then use it within the response within Summary
-            var keyVaultName = Environment.GetEnvironmentVariable("aks_keyvault");
-            if (String.IsNullOrWhiteSpace(keyVaultName))
-                keyVaultName = "kv-aksdemo-qpe"; // update for local dev
-            var client = new SecretClient(new Uri($"https://{keyVaultName}.vault.azure.net/"), new DefaultAzureCredential());
-            client.SetSecret(new KeyVaultSecret("kvsecret", "(Changeable)"));
-            var secret = client.GetSecret("kvsecret")?.Value;
 
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

@@ -12,7 +12,7 @@ parameters:
   - dev
 
 variables:
-  appVersion: "0.1.6"
+  appVersion: "0.1.7"
   imageName: '$(appName)'
   imageTag: '$(appVersion)'
   aksWorkloadIdentityClientId: '{dynamic}'
@@ -21,5 +21,5 @@ variables:
   helmChartDescription: 'AKS Sample App'
   helmReleaseName: 'aks-sample'
   helmChartName: 'aks-sample'  
-  helmChartVersion: '0.6.4'
+  helmChartVersion: '0.6.5'
   helmAppVersion: '$(appVersion)'
