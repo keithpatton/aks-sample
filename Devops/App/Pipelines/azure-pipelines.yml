@@ -104,7 +104,7 @@ stages:
         enableTelemetry: true   
         verbosity: 'detailed'   
     - task: HelmDeploy@0
-      displayName: 'Deploy Helm Chart'
+      displayName: 'Deploy Web Api App'
       inputs:
         connectionType: 'Azure Resource Manager'
         azureSubscription: $(svcConnAzureRm)
@@ -114,7 +114,7 @@ stages:
         command: 'upgrade'
         chartType: 'FilePath'
         chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample'
-        releaseName: $(helmReleaseName)
+        releaseName: $(webapiReleaseName)
         arguments: '--debug --atomic --reset-values'
   - ${{ each tenant in parameters.tenants }}:
     - job: TenantWork_${{ tenant }}
