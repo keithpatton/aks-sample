@@ -1,0 +1,20 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: webapi-ingressroute
+spec:
+  entryPoints:
+    - web
+  routes:
+      {{- range .Values.tenants }}
+      - match: PathPrefix(`/{{ . }}`)
+        kind: Rule
+        backend:
+          services:
+            - name: webapi
+              port:
+                name: web
+          headers:
+              customRequestHeaders:
+                X-TenantId: {{ . }}              
+      {{- end }}  
