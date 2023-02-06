@@ -4,12 +4,6 @@
   default     = #{tenantsJson}#
 }
 
-variable "aks_vnet_name" {
-  type        = string
-  description = "Aks VNet Name - (Temp as not able to retrieve from AKS for some reason)"
-  default     = "#{aksVNetName}#"
-}
-
 variable "rg_name" {
   type        = string
   description = "The name of the resource group to be used to provision core Azure resources."
@@ -70,6 +64,12 @@ variable "aks_storage_account_name" {
   default     = "#{aksStorageAccountName}#"
 }
 
+variable "aks_vnet_name" {
+  type        = string
+  description = "Aks VNet Name - (Temp as not able to retrieve from AKS for some reason)"
+  default     = "#{aksVNetName}#"
+}
+
 variable "aks_vm_size" {
   description = "Kubernetes VM size."
   type        = string
@@ -80,30 +80,6 @@ variable "aks_node_count" {
   description = "Number of nodes to deploy for Kubernetes"
   type        = number
   default     = #{aksNodeCount}#
-}
-
-variable "aks_vnet_name" {
-  description = "Name of VNet for AKS"
-  type        = string
-  default     = "#{aksVNetName}#"
-}
-
-variable "aks_subnet_name" {
-  description = "Name of Subnet for AKS"
-  type        = string
-  default     = "#{aksSubnetName}#"
-}
-
-variable "aks_vnet_address_space" {
-  description = "IP Address Space for AKS Vnet"
-  type        = string
-  default     = "#{aksVNetAddressSpace}#"
-}
-
-variable "aks_subnet_address_space" {
-  description = "IP Address Space for AKS Subnet"
-  type        = string
-  default     = "#{aksSubnetAddressSpace}#"
 }
 
 variable "kv_name" { 
