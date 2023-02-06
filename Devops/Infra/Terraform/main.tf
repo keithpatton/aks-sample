@@ -101,7 +101,7 @@ resource "azurerm_kubernetes_cluster" "default" {
 resource "null_resource" "az_login" {
   provisioner "local-exec" {
     command = <<-EOT
-      az login --service-principal --username ${azurerm_client_config.default.client_id} --password ${var.azClientSecret}  --tenant ${azurerm_client_config.default.tenant_id}}
+      az login --service-principal --username ${data.azurerm_client_config.default.client_id} --password ${var.azClientSecret}  --tenant ${data.azurerm_client_config.default.tenant_id}}
     EOT
   }
 
