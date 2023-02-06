@@ -4,11 +4,10 @@
   default     = #{tenantsJson}#
 }
 
-variable "azClientSecret" {
+variable "aks_vnet_name" {
   type        = string
-  description = "az Client Secret (for using az cli commands outside of the provider context)"
-  default     = "#{azClientSecret}#"
-  sensitive   = true
+  description = "Aks VNet Name - (Temp as not able to retrieve from AKS for some reason)"
+  default     = "#{aksVNetName}#"
 }
 
 variable "rg_name" {
