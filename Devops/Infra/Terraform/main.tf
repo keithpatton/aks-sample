@@ -50,7 +50,7 @@ data "azurerm_virtual_network" "aks" {
 
 data "azurerm_subnet" "aks" {
   resource_group_name = var.rg_aks_nodes_name
-  name = data.azurerm_virtual_network.aks.subnets.0.name
+  name = data.azurerm_virtual_network.aks.subnets.0
 }
 
 resource "azurerm_role_assignment" "default" {
