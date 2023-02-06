@@ -118,14 +118,10 @@ data "external" "aks_vnet_id" {
   depends_on = [null_resource.az_login,azurerm_kubernetes_cluster.default]
 }
 
-output {
-  aks_vnet_id = data.external.aks_vnet_id.result[0].vnet_id
+output "aks_vnet_id" {
+  description = "VNet ID of AKS Cluster"
+  value       = data.external.aks_vnet_id.result[0].vnet_id
 }
-
-# output "aks_vnet_id" {
-#   description = "VNet ID of AKS Cluster"
-#   value       = data.external.aks_vnet_id.result
-# }
 
 
 
