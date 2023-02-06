@@ -7,7 +7,7 @@
 variable "azClientSecret" {
   type        = string
   description = "az Client Secret (for using az cli commands outside of the provider context)"
-  default     = #{serviceprincipalkey}#
+  default     = "#{serviceprincipalkey}#"
   sensitive   = true
 }
 
