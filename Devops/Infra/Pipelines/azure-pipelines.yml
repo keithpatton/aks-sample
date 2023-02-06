@@ -155,8 +155,8 @@ stages:
       displayName: 'Replace tokens with variables'
       inputs:
         targetFiles: |
-          **/Chart.yaml
-          **/values.yaml
+          Devops/Infra/Helm/**/Chart.yaml
+          Devops/Infra/Helm/**/values.yaml
         encoding: 'auto'
         tokenPattern: 'default'
         writeBOM: true
