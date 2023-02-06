@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: webapi
   labels:
-    app: weather-forecast
+    app: webapi
 spec:
   replicas: 1
   selector:
@@ -12,9 +12,8 @@ spec:
   template:
     metadata:
       labels:
-        app: weather-forecast
+        app: webapi
         azure.workload.identity/use: "true"
-        service: webapi
     spec:
       serviceAccountName: {{ .Values.workloadIdentityServiceAccountName }}
       containers:
@@ -22,7 +21,8 @@ spec:
           image: {{ .Values.azureContainerRegistryName }}.azurecr.io/{{ .Values.imageName }}:{{ .Values.imageTag }}
           imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - name: web
+              containerPort: 80
               protocol: TCP
           envFrom:
             - configMapRef:

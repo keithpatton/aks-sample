@@ -28,6 +28,12 @@ variables:
   sqlPrivateEndpointName: "pve-${{ parameters.region }}-${{ parameters.env }}-$(appName)"
   sqlPrivateEndpointNicName: "$(sqlPrivateEndpointName)-nic"
 
+  traefikChartName: "traefik"
+  traefikChartDescription: "Traefik Ingress Controller"
+  traefikChartVersion: "1.0.0"
+  traefikAppVersion: "1.0.0"
+  traefikReleaseName: 'traefik'
+
   tfStateResourceGroup: 'rg-${{ parameters.region }}-${{ parameters.env }}-terraform'
   tfStateStorageAccount: 'stg${{ parameters.region }}${{ parameters.env }}tfstate'
   tfStateContainerName: 'tfstate'
