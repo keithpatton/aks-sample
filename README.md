@@ -4,17 +4,25 @@
 
 Provides a working example of :
 
-- Azure Devops YAML Pipelines to build and maintain infrastructure and handle application deployment to an AKS Cluster
-    - Using Terraform for Infrastructure and Helm for Application provisioning
+- Azure Devops YAML Pipelines which 
+    - Build and maintain infrastructure (Terraform)
+    - Handle workload deployments to an AKS Cluster (Helm)
 - AKS Workload Identity using the Asp.Net Core Api project template with minor modifications. 
     - Accessing Azure SQL with Managed Identity
     - Accessing Key Vault with Managed Identity
 - Multi-tenancy Aspects
     - Tenants specified as pipeline parameters (e.g tenant1, tenant2)
-    - Azure SQL Database created for each Tenant
-    - A dynamically provisioned Kubernetes Persistent Volume for each tenant (backed by Azure Blob Storage)
+    - Infrastructure Deployment
+      - Azure SQL Database provisioned for each tenant
+    - Application Deployment
+      - A Persistent Volume Claim (PVC) automatically creates an NFS mount backed by a blob container for each tenant
+      - Pipeline demonstrates ability to have tenant specific workloads running in parallel as required
+    - Application Runtime
+      - Tenant is inferred at runtime 
+      - Tenanted SQL database access
+      - Tenanted Storage Mount (blob container) written to
+      - Key Vault updated with tenanted secret (using tenant suffix)
 - Devops Aspects
-    - Azure Devops use of parallel build agents to implement tenant specific work where necessary
     - Demonstates use of templates to share variables with a deployment stamp approach
 
 ## Pre-requisites
