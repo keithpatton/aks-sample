@@ -69,6 +69,7 @@ stages:
       continueOnError: true
       inputs:
         azureSubscription: $(svcConnAzureRm)
+        addSpnToEnvironment: true
         scriptType: bash
         scriptLocation: 'inlineScript'
         inlineScript: |
