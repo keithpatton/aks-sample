@@ -113,7 +113,7 @@ resource "null_resource" "az_login" {
 }
 
 data "external" "aks_vnet_id" {
-  program = ["az","network","vnet","list","--resource-group","${var.rg_aks_nodes_name}","--query","'[].{vnet_id:id}'","-o","json"]
+  program = ["az","network","vnet","list","--resource-group","${var.rg_aks_nodes_name}","--query","'[0].{vnet_id:id}'","-o","json"]
 
   depends_on = [null_resource.az_login,azurerm_kubernetes_cluster.default]
 }
