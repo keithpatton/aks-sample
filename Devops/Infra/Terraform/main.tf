@@ -114,7 +114,7 @@ resource "null_resource" "az_login" {
 
 data "external" "aks_vnet_id" {
   program = [
-    "sh", "-c", "az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].{vnet_id:id}' --output json | jq '{vnet_id: .[0].vnet_id}'"
+    "sh", "-c", "az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].{vnet_id:id}' --output json | jq -r tostring"
   ]
 }
 
