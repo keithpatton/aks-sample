@@ -88,7 +88,6 @@ stages:
           az group create --location $(location) --name $(tfStateResourceGroup)
           az storage account create -n $(tfStateStorageAccount) -g $(tfStateResourceGroup) -l $(location) --sku Standard_LRS --encryption-services blob
           az storage container create -n $(tfStateContainerName) --account-name $(tfStateStorageAccount) -g $(tfStateResourceGroup)
-          Get-ChildItem -Path Env:
     - task: replacetokens@5
       displayName: 'Replace tokens with variables'
       inputs:
