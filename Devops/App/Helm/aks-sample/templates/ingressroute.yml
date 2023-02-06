@@ -6,15 +6,14 @@ spec:
   entryPoints:
     - web
   routes:
-      {{- range .Values.tenants }}
-      - match: PathPrefix(`/{{ . }}`)
-        kind: Rule
-        backend:
-          services:
-            - name: webapi
-              port:
-                name: web
-          headers:
-              customRequestHeaders:
-                X-TenantId: {{ . }}              
-      {{- end }}  
+  {{- range .Values.tenants }}
+  - match: PathPrefix(`/{{ . }})
+    kind: Rule
+    services:
+      - name: webapi
+        port: 
+          name: web
+    headers:
+      customRequestHeaders:
+        X-TenantId: {{ . }}
+   {{- end }}

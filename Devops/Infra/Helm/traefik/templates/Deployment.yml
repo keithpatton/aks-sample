@@ -21,7 +21,9 @@ spec:
           image: traefik:v2.9
           args:
             - --api.insecure
-            - --providers.kubernetesingress
+            - --entrypoints.web.address=:80
+            - --entrypoints.dashboard.address=:8080
+            - --providers.kubernetescrd
           ports:
             - name: web
               containerPort: 80
