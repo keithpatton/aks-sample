@@ -113,9 +113,9 @@ resource "null_resource" "az_login" {
 }
 
 data "external" "aks_vnet_id" {
-  program = ["az","network","vnet","list","--resource-group","${var.rg_aks_nodes_name}","--query","'[0].{vnet_id:id}'","-o","json","|", "jq", "{vnet_id: .[0].vnet_id}"]
-
-  depends_on = [null_resource.az_login,azurerm_kubernetes_cluster.default]
+  program = [
+    "sh", "-c", "az network vnet list --resource-group ${var.rg_aks_nodes_name} --query '[0].{vnet_id:id}' --output json | jq '{vnet_id: .[0].vnet_id}'"
+  ]
 }
 
 output "aks_vnet_id" {
