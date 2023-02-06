@@ -42,7 +42,7 @@ namespace AksWorkloadIdentitySample.Api.Controllers
             }
             catch (Exception ex)
             {
-                Console.Write("Unable to connect to Azure SQL Database"));
+                Console.Write("Unable to connect to Azure SQL Database");
                 Console.Write(ex.ToString());
             }
 
