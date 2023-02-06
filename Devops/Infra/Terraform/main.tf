@@ -1,5 +1,12 @@
 ﻿data "azurerm_client_config" "current" {}
 
+### az login for non provider based az cli calls
+resource "null_resource" "az_login" {
+  provisioner "local-exec" {
+    command = "az login --service-principal --username ${data.azurerm_client_config.current.client_id} --password ${var.azClientSecret}  --tenant ${data.azurerm_client_config.current.tenant_id}"
+  }
+}
+
 ### Core Resource Group
 
 resource "azurerm_resource_group" "default" {
@@ -98,22 +105,11 @@ resource "azurerm_kubernetes_cluster" "default" {
 #   value = "${local-exec.stdout}"
 # }
 
-resource "null_resource" "az_login" {
-  provisioner "local-exec" {
-    command = "az login --service-principal --username ${data.azurerm_client_config.current.client_id} --password ${var.azClientSecret}  --tenant ${data.azurerm_client_config.current.tenant_id}"
-  }
-
-  depends_on = [
-    azurerm_kubernetes_cluster.default
-  ]
-}
 
 data "external" "aks_vnet_id" {
-  program = [
-    "az","network","vnet","list","--resource-group","${var.rg_aks_nodes_name}","--query","'[0].id'","-o","tsv"
-  ]
+  program = ["az","network","vnet","list","--resource-group","${var.rg_aks_nodes_name}","--query","'[0].id'","-o","json"]
 
-  depends_on = [null_resource.az_login]
+  depends_on = [null_resource.az_login,azurerm_kubernetes_cluster.default]
 }
 
 # output "aks_vnet_id" {
