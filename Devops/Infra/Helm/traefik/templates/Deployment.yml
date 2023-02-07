@@ -18,7 +18,7 @@ spec:
       serviceAccountName: traefik-ingress-controller
       containers:
         - name: traefik
-          image: traefik:v2.9
+          image: traefik:{{ .Values.traefikImageTag }}
           args:
             - --log.level=DEBUG
             - --api

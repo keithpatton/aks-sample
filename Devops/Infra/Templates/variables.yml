@@ -31,8 +31,9 @@ variables:
   traefikChartName: "traefik"
   traefikChartDescription: "Traefik Ingress Controller"
   traefikChartVersion: "1.0.0"
-  traefikAppVersion: "1.0.0"
+  traefikAppVersion: "v2.9"
   traefikReleaseName: 'traefik'
+  traefikImageTag: '$(traefikAppVersion)'
 
   tfStateResourceGroup: 'rg-${{ parameters.region }}-${{ parameters.env }}-terraform'
   tfStateStorageAccount: 'stg${{ parameters.region }}${{ parameters.env }}tfstate'
