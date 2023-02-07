@@ -12,7 +12,7 @@ parameters:
   - dev
 
 variables:
-  appVersion: "0.2.0"
+  appVersion: "0.2.1"
   imageName: '$(appName)'
   imageTag: '$(appVersion)'
   aksWorkloadIdentityClientId: '{dynamic}'
