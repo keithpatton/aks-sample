@@ -2,13 +2,18 @@ name: $(Date:yyyyMMdd)$(Rev:.r)_${{ parameters.region }}_${{ parameters.env }}
 
 trigger: none
 
-extends:
-  template: ../Templates/parameters.yml 
-
 resources:
 - repo: self
 
 parameters:
+- name: regions
+  displayName: 'Regions'
+  type: object
+  default: ['au1']
+- name: envs
+  displayName: 'Environments'
+  type: object
+  default: ['dev']
 - name: region
   displayName: 'Target Region'
   type: string

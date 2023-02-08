@@ -1,9 +1,0 @@
-parameters:
-- name: regions
-  displayName: 'Regions'
-  type: object
-  default: ['au1']
-- name: envs
-  displayName: 'Environments'
-  type: object
-  default: ['dev']
