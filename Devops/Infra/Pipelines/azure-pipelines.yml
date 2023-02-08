@@ -45,9 +45,9 @@ variables:
     env: ${{ parameters.env }}
 
 - name: region
-  value: {{ parameters.region }}
+  value: ${{ parameters.region }}
 - name: env
-  value: {{ parameters.env }}
+  value: ${{ parameters.env }}
 
 stages:
 - stage: au1-dev
