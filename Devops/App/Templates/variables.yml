@@ -21,7 +21,7 @@ variables:
   - name: imageName
     value: '$(appName)'
   - name: imageBuildTag
-    value: '{{ parameters.imageBuildTag }}'
+    value: '${{ parameters.imageBuildTag }}'
   - name: aksWorkloadIdentityClientId
     value: '{dynamic}'
   - name: aksPvcBlobName
