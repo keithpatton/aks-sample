@@ -4,7 +4,6 @@ parameters:
   type: string
   values:
   - au1
-  default: au1
 - name: env
   displayName: 'Environment'
   type: string
@@ -12,12 +11,7 @@ parameters:
   - dev
 - name: rings
   displayName: 'Deployment Rings'
-  type: object
-  default: 
-    - name: stable
-      version: "0.2.1"
-    - name: vnext
-      version: "0.3.0"   
+  type: object 
 - name: imageBuildTag
   displayName: 'Image Build Tag'
   type: string
