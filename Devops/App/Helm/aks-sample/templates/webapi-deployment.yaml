@@ -19,7 +19,7 @@ spec:
       serviceAccountName: {{ $.Values.workloadIdentityServiceAccountName }}
       containers:
         - name: {{ $.Release.Name }}
-          image: {{ $.Values.azureContainerRegistryName }}.azurecr.io/{{ $.Values.imageName }}:{{ $.Values.imageTag }}
+          image: {{ $.Values.azureContainerRegistryName }}.azurecr.io/{{ $.Values.imageName }}:{{ $.Values.appVersion }}
           imagePullPolicy: Always
           ports:
             - name: web
