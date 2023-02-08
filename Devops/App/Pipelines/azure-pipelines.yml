@@ -39,7 +39,7 @@ parameters:
     - name: stable
       version: "0.2.1"
     - name: vnext
-      version: "0.2.2"       
+      version: "0.2.2"
 
 variables:
 - template: ../../Common/Templates/variables.yml  
