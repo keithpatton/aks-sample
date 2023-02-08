@@ -1,26 +1,25 @@
-{{- range $.Values.rings }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webapi-{{ .name }}
+  name: {{ $.Release.Name }}
   labels:
-    app: webapi-{{ .name }}
+    app: {{ $.Release.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: webapi-{{ .name }}
+      service: {{ $.Release.Name }}
   template:
     metadata:
       labels:
-        app: webapi-{{ .name }}
+        app: {{ $.Release.Name }}
         azure.workload.identity/use: "true"
-        service: webapi-{{ .name }}
+        service: {{ $.Release.Name }}
     spec:
       serviceAccountName: {{ $.Values.workloadIdentityServiceAccountName }}
       containers:
-        - name: webapi-{{ .name }}
-          image: {{ $.Values.azureContainerRegistryName }}.azurecr.io/{{ $.Values.imageName }}:{{ .version }}
+        - name: {{ $.Release.Name }}
+          image: {{ $.Values.azureContainerRegistryName }}.azurecr.io/{{ $.Values.imageName }}:{{ $.Values.imageTag }}
           imagePullPolicy: Always
           ports:
             - name: web
@@ -28,7 +27,7 @@ spec:
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: webapi-configmap-{{ .name }}
+                name: {{ $.Release.Name }}
           env:
             - name: ASPNETCORE_URLS
               value: http://+:80
@@ -48,5 +47,3 @@ spec:
           persistentVolumeClaim:
             claimName: {{ $.Values.pvcBlobName }}-{{ .name }}
         {{- end }}
----
-{{- end }}

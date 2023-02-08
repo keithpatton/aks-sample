@@ -1,8 +1,7 @@
 imageName: #{imageName}#
-imageTag: #{imageTag}#
+imageTag: #{appVersion}#
 appVersion: #{appVersion}#
 tenants: #{tenantsJson}#
-rings: #{ringsJson}#
 storageClassBlobName: #{aksStorageClassBlobName}#
 aksStorageAccountName: #{aksStorageAccountName}#
 pvcBlobName: #{aksPvcBlobName}#

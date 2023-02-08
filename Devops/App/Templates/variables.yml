@@ -21,12 +21,8 @@ parameters:
 variables:
   - name: ringsJson
     value: '${{ convertToJson(parameters.rings) }}'
-  - name: appVersion
-    value: "0.2.1"
   - name: imageName
     value: '$(appName)'
-  - name: imageTag
-    value: '$(appVersion)'
   - name: aksWorkloadIdentityClientId
     value: '{dynamic}'
   - name: aksPvcBlobName
@@ -36,10 +32,8 @@ variables:
   - name: webapiChartDescription 
     value: 'AKS Sample App'
   - name: webapiReleaseName
-    value: 'aks-sample'
+    value: 'webapi'
   - name: webapiChartName
-    value: 'aks-sample'  
+    value: 'webapi'  
   - name: webapiChartVersion
     value: '0.7.2'
-  - name: webapiAppVersion
-    value: '$(appVersion)'

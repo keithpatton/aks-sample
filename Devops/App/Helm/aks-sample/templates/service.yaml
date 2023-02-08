@@ -1,8 +1,7 @@
-{{- range $.Values.rings }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: webapi-{{ .name }}
+  name: {{ $.Release.Name }}
 spec:
   ports:
     - name: web
@@ -10,6 +9,4 @@ spec:
       targetPort: web
       protocol: TCP
   selector:
-    app: webapi-{{ .name }}
----
-{{- end }}
+    app: {{ $.Release.Name }}

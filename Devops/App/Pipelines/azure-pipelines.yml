@@ -113,20 +113,22 @@ stages:
         enableRecursion: false
         useLegacyPattern: false
         enableTelemetry: true   
-        verbosity: 'detailed'   
-    - task: HelmDeploy@0
-      displayName: 'Deploy Web Api App'
-      inputs:
-        connectionType: 'Azure Resource Manager'
-        azureSubscription: $(svcConnAzureRm)
-        azureResourceGroup: $(rgName)
-        kubernetesCluster: $(aksName)
-        namespace: $(aksNamespace)
-        command: 'upgrade'
-        chartType: 'FilePath'
-        chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample'
-        releaseName: $(webapiReleaseName)
-        arguments: '--debug --atomic --reset-values'
+        verbosity: 'detailed'  
+    - ${{ each ring in parameters.rings }}:  
+      - task: HelmDeploy@0
+        displayName: 'Deploy Web Api App to ring: ${{ ring.name }}'
+        inputs:
+          connectionType: 'Azure Resource Manager'
+          azureSubscription: $(svcConnAzureRm)
+          azureResourceGroup: $(rgName)
+          kubernetesCluster: $(aksName)
+          namespace: $(aksNamespace)
+          command: 'upgrade'
+          chartType: 'FilePath'
+          chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample'
+          releaseName: $(webapiReleaseName)-${{ ring.name }}
+          overrideValues: 'appVersion=${{ ring.version }}'
+          arguments: '--debug --atomic --reset-values'
   - ${{ each tenant in parameters.tenants }}:
     - job: TenantWork_${{ tenant.name }}
       displayName: ${{ tenant.name }} Specific Work 
