@@ -1,6 +1,5 @@
 imageName: #{imageName}#
-imageTag: #{appVersion}#
-appVersion: #{appVersion}#
+appVersion: "{dynamic}"
 tenants: #{tenantsJson}#
 storageClassBlobName: #{aksStorageClassBlobName}#
 aksStorageAccountName: #{aksStorageAccountName}#
