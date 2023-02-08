@@ -227,8 +227,8 @@ resource "azurerm_mssql_firewall_rule" "default" {
 }
 
 resource "azurerm_mssql_database" "default" {
-  for_each = toset(var.tenants)
-  name                = each.value
+  for_each = var.tenants
+  name                = each.value.name
   server_id           = azurerm_mssql_server.default.id
   elastic_pool_id     = azurerm_mssql_elasticpool.default.id
 
@@ -236,7 +236,7 @@ resource "azurerm_mssql_database" "default" {
 }
 
 resource "mssql_user" "aks" {
-  for_each = toset(var.tenants)
+  for_each = var.tenants
   server {
     host = azurerm_mssql_server.default.fully_qualified_domain_name
     login {
@@ -245,7 +245,7 @@ resource "mssql_user" "aks" {
     }
   }
 
-  database  = each.value
+  database  = each.value.name
   username  = azurerm_user_assigned_identity.aks.name
   object_id = azurerm_user_assigned_identity.aks.client_id
   roles     = ["db_owner"]

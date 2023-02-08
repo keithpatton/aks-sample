@@ -3,15 +3,15 @@ kind: IngressRoute
 metadata:
   name: webapi
   namespace: default
-
 spec:
   entryPoints:
     - web
-
   routes:
-  - match: PathPrefix(`/`)
+  {{- range $.Values.tenants }}
+  - match: PathPrefix(`/`) && Headers(`X-TenantId`, `{{ .name }}`)
     kind: Rule
     services:
-    - name: webapi
+    - name: webapi-{{ .ring }}
       port:
         name: web
+  {{- end }}

@@ -27,9 +27,19 @@ parameters:
 - name: tenants
   displayName: 'Tenants'
   type: object
+  default:
+    - name: tenant1
+      ring: stable
+    - name: tenant2
+      ring: stable
+- name: rings
+  displayName: 'Deployment Rings'
+  type: object
   default: 
-    - tenant1
-    - tenant2
+    - name: stable
+      version: "0.2.1"
+    - name: vnext
+      version: "0.2.2"       
 
 variables:
 - template: ../../Common/Templates/variables.yml  
@@ -37,11 +47,12 @@ variables:
       tenants: ${{ parameters.tenants }}
       region: ${{ parameters.region }}
       env: ${{ parameters.env }}
+    
 - template: ../Templates/variables.yml
   parameters:
     region: ${{ parameters.region }}
     env: ${{ parameters.env }}
-
+    rings: ${{ parameters.rings }}
 stages:
 - stage: Image
   displayName: Build and Push Image

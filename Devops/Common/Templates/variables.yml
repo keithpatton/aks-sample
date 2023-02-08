@@ -6,7 +6,6 @@ parameters:
   type: string
   values:
   - au1
-  default: au1
 - name: env
   displayName: 'Environment'
   type: string
@@ -15,9 +14,6 @@ parameters:
 - name: tenants
   displayName: 'Tenant List'
   type: object
-  default: 
-    - tenant1
-    - tenant2
 
 variables:
 - template: region-env/${{ parameters.region }}-${{ parameters.env }}/variables.yml  

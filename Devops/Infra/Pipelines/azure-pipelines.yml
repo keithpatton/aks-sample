@@ -21,9 +21,9 @@ parameters:
 - name: tenants
   displayName: 'Tenants'
   type: object
-  default: 
-    - tenant1
-    - tenant2
+  default:
+    - name: tenant1
+    - name: tenant2
 - name: destroy
   displayName: 'Destroy Infra (Before Apply)'
   type: boolean

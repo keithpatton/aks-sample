@@ -1,6 +1,7 @@
 imageName: #{imageName}#
 imageTag: #{imageTag}#
 tenants: #{tenantsJson}#
+rings: #{ringsJson}#
 storageClassBlobName: #{aksStorageClassBlobName}#
 aksStorageAccountName: #{aksStorageAccountName}#
 pvcBlobName: #{aksPvcBlobName}#

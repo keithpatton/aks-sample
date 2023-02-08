@@ -1,25 +1,26 @@
 apiVersion: apps/v1
+{{- range $.Values.rings }}
 kind: Deployment
 metadata:
-  name: webapi
+  name: webapi-{{ .name }}
   labels:
-    app: webapi
+    app: webapi-{{ .name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: webapi
+      service: webapi-{{ .name }}
   template:
     metadata:
       labels:
-        app: webapi
+        app: webapi-{{ .name }}
         azure.workload.identity/use: "true"
-        service: webapi
+        service: webapi-{{ .name }}
     spec:
-      serviceAccountName: {{ .Values.workloadIdentityServiceAccountName }}
+      serviceAccountName: {{ $.Values.workloadIdentityServiceAccountName }}
       containers:
-        - name: webapi
-          image: {{ .Values.azureContainerRegistryName }}.azurecr.io/{{ .Values.imageName }}:{{ .Values.imageTag }}
+        - name: webapi-{{ .name }}
+          image: {{ $.Values.azureContainerRegistryName }}.azurecr.io/{{ $.Values.imageName }}:{{ .version }}
           imagePullPolicy: Always
           ports:
             - name: web
@@ -27,24 +28,24 @@ spec:
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: webapi-configmap
+                name: webapi-configmap-{{ .name }}
           env:
             - name: ASPNETCORE_URLS
               value: http://+:80
           volumeMounts:
             - mountPath: /var/common
               name: common
-              {{- range .Values.tenants }}
-            - mountPath: /var/{{ . }}
-              name: {{ . }}
+              {{- range $.Values.tenants }}
+            - mountPath: /var/{{ .name }}
+              name: {{ .name }}
               {{- end }}
-      {{- $pvcBlobName := .Values.pvcBlobName }}
       volumes:
         - name: common
           persistentVolumeClaim:
-             claimName: {{ $pvcBlobName }}
-        {{- range .Values.tenants }}
-        - name: {{ . }}
+             claimName: {{ $.Values.pvcBlobName }}
+        {{- range $.Values.tenants }}
+        - name: {{ .name }}
           persistentVolumeClaim:
-            claimName: {{ $pvcBlobName }}-{{ . }}
+            claimName: {{ $.Values.pvcBlobName }}-{{ .name }}
         {{- end }}
+{{- end }}

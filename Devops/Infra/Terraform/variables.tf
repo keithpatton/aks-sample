@@ -1,5 +1,7 @@
 ﻿variable "tenants" {
-  type        = list(string)
+  type = list(object({
+    name = string
+  }))
   description = "Tenant List"
   default     = #{tenantsJson}#
 }

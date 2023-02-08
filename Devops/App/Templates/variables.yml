@@ -10,8 +10,17 @@ parameters:
   type: string
   values:
   - dev
-
+- name: rings
+  displayName: 'Deployment Rings'
+  type: object
+  default: 
+    - name: stable
+      version: "0.2.1"
+    - name: vnext
+      version: "0.2.2"      
 variables:
+- name: ringsJson
+  value: '${{ convertToJson(parameters.rings) }}'
   appVersion: "0.2.1"
   imageName: '$(appName)'
   imageTag: '$(appVersion)'
