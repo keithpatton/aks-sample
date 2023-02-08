@@ -1,3 +1,4 @@
+using Azure.Core;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Mvc;
@@ -24,8 +25,10 @@ namespace AksWorkloadIdentitySample.Api.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get(string tenant)
+        public IEnumerable<WeatherForecast> Get()
         {
+
+            var tenant = Request.Headers.TryGetValue("X-TenantId", out var headerValue) ? headerValue.ToString() : "tenant1";
 
             // Write to persistent volume storage
             WriteToPersistentStorage(tenant);
