@@ -227,7 +227,7 @@ resource "azurerm_mssql_firewall_rule" "default" {
 }
 
 resource "azurerm_mssql_database" "default" {
-  for_each = var.tenants
+  for_each =  {for tenant in var.tenants:  tenant.name => tenant}
   name                = each.value.name
   server_id           = azurerm_mssql_server.default.id
   elastic_pool_id     = azurerm_mssql_elasticpool.default.id
@@ -236,7 +236,7 @@ resource "azurerm_mssql_database" "default" {
 }
 
 resource "mssql_user" "aks" {
-  for_each = var.tenants
+  for_each =  {for tenant in var.tenants:  tenant.name => tenant}
   server {
     host = azurerm_mssql_server.default.fully_qualified_domain_name
     login {

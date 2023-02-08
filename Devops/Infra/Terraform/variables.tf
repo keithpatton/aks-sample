@@ -1,5 +1,5 @@
 ﻿variable "tenants" {
-  type = map(object({
+  type = list(object({
     name = string
   }))
   description = "Tenant List"
