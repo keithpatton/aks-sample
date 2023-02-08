@@ -25,7 +25,7 @@ parameters:
     - name: tenant1
       ring: stable
     - name: tenant2
-      ring: stable
+      ring: vnext
 - name: rings
   displayName: 'Deployment Rings'
   type: object
@@ -33,7 +33,7 @@ parameters:
     - name: stable
       version: "0.2.1"
     - name: vnext
-      version: "0.2.1"
+      version: "0.3.0"
 - name: imageBuildTag
   displayName: 'Image Build Tag'
   type: string
