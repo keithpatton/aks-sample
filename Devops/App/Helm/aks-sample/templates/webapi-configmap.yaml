@@ -2,7 +2,7 @@ apiVersion: v1
 {{- range $.Values.rings }}
 kind: ConfigMap
 metadata:
-  name: webapi-configmap{{ .name }}
+  name: webapi-configmap-{{ .name }}
 data:
   aks_keyvault: {{ $.Values.keyVaultName }}
   sql_server_name: {{ $.Values.sqlServerName }}
