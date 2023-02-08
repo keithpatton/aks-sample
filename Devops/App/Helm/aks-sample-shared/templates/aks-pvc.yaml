@@ -1,4 +1,3 @@
-# persistent volume claim for common storage class container
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -27,4 +26,3 @@ spec:
     requests:
       storage: 5Gi
 ---
-{{- end }}

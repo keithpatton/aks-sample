@@ -36,3 +36,9 @@ variables:
     value: 'webapi'  
   - name: webapiChartVersion
     value: '0.7.2'
+  - name: webapiSharedReleaseName
+    value: 'webapi-shared'
+  - name: webapiSharedChartName
+    value: 'webapi-shared'  
+  - name: webapiSharedChartVersion
+    value: '0.1.0'    

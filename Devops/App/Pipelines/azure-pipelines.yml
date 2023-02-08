@@ -111,6 +111,19 @@ stages:
         useLegacyPattern: false
         enableTelemetry: true   
         verbosity: 'detailed'  
+    - task: HelmDeploy@0
+      displayName: 'Deploy Shared App Components'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscription: $(svcConnAzureRm)
+        azureResourceGroup: $(rgName)
+        kubernetesCluster: $(aksName)
+        namespace: $(aksNamespace)
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample-shared'
+        releaseName: $(webapiReleaseName)-shared
+        arguments: '--debug --atomic --reset-values'        
     - ${{ each ring in parameters.rings }}:  
       - task: HelmDeploy@0
         displayName: 'Deploy version ${{ ring.version }} to ${{ ring.name }} ring'
@@ -122,7 +135,7 @@ stages:
           namespace: $(aksNamespace)
           command: 'upgrade'
           chartType: 'FilePath'
-          chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample'
+          chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample-deploy'
           releaseName: $(webapiReleaseName)-${{ ring.name }}
           overrideValues: 'appVersion=${{ ring.version }}'
           arguments: '--debug --atomic --reset-values'

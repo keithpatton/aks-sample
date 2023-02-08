@@ -1,0 +1,12 @@
+imageName: #{imageName}#
+appVersion: "{dynamic}"
+tenants: #{tenantsJson}#
+storageClassBlobName: #{aksStorageClassBlobName}#
+aksStorageAccountName: #{aksStorageAccountName}#
+pvcBlobName: #{aksPvcBlobName}#
+aksNamespace: #{aksNamespace}#
+workloadIdentityServiceAccountName: #{aksWorkloadIdentityServiceAccountName}#
+workloadIdentityClientId: #{aksWorkloadIdentityClientId}#
+keyVaultName: #{kvName}#
+azureContainerRegistryName: #{acrName}#
+sqlServerName: #{sqlServerName}#
