@@ -128,8 +128,8 @@ stages:
         releaseName: $(webapiReleaseName)
         arguments: '--debug --atomic --reset-values'
   - ${{ each tenant in parameters.tenants }}:
-    - job: TenantWork_${{ tenant }}
-      displayName: ${{ tenant }} Specific Work 
+    - job: TenantWork_${{ tenant.name }}
+      displayName: ${{ tenant.name }} Specific Work 
       dependsOn: Deploy
       pool:
         vmImage: ubuntu-latest
@@ -139,7 +139,7 @@ stages:
     displayName: Complete Deployment After Tenant Specific Work
     dependsOn: 
     - ${{ each tenant in parameters.tenants }}:
-      - TenantWork_${{ tenant }}
+      - TenantWork_${{ tenant.name }}
     pool:
       vmImage: ubuntu-latest
     steps:
