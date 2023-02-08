@@ -19,8 +19,8 @@ parameters:
     - name: vnext
       version: "0.2.2"      
 variables:
-- name: ringsJson
-  value: '${{ convertToJson(parameters.rings) }}'
+  - name: ringsJson
+    value: '${{ convertToJson(parameters.rings) }}'
   appVersion: "0.2.1"
   imageName: '$(appName)'
   imageTag: '$(appVersion)'
