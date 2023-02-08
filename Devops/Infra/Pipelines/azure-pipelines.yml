@@ -53,8 +53,8 @@ variables:
     env: ${{ parameters.env }}
 
 stages:
-- ${{ each region in parameter.regions }}:
-  - ${{ each env in parameter.envs }}:
+- ${{ each region in parameters.regions }}:
+  - ${{ each env in parameters.envs }}:
     - template: ../Templates/stage.yml
       parameters:
         regionStage: '${{ region }}'
