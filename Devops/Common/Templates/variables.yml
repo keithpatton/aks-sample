@@ -16,9 +16,10 @@ parameters:
   type: object
 
 variables:
-- template: region-env/${{ parameters.region }}-${{ parameters.env }}/variables.yml  
 - template: region/${{ parameters.region }}/variables.yml 
 - template: env/${{ parameters.env }}/variables.yml  
+- template: region-env/${{ parameters.region }}-${{ parameters.env }}/variables.yml  
+
 - name: appName
   value: 'aksdemo'
 - name: tenantsJson

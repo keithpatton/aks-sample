@@ -1,12 +1,6 @@
 name: $(Date:yyyyMMdd)$(Rev:.r)_${{ parameters.region }}_${{ parameters.env }}
 
-trigger:
-  branches:
-    include:
-    - master
-  paths:
-    include:
-    - AksWorkloadIdentitySample.Api
+trigger: none
 
 resources:
 - repo: self
