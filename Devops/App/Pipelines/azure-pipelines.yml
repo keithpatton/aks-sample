@@ -113,7 +113,7 @@ stages:
         verbosity: 'detailed'  
     - ${{ each ring in parameters.rings }}:  
       - task: HelmDeploy@0
-        displayName: 'Deploy App to ${{ ring.name }} ring with version ${{ ring.version }}'
+        displayName: 'Deploy version ${{ ring.version }} to ${{ ring.name }} ring'
         inputs:
           connectionType: 'Azure Resource Manager'
           azureSubscription: $(svcConnAzureRm)
