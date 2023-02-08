@@ -22,7 +22,7 @@ variables:
   - name: ringsJson
     value: '${{ convertToJson(parameters.rings) }}'
   - name: appVersion
-    value: "0.2.1"
+    value: "0.2.2"
   - name: imageName
     value: '$(appName)'
   - name: imageTag
