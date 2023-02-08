@@ -4,7 +4,7 @@ parameters:
 - name: envStage
   type: string
 - name: dependsOn  
-  type: string
+  type: object
 - name: regionTarget
   type: string
 - name: envTarget

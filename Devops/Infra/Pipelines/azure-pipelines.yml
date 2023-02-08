@@ -51,6 +51,6 @@ stages:
     envStage: 'dev'
     regionTarget: ${{ parameters.region }}
     envTarget: ${{ parameters.env }}
-    dependsOn: "[]"   
+    dependsOn: []
     apply: ${{ parameters.apply }}
     destroy: ${{ parameters.destroy }}
