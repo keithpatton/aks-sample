@@ -18,11 +18,11 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ $pvcBlobName }}-{{ . }}
+  name: {{ $pvcBlobName }}-{{ .name }}
 spec:
   accessModes:
   - ReadWriteOnce
-  storageClassName: {{ $storageClassBlobName }}-{{ . }}
+  storageClassName: {{ $storageClassBlobName }}-{{ .name}}
   resources:
     requests:
       storage: 5Gi

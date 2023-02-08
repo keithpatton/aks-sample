@@ -18,12 +18,12 @@ allowVolumeExpansion: true
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ $storageClassBlobName }}-{{ . }}
+  name: {{ $storageClassBlobName }}-{{ .name }}
   namespace: {{ $aksNamespace }}
 provisioner: blob.csi.azure.com
 parameters:
   skuName: Standard_ZRS
-  containerName: {{ . }}
+  containerName: {{ .name }}
   protocol: nfs
 volumeBindingMode: Immediate
 allowVolumeExpansion: true
