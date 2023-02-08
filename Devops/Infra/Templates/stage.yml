@@ -45,9 +45,9 @@ stages:
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
-              az extension add --name aks-preview
-              az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
-              az provider register --namespace Microsoft.ContainerService
+                az extension add --name aks-preview
+                az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
+                az provider register --namespace Microsoft.ContainerService
           - task: AzureCLI@2
             displayName: 'Ensure Build Agent Access'
             continueOnError: true
@@ -57,9 +57,9 @@ stages:
               scriptType: bash
               scriptLocation: 'inlineScript'
               inlineScript: |
-              build_agent_ip=$(curl https://ipv4.icanhazip.com/)
-              az sql server firewall-rule create -g $(rgName) --name "$(sqlFirewallRuleBuildAgentName)-pipeline" --server $(sqlServerName) --start-ip-address $build_agent_ip --end-ip-address $build_agent_ip
-              printenv
+                build_agent_ip=$(curl https://ipv4.icanhazip.com/)
+                az sql server firewall-rule create -g $(rgName) --name "$(sqlFirewallRuleBuildAgentName)-pipeline" --server $(sqlServerName) --start-ip-address $build_agent_ip --end-ip-address $build_agent_ip
+                printenv
           - task: AzureCLI@2
             displayName: 'Ensure Terraform State Storage Account and Container'
             condition: eq(1,2)
@@ -68,25 +68,25 @@ stages:
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
-              az group create --location $(location) --name $(tfStateResourceGroup)
-              az storage account create -n $(tfStateStorageAccount) -g $(tfStateResourceGroup) -l $(location) --sku Standard_LRS --encryption-services blob
-              az storage container create -n $(tfStateContainerName) --account-name $(tfStateStorageAccount) -g $(tfStateResourceGroup)
+                az group create --location $(location) --name $(tfStateResourceGroup)
+                az storage account create -n $(tfStateStorageAccount) -g $(tfStateResourceGroup) -l $(location) --sku Standard_LRS --encryption-services blob
+                az storage container create -n $(tfStateContainerName) --account-name $(tfStateStorageAccount) -g $(tfStateResourceGroup)
           - task: replacetokens@5
             displayName: 'Replace tokens with variables'
             inputs:
               targetFiles: |
-              **/variables.tf
-              encoding: 'auto'
-              tokenPattern: 'default'
-              writeBOM: true
-              actionOnMissing: 'warn'
-              keepToken: false
-              actionOnNoFiles: 'warn'
-              enableTransforms: false
-              enableRecursion: false
-              useLegacyPattern: false
-              enableTelemetry: true   
-              verbosity: 'detailed'   
+                **/variables.tf
+                encoding: 'auto'
+                tokenPattern: 'default'
+                writeBOM: true
+                actionOnMissing: 'warn'
+                keepToken: false
+                actionOnNoFiles: 'warn'
+                enableTransforms: false
+                enableRecursion: false
+                useLegacyPattern: false
+                enableTelemetry: true   
+                verbosity: 'detailed'   
           - task: TerraformTaskV3@3
             displayName: Terraform Init 
             inputs:
@@ -106,8 +106,7 @@ stages:
               environmentServiceNameAzureRM: $(svcConnAzureRm)
               command: 'destroy'
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
-              commandOptions: 
-              --auto-approve
+              commandOptions: '--auto-approve'
               backendAzureRmResourceGroupName: $(tfStateResourceGroup)
               backendAzureRmStorageAccountName: $(tfStateStorageAccount)
               backendAzureRmContainerName: $(tfStateContainerName)
@@ -120,8 +119,7 @@ stages:
               environmentServiceNameAzureRM: $(svcConnAzureRm)
               command: 'apply'
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
-              commandOptions: 
-              --auto-approve
+              commandOptions: '--auto-approve'
               backendAzureRmResourceGroupName: $(tfStateResourceGroup)
               backendAzureRmStorageAccountName: $(tfStateStorageAccount)
               backendAzureRmContainerName: $(tfStateContainerName)
@@ -144,19 +142,19 @@ stages:
             displayName: 'Replace tokens with variables'
             inputs:
               targetFiles: |
-              Devops/Infra/Helm/**/Chart.yaml
-              Devops/Infra/Helm/**/values.yaml
-              encoding: 'auto'
-              tokenPattern: 'default'
-              writeBOM: true
-              actionOnMissing: 'warn'
-              keepToken: false
-              actionOnNoFiles: 'warn'
-              enableTransforms: false
-              enableRecursion: false
-              useLegacyPattern: false
-              enableTelemetry: true   
-              verbosity: 'detailed'
+                Devops/Infra/Helm/**/Chart.yaml
+                Devops/Infra/Helm/**/values.yaml
+                encoding: 'auto'
+                tokenPattern: 'default'
+                writeBOM: true
+                actionOnMissing: 'warn'
+                keepToken: false
+                actionOnNoFiles: 'warn'
+                enableTransforms: false
+                enableRecursion: false
+                useLegacyPattern: false
+                enableTelemetry: true   
+                verbosity: 'detailed'
           - task: HelmDeploy@0
             displayName: 'Deploy Traefik'      
             inputs:
