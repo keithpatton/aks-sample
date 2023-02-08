@@ -56,4 +56,4 @@ stages:
   pool:
     vmImage: ubuntu-latest 
   jobs:
-   - template: ../templates/jobs.yml
+   - template: ../Templates/jobs.yml
