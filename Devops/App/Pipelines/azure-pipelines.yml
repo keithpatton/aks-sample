@@ -122,7 +122,7 @@ stages:
         command: 'upgrade'
         chartType: 'FilePath'
         chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample-shared'
-        releaseName: $(webapiReleaseName)-shared
+        releaseName: $(webapiSharedReleaseName)
         arguments: '--debug --atomic --reset-values'        
     - ${{ each ring in parameters.rings }}:  
       - task: HelmDeploy@0
