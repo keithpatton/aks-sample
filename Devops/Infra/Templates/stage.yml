@@ -13,24 +13,18 @@ parameters:
   type: boolean
 - name: destroy
   type: boolean
- 
-variables:
-- name: stageName
-  value: ${{ parameters.regionStage }}_${{ parameters.envStage }}
-- name: envAzD
-  value: $(stageName)
 
 stages:
-- stage: $(stageName)
+- stage: ${{ parameters.regionStage }}_${{ parameters.envStage }}
   condition: and(eq(${{ parameters.regionTarget }}, ${{ parameters.regionStage }}), eq(${{ parameters.envStage }}, ${{ parameters.envTarget }}))
-  displayName: $(stageName)
+  displayName: ${{ parameters.regionStage }}_${{ parameters.envStage }}
   dependsOn: ${{ parameters.dependsOn }}
   pool:
     vmImage: ubuntu-latest 
   jobs:
   - deployment: Infrastructure
     displayName: Ensure Azure Resources
-    environment: $(envAzD)
+    environment: ${{ parameters.regionStage }}_${{ parameters.envStage }}
     strategy:
       runOnce:
         deploy:
@@ -131,7 +125,7 @@ stages:
     dependsOn: Infrastructure
     
     condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
-    environment: $(envAzD)
+    environment: ${{ parameters.regionStage }}_${{ parameters.envStage }}
     strategy:
       runOnce:
         deploy:
