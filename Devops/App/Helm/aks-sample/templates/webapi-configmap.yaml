@@ -6,5 +6,6 @@ metadata:
 data:
   aks_keyvault: {{ $.Values.keyVaultName }}
   sql_server_name: {{ $.Values.sqlServerName }}
+  app_version: {{ $.Values.sqlServerName }}
 ---
 {{- end }}

@@ -48,12 +48,14 @@ namespace AksWorkloadIdentitySample.Api.Controllers
             using (SqlCommand command = new SqlCommand("IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'example_table') CREATE TABLE example_table (id INT PRIMARY KEY, name VARCHAR(255), date_created DATETIME DEFAULT GETDATE());", conn))
             command.ExecuteNonQuery();
 
+            var appVersion = IsInAks() ? Environment.GetEnvironmentVariable("app_version") : "0.0.1";
+
             // return result
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = $"{Summaries[Random.Shared.Next(Summaries.Length)]} - {secret?.Value}"
+                Summary = $"{Summaries[Random.Shared.Next(Summaries.Length)]} - {secret?.Value} - {appVersion}"
             })
             .ToArray();
         }
