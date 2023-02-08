@@ -21,7 +21,6 @@ parameters:
 - name: imageBuildTag
   displayName: 'Image Build Tag'
   type: string
-  default: "0.3.0"   
 variables:
   - name: ringsJson
     value: '${{ convertToJson(parameters.rings) }}'

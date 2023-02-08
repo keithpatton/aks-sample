@@ -40,19 +40,22 @@ parameters:
       version: "0.2.1"
     - name: vnext
       version: "0.2.2"
-
+- name: imageBuildTag
+  displayName: 'Image Build Tag'
+  type: string
+  default: "0.3.0"
 variables:
 - template: ../../Common/Templates/variables.yml  
   parameters:
       tenants: ${{ parameters.tenants }}
       region: ${{ parameters.region }}
-      env: ${{ parameters.env }}
-    
+      env: ${{ parameters.env }}   
 - template: ../Templates/variables.yml
   parameters:
     region: ${{ parameters.region }}
     env: ${{ parameters.env }}
     rings: ${{ parameters.rings }}
+    imageBuildTag: ${{ parameters.imageBuildTag }}
 stages:
 - stage: Image
   displayName: Build and Push Image
