@@ -63,6 +63,8 @@ stages:
         runOnce:
           deploy:
             steps:
+            - checkout: self
+              clean: true                  
             - task: AzureCLI@2
               displayName: 'Enable Workload Identity Preview Feature'
               condition: eq(1,2)
@@ -156,12 +158,16 @@ stages:
    
     - deployment: InfrastructureApps    
       displayName: Deploy Infra Apps
+      dependsOn: Infrastructure
+      
       condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
       environment: au1-dev
       strategy:
         runOnce:
           deploy:
             steps:
+            - checkout: self
+              clean: true       
             - task: replacetokens@5
               displayName: 'Replace tokens with variables'
               inputs:
