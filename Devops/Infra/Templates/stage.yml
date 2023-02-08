@@ -14,11 +14,11 @@ parameters:
 - name: destroy
   type: boolean
  
- variables:
+variables:
 - name: stageName
-- value: ${{ parameters.regionStage }}_${{ parameters.envStage }}
+  value: ${{ parameters.regionStage }}_${{ parameters.envStage }}
 - name: envAzD
-- value: $(stageName)
+  value: $(stageName)
 
 stages:
 - stage: $(stageName)
