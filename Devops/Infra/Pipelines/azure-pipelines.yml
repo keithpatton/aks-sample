@@ -36,24 +36,21 @@ parameters:
 variables:
 - template: ../../Common/Templates/variables.yml  
   parameters:
-      tenants: ${{ parameters.tenants }}
-      region: ${{ parameters.region }}
-      env: ${{ parameters.env }}
+    tenants: ${{ parameters.tenants }}
+    region: ${{ parameters.region }}
+    env: ${{ parameters.env }}
 - template: ../Templates/variables.yml
   parameters:
     region: ${{ parameters.region }}
     env: ${{ parameters.env }}
 
-- name: region
-  value: ${{ parameters.region }}
-- name: env
-  value: ${{ parameters.env }}
-
 stages:
-- stage: au1_dev
-  condition: and(eq(variables['region'], 'au1'), eq(variables['env'], 'dev'))
-  displayName: au1-dev
-  pool:
-    vmImage: ubuntu-latest 
-  jobs:
-   - template: ../Templates/jobs.yml
+- templates: ../Templates/stage.yml
+  parameters:
+    regionStage: 'au1'
+    envStage: 'dev'
+    regionTarget: ${{ parameters.region }}
+    envTarget: ${{ parameters.env }}
+    dependsOn: []   
+    apply: ${{ parameters.apply }}
+    destroy: ${{ parameters.destroy }}
