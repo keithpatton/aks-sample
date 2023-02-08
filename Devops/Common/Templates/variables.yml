@@ -20,6 +20,8 @@ variables:
 - template: env/${{ parameters.env }}/variables.yml  
 - template: region-env/${{ parameters.region }}-${{ parameters.env }}/variables.yml  
 
+- name: envAzD
+- value: $(region)-$(env)
 - name: appName
   value: 'aksdemo'
 - name: tenantsJson
