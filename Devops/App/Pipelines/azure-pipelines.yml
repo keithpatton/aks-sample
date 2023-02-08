@@ -134,7 +134,7 @@ stages:
       pool:
         vmImage: ubuntu-latest
       steps:
-      - script: echo ${{ tenant }}
+      - script: echo ${{ tenant.name }}
   - job: DeployComplete
     displayName: Complete Deployment After Tenant Specific Work
     dependsOn: 
