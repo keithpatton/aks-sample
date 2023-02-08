@@ -12,6 +12,5 @@ spec:
     kind: Rule
     services:
     - name: webapi-{{ .ring }}
-      port:
-        name: web
+      port: 80
   {{- end }}
