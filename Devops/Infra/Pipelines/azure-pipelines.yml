@@ -45,7 +45,7 @@ variables:
     env: ${{ parameters.env }}
 
 stages:
-- templates: ../Templates/stage.yml
+- template: ../Templates/stage.yml
   parameters:
     regionStage: 'au1'
     envStage: 'dev'
