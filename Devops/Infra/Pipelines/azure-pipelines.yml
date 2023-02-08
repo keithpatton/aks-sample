@@ -6,14 +6,22 @@ resources:
 - repo: self
 
 parameters:
+- name: regions
+  displayName: 'Regions'
+  type: object
+  default: ['au1']
+- name: envs
+  displayName: 'Environments'
+  type: object
+  default: ['dev']
 - name: region
-  displayName: 'Region'
+  displayName: 'Target Region'
   type: string
   values:
   - au1
   default: au1
 - name: env
-  displayName: 'Environment'
+  displayName: 'Target Environment'
   type: string
   values:
   - dev
@@ -45,12 +53,14 @@ variables:
     env: ${{ parameters.env }}
 
 stages:
-- template: ../Templates/stage.yml
-  parameters:
-    regionStage: 'au1'
-    envStage: 'dev'
-    regionTarget: ${{ parameters.region }}
-    envTarget: ${{ parameters.env }}
-    dependsOn: []
-    apply: ${{ parameters.apply }}
-    destroy: ${{ parameters.destroy }}
+- ${{ each region in parameter.regions }}:
+  - ${{ each env in parameter.envs }}:
+    - template: ../Templates/stage.yml
+      parameters:
+        regionStage: '${{ region }}'
+        envStage: '${{ env }}'
+        regionTarget: ${{ parameters.region }}
+        envTarget: ${{ parameters.env }}
+        dependsOn: []
+        apply: ${{ parameters.apply }}
+        destroy: ${{ parameters.destroy }}
