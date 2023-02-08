@@ -36,7 +36,7 @@ stages:
         deploy:
           steps:
           - checkout: self
-          clean: true                  
+            clean: true                  
           - task: AzureCLI@2
           displayName: 'Enable Workload Identity Preview Feature'
           condition: eq(1,2)
@@ -139,7 +139,7 @@ stages:
         deploy:
           steps:
           - checkout: self
-          clean: true       
+            clean: true       
           - task: replacetokens@5
           displayName: 'Replace tokens with variables'
           inputs:
