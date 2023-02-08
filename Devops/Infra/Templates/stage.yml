@@ -16,7 +16,7 @@ parameters:
 
 stages:
 - stage: ${{ parameters.regionStage }}_${{ parameters.envStage }}
-  condition: and(eq(${{ parameters.regionTarget }}, ${{ parameters.regionStage }}), eq(${{ parameters.envStage }}, ${{ parameters.envTarget }}))
+  condition: and(eq('${{ parameters.regionTarget }}', '${{ parameters.regionStage }}'), eq('${{ parameters.envStage }}', '${{ parameters.envTarget }}'))
   displayName: ${{ parameters.regionStage }}_${{ parameters.envStage }}
   dependsOn: ${{ parameters.dependsOn }}
   pool:
