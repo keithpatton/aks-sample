@@ -50,7 +50,7 @@ variables:
   value: ${{ parameters.env }}
 
 stages:
-- stage: au1-dev
+- stage: au1_dev
   condition: and(eq(variables['region'], 'au1'), eq(variables['environment'], 'dev'))
   displayName: au1-dev
   pool:
