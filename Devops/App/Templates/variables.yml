@@ -21,14 +21,25 @@ parameters:
 variables:
   - name: ringsJson
     value: '${{ convertToJson(parameters.rings) }}'
-  appVersion: "0.2.1"
-  imageName: '$(appName)'
-  imageTag: '$(appVersion)'
-  aksWorkloadIdentityClientId: '{dynamic}'
-  aksPvcBlobName: 'azure-blob'
-  aksStorageClassBlobName: 'azureblob-nfs-standard'
-  webapiChartDescription: 'AKS Sample App'
-  webapiReleaseName: 'aks-sample'
-  webapiChartName: 'aks-sample'  
-  webapiChartVersion: '0.7.2'
-  webapiAppVersion: '$(appVersion)'
+  - name: appVersion: 
+    value: "0.2.1"
+  - name: imageName
+    value: '$(appName)'
+  - name: imageTag
+    value: '$(appVersion)'
+  - name: aksWorkloadIdentityClientId
+    value: '{dynamic}'
+  - name: aksPvcBlobName
+    value: 'azure-blob'
+  - name: aksStorageClassBlobName
+    value: 'azureblob-nfs-standard'
+  - name: webapiChartDescription 
+    value: 'AKS Sample App'
+  - name: webapiReleaseName
+    value: 'aks-sample'
+  - name: webapiChartName
+    value: 'aks-sample'  
+  - name: webapiChartVersion
+    value: '0.7.2'
+  - name: webapiAppVersion
+    value: '$(appVersion)'
