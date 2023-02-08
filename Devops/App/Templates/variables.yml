@@ -41,4 +41,6 @@ variables:
   - name: webapiSharedChartName
     value: 'webapi-shared'  
   - name: webapiSharedChartVersion
-    value: '0.1.0'    
+    value: '0.1.0'   
+  - name: webapiSharedChartDescription 
+    value: 'AKS Sample App Shared Components' 
