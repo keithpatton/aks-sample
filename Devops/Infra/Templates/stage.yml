@@ -24,6 +24,7 @@ stages:
   jobs:
   - deployment: Infrastructure
     displayName: Ensure Azure Resources
+    # for security reasons all environments must be provisioned by authorised person in advance
     environment: ${{ parameters.regionStage }}_${{ parameters.envStage }}
     strategy:
       runOnce:
