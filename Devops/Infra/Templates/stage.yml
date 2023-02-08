@@ -1,4 +1,4 @@
- parameters:
+parameters:
 - name: regionStage
 - name: envStage
 - name: dependsOn
