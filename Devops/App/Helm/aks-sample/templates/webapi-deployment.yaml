@@ -48,4 +48,5 @@ spec:
           persistentVolumeClaim:
             claimName: {{ $.Values.pvcBlobName }}-{{ .name }}
         {{- end }}
+---
 {{- end }}

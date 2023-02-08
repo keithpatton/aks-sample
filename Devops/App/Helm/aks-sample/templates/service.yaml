@@ -11,4 +11,5 @@ spec:
       protocol: TCP
   selector:
     app: webapi-{{ .name }}
+---
 {{- end }}
