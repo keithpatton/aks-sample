@@ -51,7 +51,7 @@ variables:
 
 stages:
 - stage: au1_dev
-  condition: and(eq(variables['region'], 'au1'), eq(variables['environment'], 'dev'))
+  condition: and(eq(variables['region'], 'au1'), eq(variables['env'], 'dev'))
   displayName: au1-dev
   pool:
     vmImage: ubuntu-latest 
