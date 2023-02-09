@@ -50,5 +50,4 @@ stages:
     env: 'dev'
     dependsOn: []
     rings: ${{ parameters.rings }}
-    tenantsAll: ${{ parameters.tenantsAll }}
     imageBuildTag: ${{ parameters.imageBuildTag }}
