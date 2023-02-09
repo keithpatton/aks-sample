@@ -16,6 +16,8 @@ variables:
 - template: env/${{ parameters.env }}/variables.yml  
 - template: region-env/${{ parameters.region }}-${{ parameters.env }}/variables.yml  
 
+- name: TF_LOG
+  value: DEBUG
 - name: tenantsAllJson
   value: '${{ convertToJson(parameters.tenantsAll) }}'
 - name: appName
