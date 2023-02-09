@@ -66,6 +66,7 @@ stages:
 
   - deployment: Deploy    
     displayName: Deploy Application
+    condition: or(succeeded(), skipped())
     dependsOn: Image
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
