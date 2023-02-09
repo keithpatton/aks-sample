@@ -58,24 +58,24 @@ stages:
                     tenantsStageJson=$(echo '$(tenantsAllJson)' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.envs[].name == $env)]')
                     echo "##vso[task.setvariable variable=tenantsStageJson;]$tenantsStageJson"
               - task: Docker@2
-                    displayName: Build Image
-                    inputs:
-                      command: build
-                      repository: $(imageName)
-                      dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
-                      buildContext: '$(Build.SourcesDirectory)'
-                      tags: $(imageBuildTag)
+                displayName: Build Image
+                inputs:
+                  command: build
+                  repository: $(imageName)
+                  dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
+                  buildContext: '$(Build.SourcesDirectory)'
+                  tags: $(imageBuildTag)
 
               - task: AzureCLI@2
-                    displayName: 'Push Image'
-                    inputs:
-                      azureSubscription: ${{ parameters.svcConnAzureRm}}
-                      scriptType: 'pscore'
-                      scriptLocation: 'inlineScript'
-                      inlineScript: |
-                        az acr login --name $(acrName)
-                        docker tag $(imageName):$(imageBuildTag) $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
-                        docker push $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
+                displayName: 'Push Image'
+                inputs:
+                  azureSubscription: ${{ parameters.svcConnAzureRm}}
+                  scriptType: 'pscore'
+                  scriptLocation: 'inlineScript'
+                  inlineScript: |
+                    az acr login --name $(acrName)
+                    docker tag $(imageName):$(imageBuildTag) $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
+                    docker push $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
 
 
   - deployment: Deploy    
