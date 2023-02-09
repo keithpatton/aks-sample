@@ -30,6 +30,7 @@ parameters:
   values:
   - dev
   default: dev  
+  
 - name: destroy
   displayName: 'Destroy Infra (Before Apply)'
   type: boolean
@@ -60,3 +61,4 @@ stages:
     dependsOn: []
     apply: ${{ parameters.apply }}
     destroy: ${{ parameters.destroy }}
+
