@@ -1,4 +1,4 @@
-name: $(Date:yyyyMMdd)$(Rev:.r)_${{ parameters.region }}_${{ parameters.env }}
+name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger: none
 
