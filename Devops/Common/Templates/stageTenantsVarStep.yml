@@ -9,10 +9,6 @@ parameters:
 - name: env
   type: string
 
-variables:
-- name: allTenantsJson
-  value: '${{ convertToJson(parameters.tenants) }}'
-
 steps:
 - task: Bash@3
   displayName: 'Sets $tenantsJson Variable (for region and env)'
@@ -21,5 +17,6 @@ steps:
     script: |
       region=$(echo "${{parameters.region}}")
       env=$(echo "${{parameters.env}}")
-      tenantsJson=$(echo '$(allTenantsJson)' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
+      allTenantsJson=$(echo "${{ convertToJson(parameters.tenants) }}")
+      tenantsJson=$(echo '$allTenantsJson' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
       echo "##vso[task.setvariable variable=tenantsJson;]$tenantsJson"
