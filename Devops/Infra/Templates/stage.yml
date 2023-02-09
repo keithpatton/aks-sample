@@ -43,8 +43,8 @@ stages:
                 regionStage=$(echo "${{parameters.regionStage}}")
                 envStage=$(echo "${{parameters.envStage}}")
                 echo "$(tenantsAllJson)"
-                echo "${{parameters.regionStage}}"
-                echo "${{parameters.envStage}}"
+                echo $regionStage
+                echo $envStage
                 tenantsStageJson=$(echo "$(tenantsAllJson)" | jq --arg region "$regionStage" --arg env "$envStage" '.[] | select(.region == $region) | select(.envs[] == $env)')
                 echo "##vso[task.setvariable variable=tenantsStageJson;]$tenantsStageJson"
                 echo $tenantsStageJson
