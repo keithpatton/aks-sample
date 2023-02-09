@@ -2,23 +2,12 @@ parameters:
 - name: region
   displayName: 'Region'
   type: string
-  values:
-  - au1
 - name: env
   displayName: 'Environment'
-  type: string
-  values:
-  - dev
-- name: imageBuildTag
-  displayName: 'Image Build Tag'
   type: string
 variables:
   - name: imageName
     value: '$(appName)'
-  - name: imageBuildTag
-    value: '${{ parameters.imageBuildTag }}'
-  - name: aksWorkloadIdentityClientId
-    value: '{dynamic}'
   - name: aksPvcBlobName
     value: 'azure-blob'
   - name: aksStorageClassBlobName

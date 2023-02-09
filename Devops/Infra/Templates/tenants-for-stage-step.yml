@@ -1,9 +1,0 @@
-
-parameters:
-- name: 'tenantsAll'  # all tenants
-  type: object
-
-steps:
-- script: npm test
-- ${{ if eq(parameters.runExtendedTests, true) }}:
-  - script: npm test --extended

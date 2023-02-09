@@ -6,7 +6,7 @@ resources:
 - repo: self
 
 parameters:
-- name: tenantsAll
+- name: tenants
   displayName: 'Tenants'
   type: object
   default:
@@ -32,6 +32,10 @@ parameters:
       env: dev
       version: "0.3.0"
 
+- name: imageBuild
+  displayName: 'Build and Push Image'
+  type: boolean
+  default: true
 - name: imageBuildTag
   displayName: 'Image Build Tag'
   type: string
@@ -39,8 +43,6 @@ parameters:
 
 variables:
 - template: ../../Common/Templates/variables/root.yml  
-  parameters:
-    tenantsAll: ${{ parameters.tenantsAll }} 
 
 stages:
 - template: ../Templates/stage.yml
@@ -50,4 +52,5 @@ stages:
     env: 'dev'
     dependsOn: []
     rings: ${{ parameters.rings }}
-    imageBuildTag: ${{ parameters.imageBuildTag }}
+    imageBuild: ${{ parameters.imageBuild }}
+    apply: ${{ parameters.apply }}

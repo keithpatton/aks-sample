@@ -1,0 +1,25 @@
+# Sets $tenantsJson var to represent active tenants data for a particular stage (region and environment)
+
+parameters:
+- name: tenants
+  displayName: 'Tenants'
+  type: object
+- name: region
+  type: string
+- name: env
+  type: string
+
+variables:
+- name: allTenantsJson
+  value: '${{ convertToJson(parameters.tenants) }}'
+
+steps:
+- task: Bash@3
+  displayName: 'Sets $tenantsJson Variable (for region and env)'
+  inputs:
+    targetType: 'inline'
+    script: |
+      region=$(echo "${{parameters.region}}")
+      env=$(echo "${{parameters.env}}")
+      tenantsJson=$(echo '$(allTenantsJson)' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
+      echo "##vso[task.setvariable variable=tenantsJson;]$tenantsJson"

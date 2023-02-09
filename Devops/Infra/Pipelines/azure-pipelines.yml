@@ -6,7 +6,7 @@ resources:
 - repo: self
 
 parameters:
-- name: tenantsAll
+- name: tenants
   displayName: 'Tenants'
   type: object
   default:
@@ -16,7 +16,6 @@ parameters:
     - name: tenant2
       region: au1
       env: dev    
-  
 - name: destroy
   displayName: 'Destroy Infra (Before Apply)'
   type: boolean
@@ -28,8 +27,6 @@ parameters:
 
 variables:
 - template: ../../Common/Templates/variables/root.yml  
-  parameters:
-    tenantsAll: ${{ parameters.tenantsAll }} 
 
 stages:
 - template: ../Templates/stage.yml

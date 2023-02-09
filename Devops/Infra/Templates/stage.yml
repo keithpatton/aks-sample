@@ -16,11 +16,11 @@ stages:
 - stage: ${{ parameters.region }}_${{ parameters.env }}
   displayName: ${{ parameters.region }}_${{ parameters.env }}
   variables: 
-    - template: ../../Common/Templates/variables/stage.yml 
+    - template: ../../Common/Templates/variables/reg-env.yml 
       parameters:
         region: ${{ parameters.region }}
         env: ${{ parameters.env }}  
-    - template: variables/stage.yml 
+    - template: variables/reg-env.yml 
       parameters:
         region: ${{ parameters.region }}
         env: ${{ parameters.env }}
@@ -38,18 +38,7 @@ stages:
           steps:
           - checkout: self
             clean: true      
-          #- template: ../Templates/tenants-for-stage-step.yml
-          #  parameters:
-          #   tenantsAll: ${{ parameters.tenantsAll }}          
-          - task: Bash@3
-            displayName: 'Set Tenants Stage Variable'
-            inputs:
-              targetType: 'inline'
-              script: |
-                region=$(echo "${{parameters.region}}")
-                env=$(echo "${{parameters.env}}")
-                tenantsStageJson=$(echo '$(tenantsAllJson)' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
-                echo "##vso[task.setvariable variable=tenantsStageJson;]$tenantsStageJson"
+          - template:  ../../Common/Templates/stageTenantsVarStep.yml       
           - task: AzureCLI@2
             displayName: 'Enable Workload Identity Preview Feature'
             condition: eq(1,2)
