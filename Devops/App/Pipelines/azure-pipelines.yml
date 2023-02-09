@@ -1,4 +1,4 @@
-name: $(Date:yyyyMMdd)$(Rev:.r)_${{ parameters.region }}_${{ parameters.env }}
+name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger: none
 
@@ -26,7 +26,7 @@ parameters:
     - name: stable
       region: au1
       env: dev
-      version: "0.2.1"
+      version: "0.3.0"
     - name: vnext
       region: au1
       env: dev
