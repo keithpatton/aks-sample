@@ -6,3 +6,8 @@ parameters:
 variables:
 - name: tenantsAllJson
   value: '${{ convertToJson(parameters.tenantsAll) }}'
+
+- name: appName
+  value: 'aksdemo'
+- name: aksNamespace
+  value: 'default'

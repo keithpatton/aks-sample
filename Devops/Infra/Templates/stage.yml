@@ -48,7 +48,7 @@ stages:
               script: |
                 region=$(echo "${{parameters.region}}")
                 env=$(echo "${{parameters.env}}")
-                tenantsStageJson=$(echo '$(tenantsAllJson)' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.envs[] == $env)]')
+                tenantsStageJson=$(echo '$(tenantsAllJson)' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
                 echo "##vso[task.setvariable variable=tenantsStageJson;]$tenantsStageJson"
           - task: AzureCLI@2
             displayName: 'Enable Workload Identity Preview Feature'
@@ -142,7 +142,6 @@ stages:
   - deployment: InfrastructureApps    
     displayName: Deploy Infra Apps
     dependsOn: Infrastructure
-    
     condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:

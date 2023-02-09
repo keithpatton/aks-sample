@@ -12,12 +12,10 @@ parameters:
   default:
     - name: tenant1
       region: au1
-      envs: 
-        - dev
+      env: dev
     - name: tenant2
       region: au1
-      envs: 
-        - dev            
+      env: dev    
   
 - name: destroy
   displayName: 'Destroy Infra (Before Apply)'
@@ -29,7 +27,7 @@ parameters:
   default: true
 
 variables:
-- template: ../../Common/Templates/variables/global.yml  
+- template: ../../Common/Templates/variables/root.yml  
   parameters:
     tenantsAll: ${{ parameters.tenantsAll }} 
 

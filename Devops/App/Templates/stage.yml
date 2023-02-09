@@ -1,0 +1,145 @@
+parameters:
+- name: svcConnAzureRm
+  type: string  
+- name: region
+  type: string
+- name: env
+  type: string
+- name: tenantsAll
+  displayName: 'Tenants (All)'
+  type: object 
+- name: rings
+  displayName: 'Rings'
+  type: object 
+- name: dependsOn  
+  type: object
+- name: imageBuildTag
+  type: string
+
+# update any parameter.tenantsAll looping in AzD to ensure filtered for the stage
+
+stages:
+- stage: ${{ parameters.region }}_${{ parameters.env }}
+  displayName: ${{ parameters.region }}_${{ parameters.env }}
+  variables: 
+    - template: ../../Common/Templates/variables/stage.yml 
+      parameters:
+        region: ${{ parameters.region }}
+        env: ${{ parameters.env }}  
+    - template: variables/stage.yml 
+      parameters:
+        region: ${{ parameters.region }}
+        env: ${{ parameters.env }}  
+        imageBuildTag: ${{ parameters.imageBuildTag }}
+  dependsOn: ${{ parameters.dependsOn }}
+  pool:
+    vmImage: ubuntu-latest 
+  jobs:
+  - deployment: Image
+    displayName: Build and Push Image
+    # for security reasons all environments must be provisioned by authorised person in advance
+    environment: ${{ parameters.region }}_${{ parameters.env }}
+    strategy:
+          runOnce:
+            deploy:
+              steps:
+              - checkout: self
+                clean: true   
+                #- template: ../Templates/tenants-for-stage-step.yml
+                #  parameters:
+                #   tenantsAll: ${{ parameters.tenantsAll }}   
+              - task: Bash@3
+                displayName: 'Set Tenants Stage Variable'
+                inputs:
+                  targetType: 'inline'
+                  script: |
+                    region=$(echo "${{parameters.region}}")
+                    env=$(echo "${{parameters.env}}")
+                    tenantsStageJson=$(echo '$(tenantsAllJson)' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.envs[].name == $env)]')
+                    echo "##vso[task.setvariable variable=tenantsStageJson;]$tenantsStageJson"
+              - task: Docker@2
+                    displayName: Build Image
+                    inputs:
+                      command: build
+                      repository: $(imageName)
+                      dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
+                      buildContext: '$(Build.SourcesDirectory)'
+                      tags: $(imageBuildTag)
+
+              - task: AzureCLI@2
+                    displayName: 'Push Image'
+                    inputs:
+                      azureSubscription: ${{ parameters.svcConnAzureRm}}
+                      scriptType: 'pscore'
+                      scriptLocation: 'inlineScript'
+                      inlineScript: |
+                        az acr login --name $(acrName)
+                        docker tag $(imageName):$(imageBuildTag) $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
+                        docker push $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
+
+
+  - deployment: Deploy    
+    displayName: Deploy Application
+    dependsOn: Image
+    environment: ${{ parameters.region }}_${{ parameters.env }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+            clean: true       
+          - task: AzureCLI@2
+            displayName: 'Get Azure Resource Values'
+            inputs:
+              azureSubscription: ${{ parameters.svcConnAzureRm}}
+              scriptType: 'pscore'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                $aksWorkloadIdentityClientId = (az identity show --resource-group $(rgName) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
+                Write-Host "##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId"
+          - task: replacetokens@5
+            displayName: 'Replace tokens with variables'
+            inputs:
+              targetFiles: |
+                Devops/App/Helm/**/Chart.yaml
+                Devops/App/Helm/**/values.yaml
+              encoding: 'auto'
+              tokenPattern: 'default'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              actionOnNoFiles: 'warn'
+              enableTransforms: false
+              enableRecursion: false
+              useLegacyPattern: false
+              enableTelemetry: true   
+              verbosity: 'detailed'  
+          - task: HelmDeploy@0
+            displayName: 'Deploy Shared App Components'
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: ${{ parameters.svcConnAzureRm}}
+              azureResourceGroup: $(rgName)
+              kubernetesCluster: $(aksName)
+              namespace: $(aksNamespace)
+              command: 'upgrade'
+              chartType: 'FilePath'
+              chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample-shared'
+              releaseName: $(webapiSharedReleaseName)
+              arguments: '--debug --atomic --reset-values'        
+          - ${{ each ring in parameters.rings }}:
+            - ${{ if and(eq(ring.region,parameters.region),eq(ring.env,parameters.env)) }}: 
+              - task: HelmDeploy@0
+                displayName: 'Deploy version ${{ ring.version }} to ${{ ring.name }} ring'
+                inputs:
+                  connectionType: 'Azure Resource Manager'
+                  azureSubscription: ${{ parameters.svcConnAzureRm}}
+                  azureResourceGroup: $(rgName)
+                  kubernetesCluster: $(aksName)
+                  namespace: $(aksNamespace)
+                  command: 'upgrade'
+                  chartType: 'FilePath'
+                  chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample-deploy'
+                  releaseName: $(webapiReleaseName)-${{ ring.name }}
+                  overrideValues: 'appVersion=${{ ring.version }}'
+                  arguments: '--debug --atomic --reset-values'

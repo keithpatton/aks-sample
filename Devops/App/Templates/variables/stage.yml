@@ -9,15 +9,10 @@ parameters:
   type: string
   values:
   - dev
-- name: rings
-  displayName: 'Deployment Rings'
-  type: object 
 - name: imageBuildTag
   displayName: 'Image Build Tag'
   type: string
 variables:
-  - name: ringsJson
-    value: '${{ convertToJson(parameters.rings) }}'
   - name: imageName
     value: '$(appName)'
   - name: imageBuildTag

@@ -11,11 +11,6 @@ variables:
 - template: env_${{ parameters.env }}.yml  
 - template: reg_${{ parameters.region }}-env_${{ parameters.env }}.yml  
 
-- name: TF_LOG
-  value: WARNING
-
-- name: appName
-  value: 'aksdemo'
 - name: rgName
   value: 'rg-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
 - name: acrName
@@ -24,8 +19,6 @@ variables:
   value: 'kv-${{ parameters.region }}-${{ parameters.env }}-$(appName)-$(uniqueSuffix)'
 - name: aksName
   value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
-- name: aksNamespace
-  value: 'default'
 - name: aksStorageAccountName
   value: 'stg${{ parameters.region }}${{ parameters.env }}$(appName)aks'
 - name: aksWorkloadIdentityName

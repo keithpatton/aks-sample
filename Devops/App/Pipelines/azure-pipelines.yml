@@ -6,153 +6,49 @@ resources:
 - repo: self
 
 parameters:
-- name: region
-  displayName: 'Region'
-  type: string
-  values:
-  - au1
-  default: au1
-- name: env
-  displayName: 'Environment'
-  type: string
-  values:
-  - dev
-  default: dev  
-- name: tenants
+- name: tenantsAll
   displayName: 'Tenants'
   type: object
   default:
     - name: tenant1
+      region: au1
+      env: dev
       ring: stable
     - name: tenant2
+      region: au1
+      env: dev
       ring: vnext
+
 - name: rings
   displayName: 'Deployment Rings'
   type: object
   default: 
     - name: stable
+      region: au1
+      env: dev
       version: "0.2.1"
     - name: vnext
+      region: au1
+      env: dev
       version: "0.3.0"
+
 - name: imageBuildTag
   displayName: 'Image Build Tag'
   type: string
   default: "0.3.0"
+
 variables:
-- template: ../../Common/Templates/variables.yml  
+- template: ../../Common/Templates/variables/root.yml  
   parameters:
-      tenants: ${{ parameters.tenants }}
-      region: ${{ parameters.region }}
-      env: ${{ parameters.env }}   
-- template: ../Templates/variables.yml
-  parameters:
-    region: ${{ parameters.region }}
-    env: ${{ parameters.env }}
-    rings: ${{ parameters.rings }}
-    imageBuildTag: ${{ parameters.imageBuildTag }}
+    tenantsAll: ${{ parameters.tenantsAll }} 
+
 stages:
-- stage: Image
-  displayName: Build and Push Image
-  jobs:
-  - job: BuildAndPush
-    displayName: Build and Push Image
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build Image
-      inputs:
-        command: build
-        repository: $(imageName)
-        dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
-        buildContext: '$(Build.SourcesDirectory)'
-        tags: $(imageBuildTag)
-    - task: AzureCLI@2
-      displayName: 'Push Image'
-      inputs:
-        azureSubscription: $(svcConnAzureRm)
-        scriptType: 'pscore'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az acr login --name $(acrName)
-          docker tag $(imageName):$(imageBuildTag) $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
-          docker push $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
-- stage: Deploy
-  displayName: Deploy Application
-  jobs:
-  - job: Deploy
-    displayName: Deploy Application
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: AzureCLI@2
-      displayName: 'Get Azure Resource Values'
-      inputs:
-        azureSubscription: $(svcConnAzureRm)
-        scriptType: 'pscore'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          $aksWorkloadIdentityClientId = (az identity show --resource-group $(rgName) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
-          Write-Host "##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId"
-    - task: replacetokens@5
-      displayName: 'Replace tokens with variables'
-      inputs:
-        targetFiles: |
-          Devops/App/Helm/**/Chart.yaml
-          Devops/App/Helm/**/values.yaml
-        encoding: 'auto'
-        tokenPattern: 'default'
-        writeBOM: true
-        actionOnMissing: 'warn'
-        keepToken: false
-        actionOnNoFiles: 'warn'
-        enableTransforms: false
-        enableRecursion: false
-        useLegacyPattern: false
-        enableTelemetry: true   
-        verbosity: 'detailed'  
-    - task: HelmDeploy@0
-      displayName: 'Deploy Shared App Components'
-      inputs:
-        connectionType: 'Azure Resource Manager'
-        azureSubscription: $(svcConnAzureRm)
-        azureResourceGroup: $(rgName)
-        kubernetesCluster: $(aksName)
-        namespace: $(aksNamespace)
-        command: 'upgrade'
-        chartType: 'FilePath'
-        chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample-shared'
-        releaseName: $(webapiSharedReleaseName)
-        arguments: '--debug --atomic --reset-values'        
-    - ${{ each ring in parameters.rings }}:  
-      - task: HelmDeploy@0
-        displayName: 'Deploy version ${{ ring.version }} to ${{ ring.name }} ring'
-        inputs:
-          connectionType: 'Azure Resource Manager'
-          azureSubscription: $(svcConnAzureRm)
-          azureResourceGroup: $(rgName)
-          kubernetesCluster: $(aksName)
-          namespace: $(aksNamespace)
-          command: 'upgrade'
-          chartType: 'FilePath'
-          chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample-deploy'
-          releaseName: $(webapiReleaseName)-${{ ring.name }}
-          overrideValues: 'appVersion=${{ ring.version }}'
-          arguments: '--debug --atomic --reset-values'
-  - ${{ each tenant in parameters.tenants }}:
-    - job: TenantWork_${{ tenant.name }}
-      displayName: ${{ tenant.name }} Specific Work 
-      dependsOn: Deploy
-      pool:
-        vmImage: ubuntu-latest
-      steps:
-      - script: echo ${{ tenant.name }}
-  - job: DeployComplete
-    displayName: Complete Deployment After Tenant Specific Work
-    dependsOn: 
-    - ${{ each tenant in parameters.tenants }}:
-      - TenantWork_${{ tenant.name }}
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - script: echo 'Completed Deployment After Tenant Specific Work'
+- template: ../Templates/stage.yml
+  parameters:
+    svcConnAzureRm: 'Keith Patton - VS Professional Sub'
+    region: 'au1'
+    env: 'dev'
+    dependsOn: []
+    rings: ${{ parameters.rings }}
+    tenantsAll: ${{ parameters.tenantsAll }}
+    imageBuildTag: ${{ parameters.imageBuildTag }}
