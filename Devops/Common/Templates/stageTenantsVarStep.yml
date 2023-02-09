@@ -11,12 +11,13 @@ parameters:
 
 steps:
 - task: Bash@3
-  displayName: 'Sets $tenantsJson Variable (for region and env)'
+  displayName: 'Sets Tenants Json Stage Var'
   inputs:
     targetType: 'inline'
     script: |
       region=$(echo "${{parameters.region}}")
       env=$(echo "${{parameters.env}}")
-      allTenantsJson=$(echo "${{ convertToJson(parameters.tenants) }}")
+      allTenantsJson=$(echo '${{ convertToJson(parameters.tenants) }}')
+      echo allTenantsJson
       tenantsJson=$(echo '$allTenantsJson' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
       echo "##vso[task.setvariable variable=tenantsJson;]$tenantsJson"
