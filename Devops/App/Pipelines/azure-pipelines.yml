@@ -54,4 +54,5 @@ stages:
     dependsOn: []
     rings: ${{ parameters.rings }}
     imageBuild: ${{ parameters.imageBuild }}
+    imageBuildTag: ${{ parameters.imageBuildTag }}
     apply: ${{ parameters.apply }}
