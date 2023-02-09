@@ -87,17 +87,17 @@ stages:
             inputs:
               targetFiles: |
                 **/variables.tf
-                encoding: 'auto'
-                tokenPattern: 'default'
-                writeBOM: true
-                actionOnMissing: 'warn'
-                keepToken: false
-                actionOnNoFiles: 'warn'
-                enableTransforms: false
-                enableRecursion: false
-                useLegacyPattern: false
-                enableTelemetry: true   
-                verbosity: 'detailed'   
+              encoding: 'auto'
+              tokenPattern: 'default'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              actionOnNoFiles: 'warn'
+              enableTransforms: false
+              enableRecursion: false
+              useLegacyPattern: false
+              enableTelemetry: true   
+              verbosity: 'detailed'   
           - task: TerraformTaskV3@3
             displayName: Terraform Init 
             inputs:
@@ -155,17 +155,17 @@ stages:
               targetFiles: |
                 Devops/Infra/Helm/**/Chart.yaml
                 Devops/Infra/Helm/**/values.yaml
-                encoding: 'auto'
-                tokenPattern: 'default'
-                writeBOM: true
-                actionOnMissing: 'warn'
-                keepToken: false
-                actionOnNoFiles: 'warn'
-                enableTransforms: false
-                enableRecursion: false
-                useLegacyPattern: false
-                enableTelemetry: true   
-                verbosity: 'detailed'
+              encoding: 'auto'
+              tokenPattern: 'default'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              actionOnNoFiles: 'warn'
+              enableTransforms: false
+              enableRecursion: false
+              useLegacyPattern: false
+              enableTelemetry: true   
+              verbosity: 'detailed'
           - task: HelmDeploy@0
             displayName: 'Deploy Traefik'      
             inputs:
