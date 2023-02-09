@@ -38,11 +38,8 @@ stages:
           - task: Bash@3
             displayName: 'Set Tenants Stage Variable'
             inputs:
-              azureSubscription: $(svcConnAzureRm)
-              scriptType: bash
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                #!/bin/bash
+              targetType: 'inline'
+              script: |
                 regionStage=$(echo "${regionStage}")
                 envStage=$(echo "${envStage}")
                 tenantsStageJson=$(echo "$tenantsAllJson" | jq --arg region "$regionStage" --arg env "$envStage" '.[] | select(.region == $region) | select(.envs[] == $env)')
