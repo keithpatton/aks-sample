@@ -29,7 +29,6 @@ stages:
     vmImage: ubuntu-latest 
   jobs:
   - deployment: Infrastructure
-    variables:
     displayName: Ensure Azure Resources
     # for security reasons all environments must be provisioned by authorised person in advance
     environment: ${{ parameters.region }}_${{ parameters.env }}
