@@ -7,7 +7,7 @@ parameters:
 - name: env
   displayName: 'Environment'
   type: string
-- name: tenants
+- name: tenantsAll
   displayName: 'Tenant List'
   type: object
 
@@ -16,10 +16,10 @@ variables:
 - template: env/${{ parameters.env }}/variables.yml  
 - template: region-env/${{ parameters.region }}-${{ parameters.env }}/variables.yml  
 
+- name: tenantsAllJson
+  value: '${{ convertToJson(parameters.tenantsAll) }}'
 - name: appName
   value: 'aksdemo'
-- name: tenantsJson
-  value: '${{ convertToJson(parameters.tenants) }}'
 - name: rgName
   value: 'rg-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
 - name: acrName

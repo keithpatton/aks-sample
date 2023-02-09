@@ -3,7 +3,7 @@
     name = string
   }))
   description = "Tenant List"
-  default     = #{tenantsJson}#
+  default     = #{tenantsStageJson}#
 }
 
 variable "rg_name" {

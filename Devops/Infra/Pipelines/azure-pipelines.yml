@@ -6,12 +6,18 @@ resources:
 - repo: self
 
 parameters:
-- name: tenants
-  displayName: 'All Tenants'
+- name: tenantsAll
+  displayName: 'Tenants'
   type: object
   default:
     - name: tenant1
+      region: au1
+      envs: 
+        - dev
     - name: tenant2
+      region: sg1
+      envs: 
+        - dev            
 - name: region
   displayName: 'Target Region'
   type: string
@@ -36,9 +42,9 @@ parameters:
 variables:
 - template: ../../Common/Templates/variables.yml  
   parameters:
-    tenants: ${{ parameters.tenants }} # filter the tenants based on a var which defines tenancy per region/env/ring
-    #region: ${{ parameters.region }}
-    #env: ${{ parameters.env }}
+    tenantsAll: ${{ parameters.tenantsAll }} 
+    region: ${{ parameters.region }}
+    env: ${{ parameters.env }}
 - template: ../Templates/variables.yml
   parameters:
     region: ${{ parameters.region }}

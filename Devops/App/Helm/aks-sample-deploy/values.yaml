@@ -1,6 +1,6 @@
 imageName: #{imageName}#
 appVersion: "{dynamic}"
-tenants: #{tenantsJson}#
+tenants: #{tenantsStageJson}#
 storageClassBlobName: #{aksStorageClassBlobName}#
 aksStorageAccountName: #{aksStorageAccountName}#
 pvcBlobName: #{aksPvcBlobName}#
