@@ -1,6 +1,8 @@
 parameters:
 - name: svcConnAzureRm
   type: string
+- name: tenants
+  type: object  
 - name: region
   type: string
 - name: env
@@ -38,7 +40,11 @@ stages:
           steps:
           - checkout: self
             clean: true      
-          - template:  ../../Common/Templates/stageTenantsVarStep.yml       
+          - template:  ../../Common/Templates/stageTenantsVarStep.yml   
+            parameters:
+              tenants: ${{ parameters.tenants }}
+              region: ${{ parameters.region }}
+              env: ${{ parameters.env }}              
           - task: AzureCLI@2
             displayName: 'Enable Workload Identity Preview Feature'
             condition: eq(1,2)
