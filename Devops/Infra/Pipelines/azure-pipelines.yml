@@ -29,7 +29,7 @@ parameters:
   default: true
 
 variables:
-- template: ../../Common/Templates/Variables/global.yml  
+- template: ../../Common/Templates/variables/global.yml  
   parameters:
     tenantsAll: ${{ parameters.tenantsAll }} 
 
