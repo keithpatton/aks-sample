@@ -21,15 +21,16 @@ stages:
     - template: variables/stage.yml 
       parameters:
         region: ${{ parameters.region }}
-        env: ${{ parameters.env }}    
-    - name: svcConnAzureRm
-      value: 'Keith Patton - VS Professional Sub'
+        env: ${{ parameters.env }}
   dependsOn: ${{ parameters.dependsOn }}
   pool:
     vmImage: ubuntu-latest 
   jobs:
   - deployment: Infrastructure
     displayName: Ensure Azure Resources
+    variables:
+      - name: svcConnAzureRm
+      value: 'Keith Patton - VS Professional Sub'
     # for security reasons all environments must be provisioned by authorised person in advance
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
