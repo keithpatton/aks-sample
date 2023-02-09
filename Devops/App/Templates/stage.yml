@@ -62,10 +62,10 @@ stages:
                 az acr login --name $(acrName)
                 docker tag $(imageName):$(imageBuildTag) $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
                 docker push $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
-                
+
   - deployment: Deploy    
     displayName: Deploy Application
-    condition: or(succeeded(), skipped())
+    condition: or(succeeded(), equals(variables['deployment.status'], 'skipped'))
     dependsOn: Image
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
