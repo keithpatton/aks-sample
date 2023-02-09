@@ -17,6 +17,7 @@ Provides a working example of :
     - Application Deployment
       - A Persistent Volume Claim (PVC) automatically creates an NFS mount backed by a blob container for each tenant
       - Pipeline demonstrates ability to have tenant specific workloads running in parallel as required
+      - Support for tenanted Deployment Rings (e.g. tenant1 to stable version and tenant2 gets vnext version)
     - Application Runtime
       - Tenant is inferred at runtime 
       - Tenanted SQL database access
