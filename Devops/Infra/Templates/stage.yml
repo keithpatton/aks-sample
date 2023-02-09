@@ -45,7 +45,7 @@ stages:
                 echo '$(tenantsAllJson)'
                 echo $regionStage
                 echo "${{parameters.envStage}}"
-                tenantsStageJson=$(echo '$(tenantsAllJson)' | jq --arg region "$regionStage" --arg env "$envStage" '.[] | select(.region == $region) | select(.envs[] == $env)')
+                tenantsStageJson=$(echo '$(tenantsAllJson)' | jq --arg region "$regionStage" --arg env "$envStage" '[.[] | select(.region == $region) | select(.envs[] == $env)]')
                 echo "##vso[task.setvariable variable=tenantsStageJson;]$tenantsStageJson"
                 echo $tenantsStageJson
           - task: AzureCLI@2
