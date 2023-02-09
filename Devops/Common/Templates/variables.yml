@@ -16,10 +16,16 @@ variables:
 - template: env/${{ parameters.env }}/variables.yml  
 - template: region-env/${{ parameters.region }}-${{ parameters.env }}/variables.yml  
 
-- name: TF_LOG
-  value: INFO
 - name: tenantsAllJson
   value: '${{ convertToJson(parameters.tenantsAll) }}'
+- name: region
+  value: ${{ parameters.region }}
+- name: env
+  value: ${{ parameters.env }}
+
+- name: TF_LOG
+  value: WARNING
+
 - name: appName
   value: 'aksdemo'
 - name: rgName
