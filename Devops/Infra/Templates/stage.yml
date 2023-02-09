@@ -32,9 +32,9 @@ stages:
           steps:
           - checkout: self
             clean: true      
-          - template: ../Templates/tenants-for-stage-step.yml
-            parameters:
-              tenantsAll: ${{ parameters.tenantsAll }}          
+          #- template: ../Templates/tenants-for-stage-step.yml
+          #  parameters:
+          #   tenantsAll: ${{ parameters.tenantsAll }}          
           - task: Bash@3
             displayName: 'Set Tenants Stage Variable'
             inputs:
