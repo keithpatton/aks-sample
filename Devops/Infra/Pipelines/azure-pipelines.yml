@@ -15,7 +15,7 @@ parameters:
       envs: 
         - dev
     - name: tenant2
-      region: sg1
+      region: au1
       envs: 
         - dev            
 - name: region
