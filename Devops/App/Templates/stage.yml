@@ -40,16 +40,6 @@ stages:
           steps:
           - checkout: self
             clean: true   
-          - task: Bash@3
-            displayName: 'Set Tenants Stage Variable'
-            inputs:
-              targetType: 'inline'
-              script: |
-                region=$(echo "${{parameters.region}}")
-                env=$(echo "${{parameters.env}}")
-                tenantsStageJson=$(echo '$(tenantsAllJson)' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
-                echo "##vso[task.setvariable variable=tenantsStageJson;]$tenantsStageJson"
-                echo $tenantsStageJson
           - task: Docker@2
             displayName: Build Image
             inputs:
@@ -80,7 +70,17 @@ stages:
         deploy:
           steps:
           - checkout: self
-            clean: true       
+            clean: true    
+          - task: Bash@3
+            displayName: 'Set Tenants Stage Variable'
+            inputs:
+              targetType: 'inline'
+              script: |
+                region=$(echo "${{parameters.region}}")
+                env=$(echo "${{parameters.env}}")
+                tenantsStageJson=$(echo '$(tenantsAllJson)' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
+                echo "##vso[task.setvariable variable=tenantsStageJson;]$tenantsStageJson"
+                echo $tenantsStageJson               
           - task: AzureCLI@2
             displayName: 'Get Azure Resource Values'
             inputs:
