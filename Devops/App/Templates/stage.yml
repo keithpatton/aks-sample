@@ -62,8 +62,7 @@ stages:
                 az acr login --name $(acrName)
                 docker tag $(imageName):$(imageBuildTag) $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
                 docker push $(acrName).azurecr.io/$(imageName):$(imageBuildTag)
-
-
+                
   - deployment: Deploy    
     displayName: Deploy Application
     condition: or(succeeded(), skipped())
