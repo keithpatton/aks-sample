@@ -30,7 +30,7 @@ stages:
     displayName: Ensure Azure Resources
     variables:
       - name: svcConnAzureRm
-      value: 'Keith Patton - VS Professional Sub'
+        value: 'Keith Patton - VS Professional Sub'
     # for security reasons all environments must be provisioned by authorised person in advance
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
