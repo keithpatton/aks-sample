@@ -1,23 +1,27 @@
 parameters:
-- name: regionStage
+- name: region
   type: string
-- name: envStage
+- name: env
   type: string
 - name: dependsOn  
   type: object
-- name: regionTarget
-  type: string
-- name: envTarget
-  type: string
 - name: apply
   type: boolean
 - name: destroy
   type: boolean
 
 stages:
-- stage: ${{ parameters.regionStage }}_${{ parameters.envStage }}
-  condition: and(eq('${{ parameters.regionTarget }}', '${{ parameters.regionStage }}'), eq('${{ parameters.envStage }}', '${{ parameters.envTarget }}'))
-  displayName: ${{ parameters.regionStage }}_${{ parameters.envStage }}
+- stage: ${{ parameters.region }}_${{ parameters.env }}
+  displayName: ${{ parameters.region }}_${{ parameters.env }}
+  variables: 
+    - template: ../../Common/Templates/variables/stage.yml 
+      parameters:
+        region: ${{ parameters.region }}
+        env: ${{ parameters.env }}  
+    - template: variables/stage.yml 
+      parameters:
+        region: ${{ parameters.region }}
+        env: ${{ parameters.env }}
   dependsOn: ${{ parameters.dependsOn }}
   pool:
     vmImage: ubuntu-latest 
@@ -25,7 +29,7 @@ stages:
   - deployment: Infrastructure
     displayName: Ensure Azure Resources
     # for security reasons all environments must be provisioned by authorised person in advance
-    environment: ${{ parameters.regionStage }}_${{ parameters.envStage }}
+    environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
       runOnce:
         deploy:
@@ -40,14 +44,10 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                regionStage=$(echo "${{parameters.regionStage}}")
-                envStage=$(echo "${{parameters.envStage}}")
-                echo '$(tenantsAllJson)'
-                echo $regionStage
-                echo "${{parameters.envStage}}"
-                tenantsStageJson=$(echo '$(tenantsAllJson)' | jq -c --arg region "$regionStage" --arg env "$envStage" '[.[] | select(.region == $region) | select(.envs[] == $env)]')
+                region=$(echo "${{parameters.region}}")
+                env=$(echo "${{parameters.env}}")
+                tenantsStageJson=$(echo '$(tenantsAllJson)' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.envs[] == $env)]')
                 echo "##vso[task.setvariable variable=tenantsStageJson;]$tenantsStageJson"
-                echo $tenantsStageJson
           - task: AzureCLI@2
             displayName: 'Enable Workload Identity Preview Feature'
             condition: eq(1,2)
@@ -142,7 +142,7 @@ stages:
     dependsOn: Infrastructure
     
     condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
-    environment: ${{ parameters.regionStage }}_${{ parameters.envStage }}
+    environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
       runOnce:
         deploy:

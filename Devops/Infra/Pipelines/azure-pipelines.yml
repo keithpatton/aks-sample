@@ -18,18 +18,6 @@ parameters:
       region: au1
       envs: 
         - dev            
-- name: region
-  displayName: 'Target Region'
-  type: string
-  values:
-  - au1
-  default: au1
-- name: env
-  displayName: 'Target Environment'
-  type: string
-  values:
-  - dev
-  default: dev  
   
 - name: destroy
   displayName: 'Destroy Infra (Before Apply)'
@@ -41,24 +29,15 @@ parameters:
   default: true
 
 variables:
-- template: ../../Common/Templates/variables.yml  
+- template: ../../Common/Templates/Variables/global.yml  
   parameters:
     tenantsAll: ${{ parameters.tenantsAll }} 
-    region: ${{ parameters.region }}
-    env: ${{ parameters.env }}
-- template: ../Templates/variables.yml
-  parameters:
-    region: ${{ parameters.region }}
-    env: ${{ parameters.env }}
 
 stages:
 - template: ../Templates/stage.yml
   parameters:
-    regionStage: 'au1'
-    envStage: 'dev'
-    regionTarget: ${{ parameters.region }}
-    envTarget: ${{ parameters.env }}
+    region: 'au1'
+    env: 'dev'
     dependsOn: []
     apply: ${{ parameters.apply }}
     destroy: ${{ parameters.destroy }}
-

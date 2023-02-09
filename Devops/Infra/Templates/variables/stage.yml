@@ -2,15 +2,9 @@ parameters:
 - name: region
   displayName: 'Region'
   type: string
-  values:
-  - au1
-  default: au1
 - name: env
   displayName: 'Environment'
   type: string
-  values:
-  - dev
-  default: dev
 
 variables:
   rgAksNodesName: '$(rgName)-k8s'

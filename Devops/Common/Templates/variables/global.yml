@@ -1,0 +1,8 @@
+parameters:
+- name: tenantsAll
+  displayName: 'Tenant List'
+  type: object
+
+
+- name: tenantsAllJson
+  value: '${{ convertToJson(parameters.tenantsAll) }}'
