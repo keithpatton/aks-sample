@@ -1,6 +1,4 @@
 parameters:
-- name: tenantsAll
-  type: object
 - name: regionStage
   type: string
 - name: envStage
