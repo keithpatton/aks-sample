@@ -6,14 +6,12 @@ resources:
 - repo: self
 
 parameters:
-- name: regions
-  displayName: 'Regions'
+- name: tenants
+  displayName: 'All Tenants'
   type: object
-  default: ['au1']
-- name: envs
-  displayName: 'Environments'
-  type: object
-  default: ['dev']
+  default:
+    - name: tenant1
+    - name: tenant2
 - name: region
   displayName: 'Target Region'
   type: string
@@ -26,12 +24,6 @@ parameters:
   values:
   - dev
   default: dev  
-- name: tenants
-  displayName: 'Tenants'
-  type: object
-  default:
-    - name: tenant1
-    - name: tenant2
 - name: destroy
   displayName: 'Destroy Infra (Before Apply)'
   type: boolean
@@ -44,23 +36,21 @@ parameters:
 variables:
 - template: ../../Common/Templates/variables.yml  
   parameters:
-    tenants: ${{ parameters.tenants }}
-    region: ${{ parameters.region }}
-    env: ${{ parameters.env }}
+    tenants: ${{ parameters.tenants }} # filter the tenants based on a var which defines tenancy per region/env/ring
+    #region: ${{ parameters.region }}
+    #env: ${{ parameters.env }}
 - template: ../Templates/variables.yml
   parameters:
     region: ${{ parameters.region }}
     env: ${{ parameters.env }}
 
 stages:
-- ${{ each region in parameters.regions }}:
-  - ${{ each env in parameters.envs }}:
-    - template: ../Templates/stage.yml
-      parameters:
-        regionStage: '${{ region }}'
-        envStage: '${{ env }}'
-        regionTarget: ${{ parameters.region }}
-        envTarget: ${{ parameters.env }}
-        dependsOn: []
-        apply: ${{ parameters.apply }}
-        destroy: ${{ parameters.destroy }}
+- template: ../Templates/stage.yml
+  parameters:
+    regionStage: 'au1'
+    envStage: 'dev'
+    regionTarget: ${{ parameters.region }}
+    envTarget: ${{ parameters.env }}
+    dependsOn: []
+    apply: ${{ parameters.apply }}
+    destroy: ${{ parameters.destroy }}

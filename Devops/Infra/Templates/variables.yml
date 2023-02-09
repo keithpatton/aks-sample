@@ -10,6 +10,7 @@ parameters:
   type: string
   values:
   - dev
+  default: dev
 
 variables:
   rgAksNodesName: '$(rgName)-k8s'
