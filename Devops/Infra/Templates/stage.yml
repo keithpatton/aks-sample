@@ -48,11 +48,12 @@ stages:
                 env=$(echo "${{parameters.env}}")
                 tenantsStageJson=$(echo '$(tenantsAllJson)' | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.envs[] == $env)]')
                 echo "##vso[task.setvariable variable=tenantsStageJson;]$tenantsStageJson"
+                printEnv
           - task: AzureCLI@2
             displayName: 'Enable Workload Identity Preview Feature'
             condition: eq(1,2)
             inputs:
-              azureSubscription: $(svcConnAzureRm)
+              azureSubscription: 'Keith Patton - VS Professional Sub'
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
@@ -63,7 +64,7 @@ stages:
             displayName: 'Ensure Build Agent Access'
             continueOnError: true
             inputs:
-              azureSubscription: $(svcConnAzureRm)
+              azureSubscription: 'Keith Patton - VS Professional Sub'
               addSpnToEnvironment: true
               scriptType: bash
               scriptLocation: 'inlineScript'
@@ -75,7 +76,7 @@ stages:
             displayName: 'Ensure Terraform State Storage Account and Container'
             condition: eq(1,2)
             inputs:
-              azureSubscription: $(svcConnAzureRm)
+              azureSubscription: 'Keith Patton - VS Professional Sub'
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
@@ -102,7 +103,7 @@ stages:
             displayName: Terraform Init 
             inputs:
               provider: 'azurerm'
-              backendServiceArm: $(svcConnAzureRm)
+              backendServiceArm: 'Keith Patton - VS Professional Sub'
               command: 'init'
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
               backendAzureRmResourceGroupName: $(tfStateResourceGroup)
@@ -114,7 +115,7 @@ stages:
             condition: and(succeeded(), eq('${{ parameters.destroy }}', 'true'))
             inputs:
               provider: 'azurerm'
-              environmentServiceNameAzureRM: $(svcConnAzureRm)
+              environmentServiceNameAzureRM: 'Keith Patton - VS Professional Sub'
               command: 'destroy'
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
               commandOptions: '--auto-approve'
@@ -127,7 +128,7 @@ stages:
             condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
             inputs:
               provider: 'azurerm'
-              environmentServiceNameAzureRM: $(svcConnAzureRm)
+              environmentServiceNameAzureRM: 'Keith Patton - VS Professional Sub'
               command: 'apply'
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
               commandOptions: '--auto-approve'
@@ -170,7 +171,7 @@ stages:
             displayName: 'Deploy Traefik'      
             inputs:
               connectionType: 'Azure Resource Manager'
-              azureSubscription: $(svcConnAzureRm)
+              azureSubscription: 'Keith Patton - VS Professional Sub'
               azureResourceGroup: $(rgName)
               kubernetesCluster: $(aksName)
               namespace: $(aksNamespace)
