@@ -18,6 +18,7 @@ variables:
   sqlElasticPoolSkuFamily:  'Gen5'
   sqlElasticPoolSkuCapacity:  2
   sqlAdAdminUsername: "keith.d.patton@vista.co"
+  sqlAdAdminObjectId: "65f202d5-8823-4ed2-a18e-468888d62118"
   sqlAdminUsername: "sql-admin"
   sqlFirewallRuleBuildAgentName: "allow-build-agent"
   sqlPrivateEndpointName: "pve-${{ parameters.region }}-${{ parameters.env }}-$(appName)"
