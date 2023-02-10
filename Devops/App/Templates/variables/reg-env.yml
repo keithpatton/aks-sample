@@ -20,11 +20,11 @@ variables:
     value: 'webapi'  
   - name: webapiChartVersion
     value: '0.7.2'
-  - name: webapiSharedReleaseName
+  - name: webapiSharedReleaseName # delete if possible
     value: 'webapi-shared'
   - name: webapiSharedChartName
     value: 'webapi-shared'  
   - name: webapiSharedChartVersion
-    value: '0.1.0'   
+    value: $(webapiChartVersion)   
   - name: webapiSharedChartDescription 
     value: 'AKS Sample App Shared Components' 

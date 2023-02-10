@@ -1,6 +1,6 @@
 apiVersion: v2
-name: #{webapiSharedChartName}#
-description: #{webapiSharedChartDescription}#
+name: #{webapiChartName}#
+description: #{webapiChartDescription}#
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -15,7 +15,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: #{webapiSharedChartVersion}#
+version: #{webapiChartVersion}#
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
@@ -25,5 +25,6 @@ appVersion: "1.0.0"
 
 dependencies:
 - name: aks-sample-shared
-  version: #{webapiChartVersion}#
+  version: #{webapiSharedChartVersion}#
   repository: "file://../aks-sample-shared"
+  alias: #{webapiChartName}#
