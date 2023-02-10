@@ -46,7 +46,8 @@ stages:
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}              
           - task: AzureCLI@2
-            displayName: 'Az Pre-Run Script'
+            displayName: 'Enable Workload Identity Preview Feature'
+            condition: eq(1,2)
             inputs:
               azureSubscription: ${{ parameters.svcConnAzureRm}}
               scriptType: 'pscore'
@@ -55,10 +56,6 @@ stages:
                 az extension add --name aks-preview
                 az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
                 az provider register --namespace Microsoft.ContainerService
-                
-                $sqlAdAdminUsername = "$(sqlAdAdminUsername)"
-                $sqlAdAdminObjectId = (az ad user show --id $sqlAdAdminUsername --query 'clientId' --output tsv)
-                Write-Host "##vso[task.setvariable variable=sqlAdAdminObjectId;]$sqlAdAdminObjectId"
           - task: AzureCLI@2
             displayName: 'Ensure Build Agent Access'
             continueOnError: true
