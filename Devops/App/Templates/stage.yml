@@ -132,4 +132,4 @@ stages:
                   chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample-deploy'
                   releaseName: $(webapiReleaseName)-${{ ring.name }}
                   overrideValues: 'appVersion=${{ ring.version }}'
-                  arguments: '--debug --atomic --reset-values'
+                  arguments: '--debug --atomic --reset-values --dependency-update'
