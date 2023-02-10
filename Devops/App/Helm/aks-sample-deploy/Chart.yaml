@@ -27,4 +27,4 @@ dependencies:
 - name: aks-sample-shared
   version: #{webapiSharedChartVersion}#
   repository: "file://../aks-sample-shared"
-  alias: #{webapiChartName}#
+  alias: #{webapiReleaseName}#

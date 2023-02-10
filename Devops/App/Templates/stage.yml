@@ -119,6 +119,14 @@ stages:
               arguments: '--debug --atomic --reset-values'        
           - ${{ each ring in parameters.rings }}:
             - ${{ if and(eq(ring.region,parameters.region),eq(ring.env,parameters.env)) }}: 
+              - task: Bash@3
+                displayName: 'Sets Helm Release Name Var'
+                inputs:
+                  targetType: 'inline'
+                  script: |
+                    webapiReleaseName=$(echo '$(webapiReleaseNamePrefix)-${{ ring.name }}')
+                    echo "##vso[task.setvariable variable=webapiReleaseName;]$webapiReleaseName"
+                    echo $webapiReleaseName            
               - task: HelmDeploy@0
                 displayName: 'Deploy version ${{ ring.version }} to ${{ ring.name }} ring'
                 inputs:
@@ -130,6 +138,6 @@ stages:
                   command: 'upgrade'
                   chartType: 'FilePath'
                   chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample-deploy'
-                  releaseName: $(webapiReleaseName)-${{ ring.name }}
+                  releaseName: $(webapiReleaseName)
                   overrideValues: 'appVersion=${{ ring.version }}'
                   arguments: '--debug --atomic --reset-values --dependency-update'

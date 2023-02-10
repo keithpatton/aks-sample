@@ -14,7 +14,7 @@ variables:
     value: 'azureblob-nfs-standard'
   - name: webapiChartDescription 
     value: 'AKS Sample App'
-  - name: webapiReleaseName
+  - name: webapiReleaseNamePrefix
     value: 'webapi'
   - name: webapiChartName
     value: 'webapi'  
