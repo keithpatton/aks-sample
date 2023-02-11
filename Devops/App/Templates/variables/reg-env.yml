@@ -8,52 +8,35 @@ parameters:
   displayName: 'Environment'
   type: string
 variables:
-
-- name: appName
-  value: 'webapi'
-- name: imageName
-  value: '$(appName)'
-
-  # tenant group specific (suffixed dynamically)
-- name: aksNamespacePrefix
-  value: $(appName)-
-- name: aksWorkloadIdentityServiceAccountName
-  value: 'sa-workload-identity-$(appName)'
-- name: aksWorkloadIdentityNamePrefix
-  value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)'
 - name: aksFederatedIdentityNamePrefix
   value: 'fic-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)'
-
-
-
-- name: aksPvcBlobName
+- name: aksNamespacePrefix
+  value: $(appName)-
+- name: aksWorkloadIdentityNamePrefix
+  value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)'
+- name: aksWorkloadIdentityServiceAccountName
+  value: 'sa-workload-identity-$(appName)'
+- name: aksPvcName
   value: 'azure-blob'
-
-- name: aksStorageAccountName
-  value: 'stg${{ parameters.region }}${{ parameters.env }}$(appName)aks'
-
+- name: aksStorageClassNamePrefix
+  value: '$(appName)-azureblob-nfs-standard-'
+- name: aksStorageClassSkuName
+  value: 'Standard_ZRS'
+- name: appName
+  value: 'webapi'
+- name: helmAppVersion
+  value: '1.0.0'  
+- name: helmChartDescription 
+  value: 'AKS Sample App'
+- name: helmChartName
+  value: $(appName) 
+- name: helmChartVersion
+  value: '0.7.2'
+- name: helmReleaseName
+  value: $(appName)
+- name: helmReleaseNamespace
+  value: $(appName)
+- name: imageName
+  value: '$(appName)'
 - name:  sqlFirewallRuleBuildAgentName
   value: "allow-build-agent" 
-
-- name: aksStorageClassBlobName
-  value: 'azureblob-nfs-standard'
-
-# helm shared app components deploy
-- name: webapiSharedReleaseName 
-  value: '$(appName)-shared'
-- name: webapiSharedChartName
-  value: '$(appName)-shared'  
-- name: webapiSharedChartVersion
-  value: $(webapiChartVersion)   
-- name: webapiSharedChartDescription 
-  value: 'AKS Sample App Shared Components' 
-
-  #  helm app deploy
-- name: webapiChartDescription 
-  value: 'AKS Sample App'
-- name: webapiReleaseNamePrefix
-  value: $(appName)-
-- name: webapiChartName
-  value: $(appName) 
-- name: webapiChartVersion
-  value: '0.7.2'

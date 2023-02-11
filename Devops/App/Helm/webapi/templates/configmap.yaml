@@ -1,0 +1,21 @@
+
+# config map for each ring within per namespaced tenant group 
+
+{{- $groupRings := make(map[string]map[string]bool) }}
+{{- range .Values.tenants }}
+  {{- $group := .group }}
+  {{- $ring := .ring }}
+  {{- if !$groupRings[$group][$ring] }}
+     {{- $groupRings[$group][$ring] = true }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.appName }}-{{ .ring }}
+  namespace: {{ .Values.appName }}-{{ .group }}
+data:
+  aks_keyvault: {{ $.Values.kvName }}
+  sql_server_name: {{ $.Values.sqlServerName }}
+  app_version: {{ $.Values.appVersion }}
+---
+  {{- end }}
+{{- end }}

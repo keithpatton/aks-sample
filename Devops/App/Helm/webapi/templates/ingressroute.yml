@@ -1,3 +1,4 @@
+# IngressRoute created within Traefik namespace for all app routing
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -12,5 +13,6 @@ spec:
     kind: Rule
     services:
     - name: {{ .Values.appName }}-{{ .ring }}
+      namespace: {{ .Values.appName }}-{{ .group }} 
       port: 80
   {{- end }}

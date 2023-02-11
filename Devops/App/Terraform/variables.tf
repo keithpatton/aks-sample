@@ -30,12 +30,6 @@ variable "aks_namespace_prefix" {
   default     = "#{aksNamespacePrefix}#"
 }
 
-variable "aks_workload_identity_service_account_name" { 
-  description = "The name of the service account to set on AKS."
-  type        = string
-  default     = "#{aksWorkloadIdentityServiceAccountName}#"
-}
-
 variable "aks_workload_identity_name_prefix" { 
   description = "The name prefix for the workload identity used for AKS. Tenant Group added dynamically from Tenants List"
   type        = string
@@ -46,6 +40,12 @@ variable "aks_federated_identity_name_prefix" {
   description = "The name prefix of the federated identity used for AKS. Tenant Group added dynamically from Tenants List"
   type        = string
   default     = "#{aksFederatedIdentityNamePrefix}#"
+}
+
+variable "aks_workload_identity_service_account_name" { 
+  description = "The name of the service account to set on AKS."
+  type        = string
+  default     = "#{aksWorkloadIdentityServiceAccountName}#"
 }
 
 variable "kv_name" { 
@@ -71,21 +71,6 @@ variable "sql_admin_username" {
   type        = string
   default     = "#{sqlAdminUsername}#"
 }
-
-
-
-
-
-
-
-
-
-variable "aks_storage_account_name" {
-  description = "Name of the storage account to use with AKS."
-  type        = string
-  default     = "#{aksStorageAccountName}#"
-}
-
 
 variable "kv_name" { 
   description = "The name of the Key Vault instance."

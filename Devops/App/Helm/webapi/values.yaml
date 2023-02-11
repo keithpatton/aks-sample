@@ -1,0 +1,12 @@
+acrName: #{acrName}#
+aksPvcName: #{aksPvcName}#
+aksWorkloadIdentityServiceAccountName: #{aksWorkloadIdentityServiceAccountName}#
+aksStorageClassNamePrefix: #{aksStorageClassNamePrefix}#
+aksStorageClassSkuName: #{aksStorageClassSkuName}#
+appName: #{appName}#
+imageName: #{imageName}#
+kvName: #{kvName}#
+rings: #{ringsJson}#
+sqlServerName: #{sqlServerName}#
+tenants: #{tenantsJson}#
+traefikAksNamespace: #{traefikAksNamespace}#

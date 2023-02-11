@@ -1,28 +1,28 @@
+# cluster wide resources, not namespaced
+
+# common blob container for app
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ .Values.storageClassBlobName }}
-  namespace: {{ .Values.aksNamespace }}
+  name: {{ .Values.storageClassNamePrefix }}common
 provisioner: blob.csi.azure.com
 parameters:
-  skuName: Standard_ZRS
+  skuName: {{ .Values.storageClassSkuName }}
   containerName: common
   protocol: nfs
 volumeBindingMode: Immediate
 allowVolumeExpansion: true
 ---
-# tenanted storage class containers
-{{- $aksNamespace := .Values.aksNamespace}}
-{{- $storageClassBlobName := .Values.storageClassBlobName }}
+# tenanted storage class containers for each tenant for app
+{{- $storageClassNamePrefix := .Values.storageClassNamePrefix }}
 {{- range .Values.tenants }}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ $storageClassBlobName }}-{{ .name }}
-  namespace: {{ $aksNamespace }}
+  name: {{ $storageClassNamePrefix }}{{ .name }}
 provisioner: blob.csi.azure.com
 parameters:
-  skuName: Standard_ZRS
+  skuName: {{ .Values.storageClassSkuName }}
   containerName: {{ .name }}
   protocol: nfs
 volumeBindingMode: Immediate

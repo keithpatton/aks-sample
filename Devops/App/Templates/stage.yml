@@ -28,6 +28,8 @@ stages:
       parameters:
         region: ${{ parameters.region }}
         env: ${{ parameters.env }}  
+    - name: ringsJson
+      value: : ${{ convertToJson(parameters.rings) }}
   dependsOn: ${{ parameters.dependsOn }}
   pool:
     vmImage: ubuntu-latest 
@@ -124,8 +126,7 @@ stages:
               backendAzureRmResourceGroupName: $(tfStateResourceGroup)
               backendAzureRmStorageAccountName: $(tfStateStorageAccount)
               backendAzureRmContainerName: $(tfStateContainerName)
-              backendAzureRmKey: $(tfStateFileName)   
-
+              backendAzureRmKey: $(tfStateFileName)                  
   - deployment: Deploy    
     displayName: Deploy Application
     environment: ${{ parameters.region }}_${{ parameters.env }}
@@ -140,15 +141,20 @@ stages:
               tenants: ${{ parameters.tenants }}
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}                   
-          - task: AzureCLI@2
-            displayName: 'Set AKS Workload Identity ClientId Var'
+          - task: TerraformTaskV3@3
+            displayName: Terraform Output (e.g. Workload Identity ClientIds)
             inputs:
-              azureSubscription: ${{ parameters.svcConnAzureRm}}
-              scriptType: 'pscore'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                $aksWorkloadIdentityClientId = (az identity show --resource-group $(rgName) --name $(aksWorkloadIdentityName) --query 'clientId' -otsv)
-                Write-Host "##vso[task.setvariable variable=aksWorkloadIdentityClientId;]$aksWorkloadIdentityClientId"
+              provider: 'azurerm'
+              environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
+              command: 'output'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/App/Terraform'
+              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
+              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
+              backendAzureRmContainerName: $(tfStateContainerName)
+              backendAzureRmKey: $(tfStateFileName)   
+          - bash: |
+              echo 'some_string is $(TF_OUT_AKS_IDENTITY_CLIENT_IDS)'
+            displayName: echo tf output vars                          
           - task: replacetokens@5
             displayName: 'Replace tokens with variables'
             inputs:
@@ -167,39 +173,15 @@ stages:
               enableTelemetry: true   
               verbosity: 'detailed'  
           - task: HelmDeploy@0
-            displayName: 'Deploy Shared App Components'
+            displayName: 'Deploy $(appName)'
             inputs:
               connectionType: 'Azure Resource Manager'
               azureSubscription: ${{ parameters.svcConnAzureRm}}
               azureResourceGroup: $(rgName)
               kubernetesCluster: $(aksName)
-              namespace: $(aksNamespace)
               command: 'upgrade'
               chartType: 'FilePath'
-              chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample-shared'
-              releaseName: $(webapiSharedReleaseName)
-              arguments: '--debug --atomic --reset-values'        
-          - ${{ each ring in parameters.rings }}:
-            - ${{ if and(eq(ring.region,parameters.region),eq(ring.env,parameters.env)) }}: 
-              - task: Bash@3
-                displayName: 'Sets Helm Release Name Var'
-                inputs:
-                  targetType: 'inline'
-                  script: |
-                    webapiReleaseName=$(echo '$(webapiReleaseNamePrefix)${{ ring.name }}')
-                    echo "##vso[task.setvariable variable=webapiReleaseName;]$webapiReleaseName"
-                    echo $webapiReleaseName            
-              - task: HelmDeploy@0
-                displayName: 'Deploy version ${{ ring.version }} to ${{ ring.name }} ring'
-                inputs:
-                  connectionType: 'Azure Resource Manager'
-                  azureSubscription: ${{ parameters.svcConnAzureRm}}
-                  azureResourceGroup: $(rgName)
-                  kubernetesCluster: $(aksName)
-                  namespace: $(aksNamespace)
-                  command: 'upgrade'
-                  chartType: 'FilePath'
-                  chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/aks-sample-deploy'
-                  releaseName: $(webapiReleaseName)
-                  overrideValues: 'appVersion=${{ ring.version }}'
-                  arguments: '--debug --atomic --reset-values --dependency-update'
+              chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/$(appName)'
+              namespace: $(helmReleaseNamespace)
+              releaseName: $(helmReleaseName)
+              arguments: '--debug --atomic --reset-values'

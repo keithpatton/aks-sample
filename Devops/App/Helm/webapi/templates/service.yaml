@@ -1,0 +1,24 @@
+# service for each ring per namespaced tenant group 
+
+{{- $groupRings := make(map[string]map[string]bool) }}
+{{- range .Values.tenants }}
+  {{- $group := .group }}
+  {{- $ring := .ring }}
+  {{- if !$groupRings[$group][$ring] }}
+     {{- $groupRings[$group][$ring] = true }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName }}-{{ .ring }}
+  namespace: {{ .Values.appName }}-{{ .group }}
+spec:
+  ports:
+    - name: web
+      port: 80
+      targetPort: web
+      protocol: TCP
+  selector:
+    app: {{ .Values.appName }}-{{ .ring }}
+---
+  {{- end }}
+{{- end }}

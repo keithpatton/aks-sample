@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ $.Release.Name }}
-data:
-  aks_keyvault: {{ $.Values.keyVaultName }}
-  sql_server_name: {{ $.Values.sqlServerName }}
-  app_version: {{ $.Values.appVersion }}
