@@ -35,7 +35,7 @@ data "http" "myip" {
 ### Locals
 
 locals {
-  tenant_groups = distinct(tomap(var.tenants, "group"))
+  tenant_groups = distinct( [for t in var.tenants: t.group] )
 }
 
 # AKS Workload Identity, one per tenant group
