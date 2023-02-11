@@ -13,7 +13,7 @@ variables:
   aksNodeCount: 1
   aksNodepoolName: 'default'
   aksVmSize: 'Standard_B2s'
-  aksVNetName: 'aks-vnet-12649348'
+  aksVNetName: 'aks-vnet-20115861'
   
   # azure sql
   sqlElasticPoolName: "elp-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"

@@ -57,18 +57,6 @@ stages:
                 az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
                 az provider register --namespace Microsoft.ContainerService
           - task: AzureCLI@2
-            displayName: 'Ensure Build Agent Access'
-            continueOnError: true
-            inputs:
-              azureSubscription: ${{ parameters.svcConnAzureRm}}
-              addSpnToEnvironment: true
-              scriptType: bash
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                build_agent_ip=$(curl https://ipv4.icanhazip.com/)
-                az sql server firewall-rule create -g $(rgName) --name "$(sqlFirewallRuleBuildAgentName)-pipeline" --server $(sqlServerName) --start-ip-address $build_agent_ip --end-ip-address $build_agent_ip
-                printenv
-          - task: AzureCLI@2
             displayName: 'Ensure Terraform State Storage Account and Container'
             condition: eq(1,2)
             inputs:
@@ -83,7 +71,7 @@ stages:
             displayName: 'Replace tokens with variables'
             inputs:
               targetFiles: |
-                **/variables.tf
+                Devops/Infra/Terraform/variables.tf
               encoding: 'auto'
               tokenPattern: 'default'
               writeBOM: true
