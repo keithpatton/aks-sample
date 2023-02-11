@@ -63,7 +63,8 @@ stages:
                 docker tag $(imageName):${{ parameters.imageBuildTag }} $(acrName).azurecr.io/$(imageName):${{ parameters.imageBuildTag }}
                 docker push $(acrName).azurecr.io/$(imageName):${{ parameters.imageBuildTag }}
 
-  - deployment: Infra    
+  - deployment: Infrastructure    
+    dependsOn: Image
     displayName: Ensure App Specific Infrastructure
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
@@ -127,6 +128,7 @@ stages:
               backendAzureRmContainerName: $(tfStateContainerName)
               backendAzureRmKey: $(tfStateFileName)                  
   - deployment: Deploy    
+    dependsOn: Infrastructure
     displayName: Deploy Application
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
