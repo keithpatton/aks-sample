@@ -109,7 +109,7 @@ stages:
             displayName: 'Ensure Build Agent Access'
             continueOnError: true
             inputs:
-              azureSubscription: $(svcConnAzureRm)
+              azureSubscription: ${{ parameters.svcConnAzureRm}}
               addSpnToEnvironment: true
               scriptType: bash
               scriptLocation: 'inlineScript'
