@@ -162,4 +162,4 @@ stages:
               chartType: 'FilePath'
               chartPath: '$(System.DefaultWorkingDirectory)/Devops/Infra/Helm/traefik'
               releaseName: $(traefikReleaseName)
-              arguments: '--debug --atomic --reset-values'
+              arguments: '--debug --atomic --reset-values --create-namespace'
