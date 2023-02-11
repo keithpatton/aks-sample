@@ -48,9 +48,6 @@ parameters:
   type: string
   default: "0.3.0"
 
-variables:
-- template: ../../Common/Templates/variables/root.yml  
-
 stages:
 - template: ../Templates/stage.yml
   parameters:
