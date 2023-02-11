@@ -54,12 +54,6 @@ variable "kv_name" {
   default     = "#{kvName}#"
 }
 
-variable "sql_server_name" { 
-  description = "The name of the Azure SQL Server."
-  type        = string
-  default     = "#{sqlServerName}#"
-}
-
 variable "sql_elasticpool_name" { 
   description = "The name of the Azure SQL Elastic Pool."
   type        = string
@@ -72,22 +66,10 @@ variable "sql_admin_username" {
   default     = "#{sqlAdminUsername}#"
 }
 
-variable "kv_name" { 
-  description = "The name of the Key Vault instance."
-  type        = string
-  default     = "#{kvName}#"
-}
-
 variable "sql_server_name" { 
   description = "The name of the Azure SQL Server."
   type        = string
   default     = "#{sqlServerName}#"
-}
-
-variable "sql_admin_username" { 
-  description = "The username of the Sql Administrator."
-  type        = string
-  default     = "#{sqlAdminUsername}#"
 }
 
 variable "sql_firewall_rule_build_agent_name" { 
