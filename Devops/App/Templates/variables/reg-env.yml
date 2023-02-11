@@ -7,6 +7,9 @@ parameters:
 - name: env
   displayName: 'Environment'
   type: string
+- name: rings
+  displayName: 'Rings'
+  type: object  
 variables:
 - name: aksFederatedIdentityNamePrefix
   value: 'fic-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)'
@@ -38,5 +41,7 @@ variables:
   value: $(appName)
 - name: imageName
   value: '$(appName)'
+- name: ringsJson
+  value: ${{ convertToJson(parameters.rings) }}
 - name:  sqlFirewallRuleBuildAgentName
   value: "allow-build-agent" 
