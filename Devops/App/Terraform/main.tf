@@ -54,7 +54,7 @@ resource "azurerm_federated_identity_credential" "aks" {
   parent_id             = lookup(azurerm_user_assigned_identity.aks[each.key], "id")
   audience              = ["api://AzureADTokenExchange"]
   issuer                = data.azurerm_kubernetes_cluster.aks.oidc_issuer_url
-  subject               = "system:serviceaccount:" + var.aks_namespace_prefix + each.value + ":" + var.aks_workload_identity_service_account_name
+  subject               = format("system:serviceaccount:",var.aks_namespace_prefix,each.value,":",var.aks_workload_identity_service_account_name)
 }
 
 ### Key Vault Access Policy, one per tenant group
