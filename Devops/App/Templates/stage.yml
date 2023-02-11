@@ -65,7 +65,7 @@ stages:
 
   - deployment: Infrastructure    
     dependsOn: Image
-    condition: and(in(dependencies.Image.result, 'Succeeded', 'Skipped'))
+    condition: in(dependencies.Image.result, 'Succeeded', 'Skipped')
     displayName: Ensure App Specific Infrastructure
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
