@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: traefik
+  namespace: {{ .Values.traefikAksNamespace }}
 spec:
   type: LoadBalancer
   selector:
@@ -19,12 +20,12 @@ spec:
       port: 8000
       name: tcpep
       targetPort: 8000
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: traefikudp
+  namespace: {{ .Values.traefikAksNamespace }}
 spec:
   type: LoadBalancer
   selector:

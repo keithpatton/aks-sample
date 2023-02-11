@@ -2,9 +2,9 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: traefik
+  namespace: {{ .Values.traefikAksNamespace }}
   labels:
     app: traefik
-
 spec:
   replicas: 1
   selector:

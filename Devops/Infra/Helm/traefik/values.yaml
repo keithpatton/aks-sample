@@ -1,1 +1,2 @@
 traefikImageTag: #{traefikImageTag}#
+traefikAksNamespace: #{traefikAksNamespace}#

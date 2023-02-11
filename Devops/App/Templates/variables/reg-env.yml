@@ -29,13 +29,8 @@ variables:
 - name: aksPvcBlobName
   value: 'azure-blob'
 
-
-
-
 - name: aksStorageAccountName
   value: 'stg${{ parameters.region }}${{ parameters.env }}$(appName)aks'
-
-
 
 - name:  sqlFirewallRuleBuildAgentName
   value: "allow-build-agent" 
@@ -43,20 +38,22 @@ variables:
 - name: aksStorageClassBlobName
   value: 'azureblob-nfs-standard'
 
-# app helm deploy
-- name: webapiChartDescription 
-  value: 'AKS Sample App'
-- name: webapiReleaseNamePrefix
-  value: 'webapi'
-- name: webapiChartName
-  value: 'webapi'  
-- name: webapiChartVersion
-  value: '0.7.2' 
+# helm shared app components deploy
 - name: webapiSharedReleaseName 
-  value: 'webapi-shared'
+  value: '$(appName)-shared'
 - name: webapiSharedChartName
-  value: 'webapi-shared'  
+  value: '$(appName)-shared'  
 - name: webapiSharedChartVersion
   value: $(webapiChartVersion)   
 - name: webapiSharedChartDescription 
   value: 'AKS Sample App Shared Components' 
+
+  #  helm app deploy
+- name: webapiChartDescription 
+  value: 'AKS Sample App'
+- name: webapiReleaseNamePrefix
+  value: $(appName)-
+- name: webapiChartName
+  value: $(appName) 
+- name: webapiChartVersion
+  value: '0.7.2'

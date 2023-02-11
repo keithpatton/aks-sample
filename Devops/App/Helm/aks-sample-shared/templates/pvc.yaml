@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Values.pvcBlobName }}
+  namespace: {{ .Release.Name }}
 spec:
   accessModes:
   - ReadWriteOnce
@@ -18,6 +19,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ $pvcBlobName }}-{{ .name }}
+  namespace: {{.Values.appName }}-{{ .ring }}
 spec:
   accessModes:
   - ReadWriteOnce

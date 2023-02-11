@@ -186,7 +186,7 @@ stages:
                 inputs:
                   targetType: 'inline'
                   script: |
-                    webapiReleaseName=$(echo '$(webapiReleaseNamePrefix)-${{ ring.name }}')
+                    webapiReleaseName=$(echo '$(webapiReleaseNamePrefix)${{ ring.name }}')
                     echo "##vso[task.setvariable variable=webapiReleaseName;]$webapiReleaseName"
                     echo $webapiReleaseName            
               - task: HelmDeploy@0
