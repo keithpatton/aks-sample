@@ -25,9 +25,6 @@ parameters:
   type: boolean
   default: true
 
-variables:
-- template: ../../Common/Templates/variables/root.yml  
-
 stages:
 - template: ../Templates/stage.yml
   parameters:
