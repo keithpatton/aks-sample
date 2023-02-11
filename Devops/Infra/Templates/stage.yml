@@ -58,7 +58,6 @@ stages:
                 az provider register --namespace Microsoft.ContainerService
           - task: AzureCLI@2
             displayName: 'Ensure Terraform State Storage Account and Container'
-            condition: eq(1,2)
             inputs:
               azureSubscription: ${{ parameters.svcConnAzureRm}}
               scriptType: 'pscore'
