@@ -51,7 +51,7 @@ resource "azurerm_federated_identity_credential" "aks" {
   for_each =  {for group in local.tenant_groups: group => group}
   name                  = var.app_aks_federated_identity_name_prefix + each.value.group
   resource_group_name   = var.rg_name
-  parent_id             = azurerm_user_assigned_identity.aks.id
+  parent_id             = lookup(azurerm_user_assigned_identity.aks[each.key], "id")
   audience              = ["api://AzureADTokenExchange"]
   issuer                = data.azurerm_kubernetes_cluster.aks.oidc_issuer_url
   subject               = "system:serviceaccount:" + var.aks_namespace_prefix + each.value + ":" + var.aks_workload_identity_service_account_name
