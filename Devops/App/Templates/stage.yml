@@ -105,6 +105,17 @@ stages:
                 az group create --location $(location) --name $(tfStateResourceGroup)
                 az storage account create -n $(tfStateStorageAccount) -g $(tfStateResourceGroup) -l $(location) --sku Standard_LRS --encryption-services blob
                 az storage container create -n $(tfStateContainerName) --account-name $(tfStateStorageAccount) -g $(tfStateResourceGroup)          
+          - task: AzureCLI@2
+            displayName: 'Ensure Build Agent Access'
+            continueOnError: true
+            inputs:
+              azureSubscription: $(svcConnAzureRm)
+              addSpnToEnvironment: true
+              scriptType: bash
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                build_agent_ip=$(curl https://ipv4.icanhazip.com/)
+                az sql server firewall-rule create -g $(rgName) --name "$(sqlFirewallRuleBuildAgentName)-pipeline" --server $(sqlServerName) --start-ip-address $build_agent_ip --end-ip-address $build_agent_ip     
           - task: TerraformTaskV3@3
             displayName: Terraform Init 
             inputs:
