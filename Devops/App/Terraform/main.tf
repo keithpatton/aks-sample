@@ -49,7 +49,7 @@ resource "azurerm_user_assigned_identity" "aks" {
 
 resource "azurerm_federated_identity_credential" "aks" {
   for_each =  {for group in local.tenant_groups: group => group}
-  name                  = var.app_aks_federated_identity_name_prefix + each.value.group
+  name                  = var.aks_federated_identity_name_prefix + each.value.group
   resource_group_name   = var.rg_name
   parent_id             = lookup(azurerm_user_assigned_identity.aks[each.key], "id")
   audience              = ["api://AzureADTokenExchange"]
