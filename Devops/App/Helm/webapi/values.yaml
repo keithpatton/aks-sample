@@ -1,6 +1,6 @@
 acrName: #{acrName}#
 aksPvcName: #{aksPvcName}#
-aksIdentityClientIds: #{aksIdentityClientIds}#
+aksManagedIdentities: #{aksManagedIdentities}#
 aksWorkloadIdentityServiceAccountName: #{aksWorkloadIdentityServiceAccountName}#
 aksStorageClassNamePrefix: #{aksStorageClassNamePrefix}#
 aksStorageClassSkuName: #{aksStorageClassSkuName}#

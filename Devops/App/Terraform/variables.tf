@@ -32,7 +32,7 @@ variable "aks_namespace_prefix" {
 }
 
 variable "aks_workload_identity_name_prefix" { 
-  description = "The name prefix for the workload identity used for AKS. Tenant Group added dynamically from Tenants List"
+  description = "The name prefix for the Azure Managed identity used for AKS. Tenant Group added dynamically from Tenants List"
   type        = string
   default     = "#{aksWorkloadIdentityNamePrefix}#"
 }
