@@ -35,7 +35,7 @@ data "http" "myip" {
 ### Locals
 
 locals {
-  tenant_groups = distinct(map(var.tenants, "group"))
+  tenant_groups = distinct(tomap(var.tenants, "group"))
 }
 
 # AKS Workload Identity, one per tenant group
@@ -88,7 +88,7 @@ resource "azurerm_mssql_database" "default" {
   for_each =  {for tenant in var.tenants:  tenant.name => tenant}
   name                = each.value.name
   server_id           = data.azurerm_mssql_server.sql.id
-  elastic_pool_id     = data.azurerm_mssql_elasticpool.default.id
+  elastic_pool_id     = data.azurerm_mssql_elasticpool.sql.id
 
   depends_on = [ azurerm_mssql_firewall_rule.default ]
 }
