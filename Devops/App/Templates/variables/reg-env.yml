@@ -45,3 +45,5 @@ variables:
   value: ${{ convertToJson(parameters.rings) }}
 - name:  sqlFirewallRuleBuildAgentName
   value: "allow-build-agent" 
+- name: tfStateContainerName
+  value: $(appName)

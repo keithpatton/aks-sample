@@ -25,6 +25,10 @@ variables:
   sqlPrivateEndpointName: "pve-${{ parameters.region }}-${{ parameters.env }}"
   sqlPrivateEndpointNicName: "$(sqlPrivateEndpointName)-nic"
 
+  # terraform
+- name: tfStateContainerName
+  value: 'infra'
+
   # traefik
   traefikChartName: "traefik"
   traefikChartDescription: "Traefik Ingress Controller"
