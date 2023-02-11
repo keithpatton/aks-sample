@@ -34,4 +34,5 @@ variables:
   value: 'terraform.tfstate'
 
   # traefik
-  traefikAksNamespace: "traefik"
+- name: traefikAksNamespace
+  value: "traefik"
