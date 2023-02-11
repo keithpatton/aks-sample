@@ -43,18 +43,18 @@ locals {
 resource "azurerm_user_assigned_identity" "aks" {
   for_each =  {for group in local.tenant_groups: group => group}
   location            = var.location
-  name                = format(var.aks_workload_identity_name_prefix,each.value)
+  name                = "${var.aks_workload_identity_name_prefix}${each.value}"
   resource_group_name = var.rg_name
 }
 
 resource "azurerm_federated_identity_credential" "aks" {
   for_each =  {for group in local.tenant_groups: group => group}
-  name                  = format(var.aks_federated_identity_name_prefix,each.value.group)
+  name                  = "${var.aks_federated_identity_name_prefix}${each.value.group}"
   resource_group_name   = var.rg_name
   parent_id             = lookup(azurerm_user_assigned_identity.aks[each.key], "id")
   audience              = ["api://AzureADTokenExchange"]
   issuer                = data.azurerm_kubernetes_cluster.aks.oidc_issuer_url
-  subject               = format("system:serviceaccount:",var.aks_namespace_prefix,each.value,":",var.aks_workload_identity_service_account_name)
+  subject               = "system:serviceaccount:${var.aks_namespace_prefix}${each.value}:${var.aks_workload_identity_service_account_name}"
 }
 
 ### Key Vault Access Policy, one per tenant group
