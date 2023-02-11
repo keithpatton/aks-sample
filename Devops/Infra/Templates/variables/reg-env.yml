@@ -26,8 +26,7 @@ variables:
   sqlPrivateEndpointNicName: "$(sqlPrivateEndpointName)-nic"
 
   # terraform
-- name: tfStateContainerName
-  value: 'infra'
+  tfStateContainerName: 'infra-shared'
 
   # traefik
   traefikChartName: "traefik"
