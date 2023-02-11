@@ -119,7 +119,6 @@ stages:
               backendAzureRmStorageAccountName: $(tfStateStorageAccount)
               backendAzureRmContainerName: $(tfStateContainerName)
               backendAzureRmKey: $(tfStateFileName)
-              backendAWSBucketName: 
 
   - deployment: InfrastructureApps    
     displayName: Deploy Infra Apps

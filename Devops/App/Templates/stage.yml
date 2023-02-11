@@ -97,7 +97,6 @@ stages:
               verbosity: 'detailed'  
           - task: AzureCLI@2
             displayName: 'Ensure Terraform State Storage Account and Container'
-            condition: and(succeeded(), eq(1,2))
             inputs:
               azureSubscription: ${{ parameters.svcConnAzureRm}}
               scriptType: 'pscore'
