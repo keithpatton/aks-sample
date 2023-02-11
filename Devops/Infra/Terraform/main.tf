@@ -1,7 +1,6 @@
 ﻿data "azurerm_client_config" "current" {}
 
 ### Core Resource Group
-
 resource "azurerm_resource_group" "default" {
   name     = "${var.rg_name}"
   location = var.location
@@ -16,12 +15,11 @@ resource "azurerm_container_registry" "default" {
 }
 
 ### AKS Cluster
-
 resource "azurerm_kubernetes_cluster" "default" {
-  name                = "${var.aks_name}"
+  name                = var.aks_name
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
-  dns_prefix          = "${var.aks_name}"
+  dns_prefix          = var.aks_name
   node_resource_group = var.rg_aks_nodes_name
   workload_identity_enabled = true
   oidc_issuer_enabled = true
@@ -31,7 +29,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 
   default_node_pool {
-    name            = var.aks_namespace
+    name            = var.aks_nodepool_name
     node_count      = var.aks_node_count
     vm_size         = var.aks_vm_size
   }
@@ -61,21 +59,6 @@ resource "azurerm_role_assignment" "default" {
   skip_service_principal_aad_check = true
 }
 
-resource "azurerm_user_assigned_identity" "aks" {
-  location            = azurerm_resource_group.default.location
-  name                = "${var.aks_workload_identity_name}"
-  resource_group_name = azurerm_resource_group.default.name
-}
-
-resource "azurerm_federated_identity_credential" "aks" {
-  name                  = "${var.aks_federated_identity_name}"
-  resource_group_name   = azurerm_resource_group.default.name
-  parent_id             = azurerm_user_assigned_identity.aks.id
-  audience              = ["api://AzureADTokenExchange"]
-  issuer                = azurerm_kubernetes_cluster.default.oidc_issuer_url
-  subject               = "system:serviceaccount:${var.aks_namespace}:${var.aks_workload_identity_service_account_name}"
-}
-
 ### Key Vault
 
 resource "azurerm_key_vault" "default" {
@@ -102,19 +85,6 @@ resource "azurerm_key_vault_access_policy" "superadmin" {
     "Purge",
     "Recover",
     "Restore",
-    "Set"
-  ]
-}
-
-resource "azurerm_key_vault_access_policy" "aks" {
-  key_vault_id = azurerm_key_vault.default.id
-
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = azurerm_user_assigned_identity.aks.principal_id
-
-  secret_permissions = [
-    "Get",
-    "List",
     "Set"
   ]
 }
@@ -211,44 +181,4 @@ resource "azurerm_private_dns_a_record" "sql" {
   resource_group_name = azurerm_resource_group.default.name
   ttl                 = 300
   records             = [data.azurerm_private_endpoint_connection.sql.private_service_connection.0.private_ip_address]
-}
-
-data "http" "myip" {
-  url = "https://ipv4.icanhazip.com/"
-}
-
-resource "azurerm_mssql_firewall_rule" "default" {
-  name                = var.sql_firewall_rule_build_agent_name
-  server_id           = azurerm_mssql_server.default.id
-  start_ip_address    = "${chomp(data.http.myip.response_body)}"
-  end_ip_address      = "${chomp(data.http.myip.response_body)}"
-
-  depends_on = [ data.http.myip ]
-}
-
-resource "azurerm_mssql_database" "default" {
-  for_each =  {for tenant in var.tenants:  tenant.name => tenant}
-  name                = each.value.name
-  server_id           = azurerm_mssql_server.default.id
-  elastic_pool_id     = azurerm_mssql_elasticpool.default.id
-
-  depends_on = [ azurerm_mssql_firewall_rule.default ]
-}
-
-resource "mssql_user" "aks" {
-  for_each =  {for tenant in var.tenants:  tenant.name => tenant}
-  server {
-    host = azurerm_mssql_server.default.fully_qualified_domain_name
-    login {
-      username = var.sql_admin_username
-      password = azurerm_key_vault_secret.sql.value
-    }
-  }
-
-  database  = each.value.name
-  username  = azurerm_user_assigned_identity.aks.name
-  object_id = azurerm_user_assigned_identity.aks.client_id
-  roles     = ["db_owner"]
-
-  depends_on = [ azurerm_mssql_database.default ]
 }

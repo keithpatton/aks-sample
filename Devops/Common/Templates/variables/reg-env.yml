@@ -12,18 +12,25 @@ variables:
 - template: reg_${{ parameters.region }}-env_${{ parameters.env }}.yml  
 
 - name: rgName
-  value: 'rg-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+  value: 'rg-${{ parameters.region }}-${{ parameters.env }}'
 - name: acrName
-  value: 'acr${{ parameters.region }}${{ parameters.env }}$(appName)$(uniqueSuffix)'
-- name: kvName
-  value: 'kv-${{ parameters.region }}-${{ parameters.env }}-$(appName)-$(uniqueSuffix)'
+  value: 'acr${{ parameters.region }}${{ parameters.env }}$(uniqueSuffix)'
 - name: aksName
-  value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
-- name: aksStorageAccountName
-  value: 'stg${{ parameters.region }}${{ parameters.env }}$(appName)aks'
-- name: aksWorkloadIdentityName
-  value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
-- name: aksWorkloadIdentityServiceAccountName
-  value: 'sa-workload-identity-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
+  value: 'aks-${{ parameters.region }}-${{ parameters.env }}'
+- name: kvName
+  value: 'kv-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)'
 - name: sqlServerName
   value: 'sql-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)'
+
+  # terraform state
+- name: tfStateResourceGroup
+  value: 'rg-${{ parameters.region }}-${{ parameters.env }}-terraform'
+- name: tfStateStorageAccount
+  value: 'stg${{ parameters.region }}${{ parameters.env }}tfstate'
+- name: tfStateContainerName
+  value: 'tfstate'
+- name: tfStateFileName
+  value: 'terraform.tfstate'
+
+  # traefik
+  traefikAksNamespace: "traefik"

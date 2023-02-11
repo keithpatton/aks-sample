@@ -169,7 +169,7 @@ stages:
               azureSubscription: ${{ parameters.svcConnAzureRm}}
               azureResourceGroup: $(rgName)
               kubernetesCluster: $(aksName)
-              namespace: $(aksNamespace)
+              namespace: $(traefikAksNamespace)
               command: 'upgrade'
               chartType: 'FilePath'
               chartPath: '$(System.DefaultWorkingDirectory)/Devops/Infra/Helm/traefik'

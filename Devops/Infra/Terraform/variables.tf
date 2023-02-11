@@ -1,12 +1,4 @@
-﻿variable "tenants" {
-  type = list(object({
-    name = string
-  }))
-  description = "Tenant List"
-  default     = #{tenantsJson}#
-}
-
-variable "rg_name" {
+﻿variable "rg_name" {
   type        = string
   description = "The name of the resource group to be used to provision core Azure resources."
   default     = "#{rgName}#"
@@ -36,34 +28,10 @@ variable "aks_name" {
   default     = "#{aksName}#"
 }
 
-variable "aks_workload_identity_name" { 
-  description = "The name of the AKS workload identity."
+variable "aks_nodepool_name" { 
+  description = "The name of the AKS Node Pool."
   type        = string
-  default     = "#{aksWorkloadIdentityName}#"
-}
-
-variable "aks_federated_identity_name" { 
-  description = "The name of the AKS federated identity."
-  type        = string
-  default     = "#{aksFederatedIdentityName}#"
-}
-
-variable "aks_namespace" { 
-  description = "The default namespace to be set on AKS."
-  type        = string
-  default     = "#{aksNamespace}#"
-}
-
-variable "aks_workload_identity_service_account_name" { 
-  description = "The name of the service account to use on AKS."
-  type        = string
-  default     = "#{aksWorkloadIdentityServiceAccountName}#"
-}
-
-variable "aks_storage_account_name" {
-  description = "Name of the storage account to use with AKS."
-  type        = string
-  default     = "#{aksStorageAccountName}#"
+  default     = "#{aksNodepoolName}#"
 }
 
 variable "aks_vnet_name" {
@@ -142,12 +110,6 @@ variable "sql_ad_admin_object_id" {
   description = "The object id of the Azure AD Sql Administrator."
   type        = string
   default     = "#{sqlAdAdminObjectId}#"
-}
-
-variable "sql_firewall_rule_build_agent_name" { 
-  description = "The name of the sql firewall rule applying for the build agent."
-  type        = string
-  default     = "#{sqlFirewallRuleBuildAgentName}#"
 }
 
 variable "sql_private_endpoint_name" { 

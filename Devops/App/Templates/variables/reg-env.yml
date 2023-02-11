@@ -1,3 +1,5 @@
+# App Specific Variables for Region and Environment
+
 parameters:
 - name: region
   displayName: 'Region'
@@ -6,25 +8,55 @@ parameters:
   displayName: 'Environment'
   type: string
 variables:
-  - name: imageName
-    value: '$(appName)'
-  - name: aksPvcBlobName
-    value: 'azure-blob'
-  - name: aksStorageClassBlobName
-    value: 'azureblob-nfs-standard'
-  - name: webapiChartDescription 
-    value: 'AKS Sample App'
-  - name: webapiReleaseNamePrefix
-    value: 'webapi'
-  - name: webapiChartName
-    value: 'webapi'  
-  - name: webapiChartVersion
-    value: '0.7.2'
-  - name: webapiSharedReleaseName 
-    value: 'webapi-shared'
-  - name: webapiSharedChartName
-    value: 'webapi-shared'  
-  - name: webapiSharedChartVersion
-    value: $(webapiChartVersion)   
-  - name: webapiSharedChartDescription 
-    value: 'AKS Sample App Shared Components' 
+
+- name: appName
+  value: 'webapi'
+- name: imageName
+  value: '$(appName)'
+
+  # tenant group specific (suffixed dynamically)
+- name: aksNamespacePrefix
+  value: $(appName)-
+- name: aksWorkloadIdentityServiceAccountName
+  value: 'sa-workload-identity-$(appName)'
+- name: aksWorkloadIdentityNamePrefix
+  value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)'
+- name: aksFederatedIdentityNamePrefix
+  value: 'fic-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)'
+
+
+
+- name: aksPvcBlobName
+  value: 'azure-blob'
+
+
+
+
+- name: aksStorageAccountName
+  value: 'stg${{ parameters.region }}${{ parameters.env }}$(appName)aks'
+
+
+
+- name:  sqlFirewallRuleBuildAgentName
+  value: "allow-build-agent" 
+
+- name: aksStorageClassBlobName
+  value: 'azureblob-nfs-standard'
+
+# app helm deploy
+- name: webapiChartDescription 
+  value: 'AKS Sample App'
+- name: webapiReleaseNamePrefix
+  value: 'webapi'
+- name: webapiChartName
+  value: 'webapi'  
+- name: webapiChartVersion
+  value: '0.7.2' 
+- name: webapiSharedReleaseName 
+  value: 'webapi-shared'
+- name: webapiSharedChartName
+  value: 'webapi-shared'  
+- name: webapiSharedChartVersion
+  value: $(webapiChartVersion)   
+- name: webapiSharedChartDescription 
+  value: 'AKS Sample App Shared Components' 

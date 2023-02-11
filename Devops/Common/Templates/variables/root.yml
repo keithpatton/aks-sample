@@ -1,5 +1,1 @@
 variables:
-- name: appName
-  value: 'aksdemo'
-- name: aksNamespace
-  value: 'default'

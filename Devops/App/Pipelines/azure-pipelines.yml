@@ -11,13 +11,20 @@ parameters:
   type: object
   default:
     - name: tenant1
+      group: common
       region: au1
       env: dev
       ring: stable
     - name: tenant2
+      group: common
       region: au1
       env: dev
       ring: vnext
+    - name: tenant3
+      group: tenant3
+      region: au1
+      env: dev
+      ring: stable    
 
 - name: rings
   displayName: 'Deployment Rings'

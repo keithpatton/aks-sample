@@ -7,11 +7,15 @@ parameters:
   type: string
 
 variables:
+
+  # aks cluster
   rgAksNodesName: '$(rgName)-k8s'
-  aksFederatedIdentityName: 'fic-${{ parameters.region }}-${{ parameters.env }}-$(appName)'
   aksNodeCount: 1
+  aksNodepoolName: 'default'
   aksVmSize: 'Standard_B2s'
   aksVNetName: 'aks-vnet-12649348'
+  
+  # azure sql
   sqlElasticPoolName: "elp-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
   sqlElasticPoolSkuName:  'GP_Gen5'
   sqlElasticPoolSkuTier:  'GeneralPurpose'
@@ -20,18 +24,13 @@ variables:
   sqlAdAdminUsername: "keith.d.patton@vista.co"
   sqlAdAdminObjectId: "65f202d5-8823-4ed2-a18e-468888d62118"
   sqlAdminUsername: "sql-admin"
-  sqlFirewallRuleBuildAgentName: "allow-build-agent"
-  sqlPrivateEndpointName: "pve-${{ parameters.region }}-${{ parameters.env }}-$(appName)"
+  sqlPrivateEndpointName: "pve-${{ parameters.region }}-${{ parameters.env }}"
   sqlPrivateEndpointNicName: "$(sqlPrivateEndpointName)-nic"
 
+  # traefik
   traefikChartName: "traefik"
   traefikChartDescription: "Traefik Ingress Controller"
   traefikChartVersion: "1.0.0"
   traefikAppVersion: "v2.9"
   traefikReleaseName: 'traefik'
   traefikImageTag: '$(traefikAppVersion)'
-
-  tfStateResourceGroup: 'rg-${{ parameters.region }}-${{ parameters.env }}-terraform'
-  tfStateStorageAccount: 'stg${{ parameters.region }}${{ parameters.env }}tfstate'
-  tfStateContainerName: 'tfstate'
-  tfStateFileName: 'terraform.tfstate'

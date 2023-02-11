@@ -1,4 +1,8 @@
 imageName: #{imageName}#
+appName: #{appName}#
+
+traefikAksNamespace: #{traefikAksNamespace}#
+
 appVersion: "{dynamic}"
 tenants: #{tenantsJson}#
 storageClassBlobName: #{aksStorageClassBlobName}#

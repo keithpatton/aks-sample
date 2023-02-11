@@ -1,8 +1,8 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: webapi
-  namespace: default
+  name: {{ .Values.appName }}
+  namespace: {{ .Values.traefikAksNamespace }}
 spec:
   entryPoints:
     - web
@@ -11,6 +11,6 @@ spec:
   - match: PathPrefix(`/`) && Headers(`X-TenantId`, `{{ .name }}`)
     kind: Rule
     services:
-    - name: webapi-{{ .ring }}
+    - name: {{ .Values.appName }}-{{ .ring }}
       port: 80
   {{- end }}
