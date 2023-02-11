@@ -151,8 +151,8 @@ stages:
               backendAzureRmContainerName: $(tfStateContainerName)
               backendAzureRmKey: $(tfStateFileName)   
           - bash: |
-              echo "AKS Identity Client Ids: $TF_OUT_AKS_IDENTITY_CLIENT_IDS"
-              aksIdentityClientIds=$(echo $TF_OUT_AKS_IDENTITY_CLIENT_IDS)
+              echo "AKS Identity Client Ids: $(TF_OUT_AKS_IDENTITY_CLIENT_IDS)"
+              aksIdentityClientIds=$(echo $(TF_OUT_AKS_IDENTITY_CLIENT_IDS))
               echo "##vso[task.setvariable variable=AksIdentityClientIds;isOutput=true]$aksIdentityClientIds"
             displayName: Set Terraform Output Variable                              
   - deployment: Deploy    
@@ -160,6 +160,7 @@ stages:
     - name: aksIdentityClientIds
       value: $[ dependencies.Infrastructure.outputs['AksIdentityClientIds'] ]
     dependsOn: Infrastructure
+    condition: in(dependencies.Image.result, 'Succeeded', 'Skipped')
     displayName: Deploy Application
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
