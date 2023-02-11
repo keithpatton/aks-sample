@@ -127,8 +127,27 @@ stages:
               backendAzureRmResourceGroupName: $(tfStateResourceGroup)
               backendAzureRmStorageAccountName: $(tfStateStorageAccount)
               backendAzureRmContainerName: $(tfStateContainerName)
-              backendAzureRmKey: $(tfStateFileName)                  
+              backendAzureRmKey: $(tfStateFileName)   
+          - task: TerraformTaskV3@3
+            displayName: Terraform Output (e.g. Workload Identity ClientIds)
+            inputs:
+              provider: 'azurerm'
+              environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
+              command: 'output'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/App/Terraform'
+              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
+              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
+              backendAzureRmContainerName: $(tfStateContainerName)
+              backendAzureRmKey: $(tfStateFileName)   
+          - bash: |
+              echo "AKS Identity Client Ids: $TF_OUT_AKS_IDENTITY_CLIENT_IDS"
+              aksIdentityClientIds=$(echo $TF_OUT_AKS_IDENTITY_CLIENT_IDS)
+              echo "##vso[task.setvariable variable=AksIdentityClientIds;isOutput=true]$aksIdentityClientIds"
+            displayName: Set Terraform Output Variable                              
   - deployment: Deploy    
+    variables:
+    - name: aksIdentityClientIds
+      value: $[ dependencies.Infrastructure.outputs['AksIdentityClientIds'] ]
     dependsOn: Infrastructure
     displayName: Deploy Application
     environment: ${{ parameters.region }}_${{ parameters.env }}
@@ -142,21 +161,7 @@ stages:
             parameters:
               tenants: ${{ parameters.tenants }}
               region: ${{ parameters.region }}
-              env: ${{ parameters.env }}                   
-          - task: TerraformTaskV3@3
-            displayName: Terraform Output (e.g. Workload Identity ClientIds)
-            inputs:
-              provider: 'azurerm'
-              environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
-              command: 'output'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/App/Terraform'
-              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
-              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
-              backendAzureRmContainerName: $(tfStateContainerName)
-              backendAzureRmKey: $(tfStateFileName)   
-          - bash: |
-              echo "some_string is $TF_OUT_AKS_IDENTITY_CLIENT_IDS"
-            displayName: echo tf output vars                          
+              env: ${{ parameters.env }}                                        
           - task: replacetokens@5
             displayName: 'Replace tokens with variables'
             inputs:
