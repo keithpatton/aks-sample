@@ -98,10 +98,10 @@ resource "azurerm_mssql_database" "default" {
 resource "mssql_user" "aks" {
   for_each =  {for tenant in var.tenants:  tenant.name => tenant}
   server {
-    host = azurerm_mssql_server.default.fully_qualified_domain_name
+    host = data.azurerm_mssql_server.sql.fully_qualified_domain_name
     login {
       username = var.sql_admin_username
-      password = azurerm_key_vault_secret.sql.value
+      password = data.azurerm_key_vault_secret.sql.value
     }
   }
 
