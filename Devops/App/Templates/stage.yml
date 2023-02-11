@@ -165,7 +165,7 @@ stages:
               scriptType: bash
               scriptLocation: 'inlineScript'
               inlineScript: |
-                aksManagedIdentities=$(az identity list -g $(rgName) --query "[?starts_with(name,'$(aksWorkloadIdentityNamePrefix)')].{client_id: client_id, name: name" -o json)
+                aksManagedIdentities=$(az identity list -g $(rgName) --query "[?starts_with(name,'$(aksWorkloadIdentityNamePrefix)')].{client_id: client_id, name: name}" -o json)
                 echo "##vso[task.setvariable variable=aksManagedIdentities;]$aksManagedIdentities"              
                 echo $aksManagedIdentities                                   
           - task: replacetokens@5
