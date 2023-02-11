@@ -161,9 +161,10 @@ stages:
           - task: AzureCLI@2
             displayName: Get Azure Managed Workload Identities
             inputs:
-              azureSubscription: $(azureSubscription)
+              azureSubscription: ${{ parameters.svcConnAzureRm}}
               scriptType: bash
-              scriptPath: | 
+              scriptLocation: 'inlineScript'
+              inlineScript: |
                 aksManagedIdentities=$(az identity list -g $(rgName) --query "[?starts_with(name,'$(aksWorkloadIdentityNamePrefix)')].{client_id: client_id, name: name, group: substring(name, length('$(aksWorkloadIdentityNamePrefix)'))}" -o json)
                 echo "##vso[task.setvariable variable=aksManagedIdentities;]$aksManagedIdentities"              
                 echo $aksManagedIdentities                                   
