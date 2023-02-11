@@ -16,15 +16,10 @@ parameters:
       env: dev
       ring: stable
     - name: tenant2
-      group: common
+      group: common2
       region: au1
       env: dev
-      ring: vnext
-    - name: tenant3
-      group: tenant3
-      region: au1
-      env: dev
-      ring: stable    
+      ring: vnext  
 
 - name: rings
   displayName: 'Deployment Rings'
