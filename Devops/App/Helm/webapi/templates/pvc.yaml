@@ -3,7 +3,7 @@
 {{- $storageClassNamePrefix := .Values.storageClassNamePrefix }}
 
 # pvc per namespaced tenant group 
-{{- $groups := make(map[string]bool) }}
+{{- $groups := map[string]bool{} }}
 {{- range .Values.tenants }}
   {{- if !$groups.{{.group}} }}
 apiVersion: v1

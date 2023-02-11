@@ -31,7 +31,7 @@ stages:
     vmImage: ubuntu-latest 
   jobs:
   - deployment: Infrastructure
-    displayName: Ensure Azure Resources
+    displayName: Ensure Shared Infra Resources
     # for security reasons all environments must be provisioned by authorised person in advance
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
@@ -121,7 +121,7 @@ stages:
               backendAzureRmKey: $(tfStateFileName)
 
   - deployment: InfrastructureApps    
-    displayName: Deploy Infra Apps
+    displayName: Deploy Shared Infra Apps
     dependsOn: Infrastructure
     condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
     environment: ${{ parameters.region }}_${{ parameters.env }}

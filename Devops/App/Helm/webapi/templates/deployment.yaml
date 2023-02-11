@@ -1,6 +1,6 @@
 # deployment for each ring per namespaced tenant group 
 
-{{- $groupRings := make(map[string]map[string]bool) }}
+{{- $groupRings := map[string]map[string]bool{} }}
 {{- range $.Values.tenants }}
   {{- $group := .group }}
   {{- $ring := .ring }}
