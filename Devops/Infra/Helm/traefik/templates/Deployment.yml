@@ -27,6 +27,7 @@ spec:
             - --entrypoints.tcpep.address=:8000
             - --entrypoints.udpep.address=:9000/udp
             - --providers.kubernetescrd
+            - --providers.kubernetescrd.allowCrossNamespace=true
           ports:
             - name: web
               containerPort: 80
