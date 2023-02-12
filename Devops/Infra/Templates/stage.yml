@@ -2,7 +2,7 @@ parameters:
 - name: svcConnAzureRm
   type: string
 - name: tenants
-  type: object  
+  type: object   
 - name: region
   type: string
 - name: env

@@ -1,9 +1,12 @@
-# Sets $tenantsJson var to represent active tenants data for a particular stage (region and environment)
+# Sets $tenantsJson and $ringsJson vars to represent active 
+# tenants and rings data for a particular stage (region and environment)
 
 parameters:
 - name: tenants
-  displayName: 'Tenants'
   type: object
+- name: rings
+  type: object
+  default: []
 - name: region
   type: string
 - name: env
@@ -11,7 +14,7 @@ parameters:
 
 steps:
 - task: Bash@3
-  displayName: 'Sets Tenants Json Stage Var'
+  displayName: 'Sets Tenants and Rings Json Stage Vars'
   inputs:
     targetType: 'inline'
     script: |
@@ -22,3 +25,9 @@ steps:
       tenantsJson=$(echo "$allTenantsJson" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
       echo "##vso[task.setvariable variable=tenantsJson;]$tenantsJson"
       echo $tenantsJson
+
+      allRingsJson=$(echo '${{ convertToJson(parameters.rings) }}')
+      echo $allRingsJson
+      ringsJson=$(echo "$allRingsJson" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
+      echo "##vso[task.setvariable variable=ringsJson;]$ringsJson"
+      echo $ringsJson

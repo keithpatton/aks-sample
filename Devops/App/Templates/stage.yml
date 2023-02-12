@@ -3,6 +3,8 @@ parameters:
   type: string  
 - name: tenants
   type: object  
+- name: rings
+  type: object  
 - name: region
   type: string
 - name: env
@@ -79,6 +81,7 @@ stages:
           - template:  ../../Common/Templates/stageTenantsVarStep.yml        
             parameters:
               tenants: ${{ parameters.tenants }}
+              rings: ${{ parameters.rings }}
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}                   
           - task: replacetokens@5
@@ -155,6 +158,7 @@ stages:
           - template:  ../../Common/Templates/stageTenantsVarStep.yml        
             parameters:
               tenants: ${{ parameters.tenants }}
+              tenants: ${{ parameters.rings }}
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}      
           - task: AzureCLI@2
