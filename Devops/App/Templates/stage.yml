@@ -106,7 +106,7 @@ stages:
                 az storage account create -n $(tfStateStorageAccount) -g $(tfStateResourceGroup) -l $(location) --sku Standard_LRS --encryption-services blob
                 az storage container create -n $(tfStateContainerName) --account-name $(tfStateStorageAccount) -g $(tfStateResourceGroup)          
           - task: AzureCLI@2
-            displayName: 'Ensure Build Agent Access'
+            displayName: 'Ensure Build Agent Sql Access'
             continueOnError: true
             inputs:
               azureSubscription: ${{ parameters.svcConnAzureRm}}
@@ -140,9 +140,6 @@ stages:
               backendAzureRmContainerName: $(tfStateContainerName)
               backendAzureRmKey: $(tfStateFileName)                              
   - deployment: Deploy    
-    variables:
-    - name: aksIdentityClientIds
-      value: $[ dependencies.Infrastructure.outputs['aksIdentityClientIds'] ]
     dependsOn: Infrastructure
     condition: in(dependencies.Image.result, 'Succeeded', 'Skipped')
     displayName: Deploy Application
@@ -165,9 +162,9 @@ stages:
               scriptType: bash
               scriptLocation: 'inlineScript'
               inlineScript: |
-                aksManagedIdentities=$(az identity list -g $(rgName) --query "[?starts_with(name,'$(aksWorkloadIdentityNamePrefix)')].{client_id: client_id, name: name}" -o json | jq -c '.')
-                echo "##vso[task.setvariable variable=aksManagedIdentities;]$aksManagedIdentities"              
-                echo $aksManagedIdentities                                   
+                aksManagedIdentities=$(az identity list -g $(rgName) --query "[?starts_with(name,'$(aksWorkloadIdentityNamePrefix)')].{client_id: clientId, name: name}" -o json | jq -c '.')
+                echo "##vso[task.setvariable variable=aksManagedIdentities;]$aksManagedIdentities"
+                echo $aksManagedIdentities
           - task: replacetokens@5
             displayName: 'Replace tokens with variables'
             inputs:
