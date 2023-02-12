@@ -198,4 +198,4 @@ stages:
               chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/$(appName)'
               namespace: $(helmReleaseNamespace)
               releaseName: $(helmReleaseName)
-              arguments: '--debug --atomic --reset-values'
+              arguments: '--debug --atomic --reset-values --create-namespace'

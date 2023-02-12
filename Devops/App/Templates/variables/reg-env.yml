@@ -38,7 +38,7 @@ variables:
 - name: helmReleaseName
   value: $(appName)
 - name: helmReleaseNamespace
-  value: $(appName)
+  value: helm
 - name: imageName
   value: '$(appName)'
 - name:  sqlFirewallRuleBuildAgentName
