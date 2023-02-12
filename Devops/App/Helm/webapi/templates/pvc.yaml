@@ -28,7 +28,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ $.Values.aksPvcName }}-{{ .name }}kubcetl
+  name: {{ $.Values.aksPvcName }}-{{ .name }}
   namespace: {{ $.Values.appName }}-{{ .group }}
 spec:
   accessModes:
