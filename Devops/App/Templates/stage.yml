@@ -113,7 +113,7 @@ stages:
             displayName: Terraform Ensure Workspace 
             inputs:
               provider: 'azurerm'
-              backendServiceArm: ${{ parameters.svcConnAzureRm}}
+              environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
               command: 'custom'
               customCommmand: 'workspace new $(tfWorkspaceName)'
               backendAzureRmResourceGroupName: $(tfStateResourceGroup)
@@ -124,7 +124,7 @@ stages:
             displayName: Terraform Set Workspace 
             inputs:
               provider: 'azurerm'
-              backendServiceArm: ${{ parameters.svcConnAzureRm}}
+              environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
               command: 'custom'
               customCommmand: 'workspace select $(tfWorkspaceName)'
               backendAzureRmResourceGroupName: $(tfStateResourceGroup)

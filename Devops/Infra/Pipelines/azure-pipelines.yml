@@ -5,17 +5,6 @@ trigger: none
 resources:
 - repo: self
 
-parameters:
-- name: tenants
-  displayName: 'Tenants'
-  type: object
-  default:
-    - name: tenant1
-      region: au1
-      env: dev
-    - name: tenant2
-      region: au1
-      env: dev    
 stages:
 - template: ../Templates/stage.yml
   parameters:
