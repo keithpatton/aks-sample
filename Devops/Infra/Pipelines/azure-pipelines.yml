@@ -9,7 +9,6 @@ stages:
 - template: ../Templates/stage.yml
   parameters:
     svcConnAzureRm: 'Keith Patton - VS Professional Sub'
-    tenants: ${{ parameters.tenants }}
     region: 'au1'
     env: 'dev'
     dependsOn: []
