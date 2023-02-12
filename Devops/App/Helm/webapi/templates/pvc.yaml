@@ -1,6 +1,6 @@
 # pvcs 
 
-{{- $storageClassNamePrefix := .Values.storageClassNamePrefix }}
+{{- $storageClassNamePrefix := $.Values.aksStorageClassNamePrefix }}
 
 # pvc per namespaced tenant group 
 {{- $groups := (uniq (seq (index .Values.tenants) .group)) -}}
