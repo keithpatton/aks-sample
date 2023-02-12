@@ -1,7 +1,7 @@
 # deployment for each ring per namespaced tenant group 
 
-{{- $groupRings := map[string]map[string]bool{} }}
-{{- range $.Values.tenants }}
+{{- $groupRings := (uniq (seq (index .Values.tenants) "group" "ring")) -}}
+{{- range $groupRings  }}
   {{- $group := .group }}
   {{- $ring := .ring }}
   {{- $ringVersion := "" }}
@@ -11,12 +11,10 @@
       {{- break }}
     {{- end }}
   {{- end }}  
-  {{- if !$groupRings[$group][$ring] }}
-     {{- $groupRings[$group][$ring] = true }}
-     {{- $deploymentNamespace := {{ .Values.appName }}-{{ .group }} }}
-     {{- $deploymentName := {{ .Values.appName }}-{{ .ring }} }}
-     {{- $serviceName := $deploymentName }}
-     {{- $configMapName := $deploymentName }}
+  {{- $deploymentNamespace := {{ $.Values.appName }}-{{ .group }} }}
+  {{- $deploymentName := {{ $.Values.appName }}-{{ .ring }} }}
+  {{- $serviceName := $deploymentName }}
+  {{- $configMapName := $deploymentName }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -55,7 +53,7 @@ spec:
             - mountPath: /var/common
               name: common
               {{- range $.Values.tenants }}
-                # only tenants that are in current group
+                # only tenants in current group
                 {{- if eq $group .group }}
             - mountPath: /var/{{ .name }}
               name: {{ .name }}
@@ -65,14 +63,13 @@ spec:
         - name: common
           persistentVolumeClaim:
              claimName: {{ $.Values.aksPvcName }}        
-        {{- range $.Values.tenants }}
-          # only tenants that are in current group
-          {{- if eq $group .group }}
+          {{- range $.Values.tenants }}
+          # only tenants in current group
+            {{- if eq $group .group }}
         - name: {{ .name }}
           persistentVolumeClaim:
             claimName: {{ $.Values.aksPvcName }}-{{ .name }}
+            {{- end }}
           {{- end }}
-        {{- end }}
 ---
-  {{- end }}
 {{- end }}

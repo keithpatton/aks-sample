@@ -3,14 +3,13 @@
 {{- $storageClassNamePrefix := .Values.storageClassNamePrefix }}
 
 # pvc per namespaced tenant group 
-{{- $groups := map[string]bool{} }}
-{{- range .Values.tenants }}
-  {{- if !$groups.{{.group}} }}
+{{- $groups := (uniq (seq (index .Values.tenants) .group)) -}}
+{{- range $groups }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.aksPvcName }}
-  namespace: {{ .Values.appName }}-{{ .group }}
+  name: {{ $.Values.aksPvcName }}
+  namespace: {{ .Values.appName }}-{{ . }}
 spec:
   accessModes:
   - ReadWriteOnce
@@ -19,8 +18,6 @@ spec:
     requests:
       storage: 5Gi
 ---
----
-  {{- end }}
 {{- end }}
 
 # pvc for each tenant per namespaced tenant group 
