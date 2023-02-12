@@ -63,8 +63,6 @@ The pipeline is triggered manually and has several parameters:
     - Fixed at present, but combined with the variable structure above showcases flexibility for various deployment stamps
 - tenants - Can be altered to add/remove tenants. 
     - e.g. Each tenant is provisioned with their own database to which the AKS cluster has access
-- destroy infra (before apply) 
-    - Allows for infra to be destroyed before being applied, defaults to false
 - apply infra 
     - Allows for control over whether infra is applied, defaults to true
 

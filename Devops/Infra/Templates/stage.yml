@@ -9,10 +9,6 @@ parameters:
   type: string
 - name: dependsOn  
   type: object
-- name: apply
-  type: boolean
-- name: destroy
-  type: boolean
 
 stages:
 - stage: ${{ parameters.region }}_${{ parameters.env }}
@@ -46,7 +42,7 @@ stages:
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}              
           - task: AzureCLI@2
-            displayName: 'Enable Workload Identity Preview Feature'
+            displayName: 'Enable Workload Identity Preview'
             condition: eq(1,2)
             inputs:
               azureSubscription: ${{ parameters.svcConnAzureRm}}
@@ -83,7 +79,29 @@ stages:
               enableTelemetry: true   
               verbosity: 'detailed'   
           - task: TerraformTaskV3@3
-            displayName: Terraform Init 
+            displayName: Terraform Ensure Workspace 
+            inputs:
+              provider: 'azurerm'
+              backendServiceArm: ${{ parameters.svcConnAzureRm}}
+              command: 'custom'
+              customCommmand: 'workspace new $(tfWorkspaceName)'
+              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
+              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
+              backendAzureRmContainerName: $(tfStateContainerName)
+              backendAzureRmKey: $(tfStateFileName)    
+          - task: TerraformTaskV3@3
+            displayName: Terraform Set Workspace 
+            inputs:
+              provider: 'azurerm'
+              backendServiceArm: ${{ parameters.svcConnAzureRm}}
+              command: 'custom'
+              customCommmand: 'workspace select $(tfWorkspaceName)'
+              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
+              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
+              backendAzureRmContainerName: $(tfStateContainerName)
+              backendAzureRmKey: $(tfStateFileName)                             
+          - task: TerraformTaskV3@3
+            displayName: Terraform Init
             inputs:
               provider: 'azurerm'
               backendServiceArm: ${{ parameters.svcConnAzureRm}}
@@ -92,23 +110,9 @@ stages:
               backendAzureRmResourceGroupName: $(tfStateResourceGroup)
               backendAzureRmStorageAccountName: $(tfStateStorageAccount)
               backendAzureRmContainerName: $(tfStateContainerName)
-              backendAzureRmKey: $(tfStateFileName)
-          - task: TerraformTaskV3@3
-            displayName: Terraform Destroy
-            condition: and(succeeded(), eq('${{ parameters.destroy }}', 'true'))
-            inputs:
-              provider: 'azurerm'
-              environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
-              command: 'destroy'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
-              commandOptions: '--auto-approve'
-              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
-              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
-              backendAzureRmContainerName: $(tfStateContainerName)
-              backendAzureRmKey: $(tfStateFileName)        
+              backendAzureRmKey: $(tfStateFileName)                               
           - task: TerraformTaskV3@3
             displayName: Terraform Apply
-            condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
             inputs:
               provider: 'azurerm'
               environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
@@ -119,11 +123,9 @@ stages:
               backendAzureRmStorageAccountName: $(tfStateStorageAccount)
               backendAzureRmContainerName: $(tfStateContainerName)
               backendAzureRmKey: $(tfStateFileName)
-
   - deployment: InfrastructureApps    
     displayName: Deploy Shared Infra Apps
     dependsOn: Infrastructure
-    condition: and(succeeded(), eq('${{ parameters.apply }}', 'true'))
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
       runOnce:

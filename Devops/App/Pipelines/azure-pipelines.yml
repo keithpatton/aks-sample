@@ -47,6 +47,7 @@ parameters:
   displayName: 'Apply Infra'
   type: boolean
   default: true
+
 stages:
 - template: ../Templates/stage.yml
   parameters:

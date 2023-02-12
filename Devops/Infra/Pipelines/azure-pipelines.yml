@@ -16,10 +16,6 @@ parameters:
     - name: tenant2
       region: au1
       env: dev    
-- name: destroy
-  displayName: 'Destroy Infra (Before Apply)'
-  type: boolean
-  default: false
 - name: apply
   displayName: 'Apply Infra'
   type: boolean
@@ -34,4 +30,3 @@ stages:
     env: 'dev'
     dependsOn: []
     apply: ${{ parameters.apply }}
-    destroy: ${{ parameters.destroy }}
