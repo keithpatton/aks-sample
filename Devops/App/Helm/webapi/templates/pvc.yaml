@@ -9,11 +9,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ $.Values.aksPvcName }}
-  namespace: {{ .Values.appName }}-{{ . }}
+  namespace: {{ $.Values.appName }}-{{ . }}
 spec:
   accessModes:
   - ReadWriteOnce
-  storageClassName: {{ storageClassNamePrefix }}common
+  storageClassName: {{ $storageClassNamePrefix }}common
   resources:
     requests:
       storage: 5Gi
@@ -21,16 +21,16 @@ spec:
 {{- end }}
 
 # pvc for each tenant per namespaced tenant group 
-{{- range .Values.tenants }}
+{{- range $.Values.tenants }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.aksPvcName }}-{{ .name }}
-  namespace: {{ .Values.appName }}-{{ .group }}
+  name: {{ $.Values.aksPvcName }}-{{ .name }}
+  namespace: {{ $.Values.appName }}-{{ .group }}
 spec:
   accessModes:
   - ReadWriteOnce
-  storageClassName: {{ storageClassNamePrefix }}{{ .name}}
+  storageClassName: {{ $storageClassNamePrefix }}{{ .name}}
   resources:
     requests:
       storage: 5Gi
