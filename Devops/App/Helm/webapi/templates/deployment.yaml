@@ -11,8 +11,8 @@
       {{- break }}
     {{- end }}
   {{- end }}  
-  {{- $deploymentNamespace := {{ $.Values.appName }}-{{ .group }} }}
-  {{- $deploymentName := {{ $.Values.appName }}-{{ .ring }} }}
+  {{- $deploymentNamespace := printf "%s-%s" $.Values.appName .group }}
+  {{- $deploymentName := printf "%s-%s" $.Values.appName .ring }}
   {{- $serviceName := $deploymentName }}
   {{- $configMapName := $deploymentName }}
 apiVersion: apps/v1
