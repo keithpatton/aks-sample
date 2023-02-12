@@ -11,8 +11,6 @@ parameters:
   type: string
 - name: dependsOn  
   type: object
-- name: rings
-  type: object   
 - name: imageBuild
   type: boolean
 - name: imageBuildTag
