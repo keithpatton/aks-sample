@@ -64,7 +64,7 @@ spec:
           persistentVolumeClaim:
              claimName: {{ $.Values.aksPvcName }}        
           {{- range $.Values.tenants }}
-          # only tenants in current group
+            # only tenants in current group
             {{- if eq $group .group }}
         - name: {{ .name }}
           persistentVolumeClaim:
