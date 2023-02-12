@@ -158,7 +158,7 @@ stages:
           - template:  ../../Common/Templates/stageTenantsVarStep.yml        
             parameters:
               tenants: ${{ parameters.tenants }}
-              tenants: ${{ parameters.rings }}
+              rings: ${{ parameters.rings }}
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}      
           - task: AzureCLI@2
