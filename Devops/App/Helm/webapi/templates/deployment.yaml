@@ -24,10 +24,10 @@
         {{- $ringVersion = .version }}
       {{- end }}
     {{- end }}    
-  {{- $deploymentNamespace := printf "%s-%s" $.Values.appName $group }}
-  {{- $deploymentName := printf "%s-%s" $.Values.appName $ring }}
-  {{- $serviceName := $deploymentName }}
-  {{- $configMapName := $deploymentName }}
+    {{- $deploymentNamespace := printf "%s-%s" $.Values.appName $group }}
+    {{- $deploymentName := printf "%s-%s" $.Values.appName $ring }}
+    {{- $serviceName := $deploymentName }}
+    {{- $configMapName := $deploymentName }}
   
 apiVersion: apps/v1
 kind: Deployment
@@ -83,6 +83,6 @@ spec:
             claimName: {{ $.Values.aksPvcName }}-{{ .name }}
             {{- end }}
           {{- end }}
-     {{- end }}
 ---
+  {{- end }}
 {{- end }}
