@@ -16,11 +16,6 @@ parameters:
     - name: tenant2
       region: au1
       env: dev    
-- name: apply
-  displayName: 'Apply Infra'
-  type: boolean
-  default: true
-
 stages:
 - template: ../Templates/stage.yml
   parameters:
@@ -29,4 +24,3 @@ stages:
     region: 'au1'
     env: 'dev'
     dependsOn: []
-    apply: ${{ parameters.apply }}
