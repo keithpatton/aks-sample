@@ -16,5 +16,4 @@ metadata:
 labels:
   name: {{ $.Values.appName }}-{{ $group }}
 ---
-  {{- end }}
 {{- end }}
