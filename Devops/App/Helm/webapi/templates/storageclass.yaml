@@ -25,6 +25,7 @@ parameters:
   containerName: {{ .name }}
   protocol: nfs
 volumeBindingMode: Immediate
+reclaimPolicy: Retain
 allowVolumeExpansion: true
 ---
 {{- end }}
