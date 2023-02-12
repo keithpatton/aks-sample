@@ -1,0 +1,26 @@
+acrName: acrau1dev01
+aksPvcName: azure-blob
+aksManagedIdentities: [{"client_id":"daee9da8-e7aa-46ec-8235-7369c87f2620","name":"aks-au1-dev-webapi-common"},{"client_id":"e5e21f6b-3f64-40d7-8a31-5967da49c77b","name":"aks-au1-dev-webapi-common2"}]
+aksWorkloadIdentityServiceAccountName: sa-workload-identity-webapi
+aksStorageClassNamePrefix: webapi-azureblob-nfs-standard-
+aksStorageClassSkuName: Standard_ZRS
+appName: webapi
+imageName: webapi
+kvName: kv-au1-dev-01
+rings: [
+  {
+    "name": "stable",
+    "region": "au1",
+    "env": "dev",
+    "version": "0.3.0"
+  },
+  {
+    "name": "vnext",
+    "region": "au1",
+    "env": "dev",
+    "version": "0.3.0"
+  }
+]
+sqlServerName: sql-au1-dev-01
+tenants: [{"name":"tenant1","group":"common","region":"au1","env":"dev","ring":"stable"},{"name":"tenant2","group":"common2","region":"au1","env":"dev","ring":"vnext"}]
+traefikAksNamespace: traefik

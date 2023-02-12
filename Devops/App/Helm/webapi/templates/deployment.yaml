@@ -1,20 +1,34 @@
 # deployment for each ring per namespaced tenant group 
 
-{{- $groupRings := (uniq (seq (index .Values.tenants) "group" "ring")) -}}
-{{- range $groupRings  }}
-  {{- $group := .group }}
-  {{- $ring := .ring }}
-  {{- $ringVersion := "" }}
-  {{- range $.Values.rings }}
-    {{- if eq $ring .name }}
-      {{- $ringVersion = .version }}
-      {{- break }}
-    {{- end }}
-  {{- end }}  
-  {{- $deploymentNamespace := printf "%s-%s" $.Values.appName .group }}
-  {{- $deploymentName := printf "%s-%s" $.Values.appName .ring }}
+{{- $groups := list }}
+{{- range $.Values.tenants }}
+  {{- if not (has .group $groups) }}
+  {{- $groups = append $groups .group}}
+  {{- end }}
+{{- end }}
+
+{{- $rings := list }}
+{{- range $.Values.rings }}
+  {{- if not (has .name $rings) }}
+  {{- $rings = append $rings .name}}
+  {{- end }}
+{{- end }}
+
+{{- range $groups }}
+  {{- $group := .}}
+  {{- range $rings }}
+    {{- $ring := .}}
+    {{- $ringVersion := "" }}
+    {{- range $.Values.rings }}
+      {{- if eq $ring .name }}
+        {{- $ringVersion = .version }}
+      {{- end }}
+    {{- end }}    
+  {{- $deploymentNamespace := printf "%s-%s" $.Values.appName $group }}
+  {{- $deploymentName := printf "%s-%s" $.Values.appName $ring }}
   {{- $serviceName := $deploymentName }}
   {{- $configMapName := $deploymentName }}
+  
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -53,7 +67,6 @@ spec:
             - mountPath: /var/common
               name: common
               {{- range $.Values.tenants }}
-                # only tenants in current group
                 {{- if eq $group .group }}
             - mountPath: /var/{{ .name }}
               name: {{ .name }}
@@ -64,12 +77,12 @@ spec:
           persistentVolumeClaim:
              claimName: {{ $.Values.aksPvcName }}        
           {{- range $.Values.tenants }}
-            # only tenants in current group
             {{- if eq $group .group }}
         - name: {{ .name }}
           persistentVolumeClaim:
             claimName: {{ $.Values.aksPvcName }}-{{ .name }}
             {{- end }}
           {{- end }}
+     {{- end }}
 ---
 {{- end }}

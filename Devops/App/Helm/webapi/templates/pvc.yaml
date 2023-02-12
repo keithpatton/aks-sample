@@ -1,9 +1,12 @@
 # pvcs 
-
-{{- $storageClassNamePrefix := $.Values.aksStorageClassNamePrefix }}
+{{- $groups := list }}
+{{- range $.Values.tenants }}
+  {{- if not (has .group $groups) }}
+  {{- $groups = append $groups .group}}
+  {{- end }}
+{{- end }}
 
 # pvc per namespaced tenant group 
-{{- $groups := (uniq (seq (index .Values.tenants) .group)) -}}
 {{- range $groups }}
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -13,7 +16,7 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
-  storageClassName: {{ $storageClassNamePrefix }}common
+  storageClassName: {{ $.Values.aksStorageClassNamePrefix }}common
   resources:
     requests:
       storage: 5Gi
@@ -30,7 +33,7 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
-  storageClassName: {{ $storageClassNamePrefix }}{{ .name}}
+  storageClassName: {{ $.Values.aksStorageClassNamePrefix }}{{ .name}}
   resources:
     requests:
       storage: 5Gi

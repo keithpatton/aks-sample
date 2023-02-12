@@ -1,16 +1,32 @@
 
 # config map for each ring within per namespaced tenant group 
+{{- $groups := list }}
+{{- range $.Values.tenants }}
+  {{- if not (has .group $groups) }}
+  {{- $groups = append $groups .group}}
+  {{- end }}
+{{- end }}
 
-{{- $groupRings := (uniq (seq (index .Values.tenants) "group" "ring")) -}}
-{{- range $groupRings }}
+{{- $rings := list }}
+{{- range $.Values.rings }}
+  {{- if not (has .name $rings) }}
+  {{- $rings = append $rings .name}}
+  {{- end }}
+{{- end }}
+
+{{- range $groups }}
+  {{- $group := .}}
+  {{- range $rings }}
+    {{- $ring := .}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $.Values.appName }}-{{ .ring }}
-  namespace: {{ $.Values.appName }}-{{ .group }}
+  name: {{ $.Values.appName }}-{{ $ring }}
+  namespace: {{ $.Values.appName }}-{{ $group }}
 data:
   aks_keyvault: {{ $.Values.kvName }}
   sql_server_name: {{ $.Values.sqlServerName }}
   app_version: {{ $.Values.appVersion }}
 ---
+  {{- end }}
 {{- end }}

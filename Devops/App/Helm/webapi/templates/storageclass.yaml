@@ -4,10 +4,10 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ $.Values.storageClassNamePrefix }}common
+  name: {{ $.Values.aksStorageClassNamePrefix }}common
 provisioner: blob.csi.azure.com
 parameters:
-  skuName: {{ $.Values.storageClassSkuName }}
+  skuName: {{ $.Values.aksStorageClassSkuName }}
   containerName: common
   protocol: nfs
 volumeBindingMode: Immediate
@@ -18,10 +18,10 @@ allowVolumeExpansion: true
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ $.Values.storageClassNamePrefix }}{{ .name }}
+  name: {{ $.Values.aksStorageClassNamePrefix }}{{ .name }}
 provisioner: blob.csi.azure.com
 parameters:
-  skuName: {{ $.Values.storageClassSkuName }}
+  skuName: {{ $.Values.aksStorageClassSkuName }}
   containerName: {{ .name }}
   protocol: nfs
 volumeBindingMode: Immediate
