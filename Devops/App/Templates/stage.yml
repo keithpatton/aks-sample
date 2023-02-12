@@ -144,7 +144,6 @@ stages:
   - deployment: Deploy    
     dependsOn: Infrastructure
     condition: and(in(dependencies.Image.result, 'Succeeded', 'Skipped'), in(dependencies.Infrastructure.result, 'Succeeded', 'Skipped'))
-
     displayName: Deploy Application
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
