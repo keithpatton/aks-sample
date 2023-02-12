@@ -34,6 +34,7 @@ parameters:
       env: dev
       version: "0.3.0"
 
+
 - name: imageBuild
   displayName: 'Build and Push Image'
   type: boolean
@@ -42,7 +43,10 @@ parameters:
   displayName: 'Image Build Tag'
   type: string
   default: "0.3.0"
-
+- name: apply
+  displayName: 'Apply Infra'
+  type: boolean
+  default: true
 stages:
 - template: ../Templates/stage.yml
   parameters:
@@ -54,3 +58,4 @@ stages:
     rings: ${{ parameters.rings }}
     imageBuild: ${{ parameters.imageBuild }}
     imageBuildTag: ${{ parameters.imageBuildTag }}
+    apply: ${{ parameters.apply }}
