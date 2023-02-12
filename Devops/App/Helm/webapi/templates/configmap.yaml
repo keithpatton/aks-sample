@@ -18,6 +18,12 @@
   {{- $group := .}}
   {{- range $rings }}
     {{- $ring := .}}
+    {{- $ringVersion := "" }}
+    {{- range $.Values.rings }}
+      {{- if eq $ring .name }}
+        {{- $ringVersion = .version }}
+      {{- end }}
+    {{- end }} 
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -26,7 +32,7 @@ metadata:
 data:
   aks_keyvault: {{ $.Values.kvName }}
   sql_server_name: {{ $.Values.sqlServerName }}
-  app_version: {{ $.Values.appVersion }}
+  app_version: {{ $ringVersion }}
 ---
   {{- end }}
 {{- end }}
