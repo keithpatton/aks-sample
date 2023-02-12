@@ -34,7 +34,7 @@ variables:
 - name: helmChartName
   value: $(appName) 
 - name: helmChartVersion
-  value: '0.7.3'
+  value: '0.7.4'
 - name: helmReleaseName
   value: $(appName)
 - name: helmReleaseNamespace
