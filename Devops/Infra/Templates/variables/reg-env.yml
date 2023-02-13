@@ -1,42 +1,61 @@
 parameters:
-- name: region
-  displayName: 'Region'
+- name:  region
+  displayname:  'Region'
   type: string
-- name: env
-  displayName: 'Environment'
+- name:  env
+  displayname:  'Environment'
   type: string
 
 variables:
-# include common variables
+# common variables
 - template: ../../Common/Templates/variables/reg-env.yml
   parameters:
     region: ${{ parameters.region }}
     env: ${{ parameters.env }}  
 
-  # aks cluster
-  rgAksNodesName: '$(rgName)-k8s'
-  aksNodeCount: 1
-  aksNodepoolName: 'default'
-  aksVmSize: 'Standard_B2s'
-  aksVNetName: 'aks-vnet-20115861'
-  
-  # azure sql
-  sqlElasticPoolSkuName:  'GP_Gen5'
-  sqlElasticPoolSkuTier:  'GeneralPurpose'
-  sqlElasticPoolSkuFamily:  'Gen5'
-  sqlElasticPoolSkuCapacity:  2
-  sqlAdAdminUsername: "keith.d.patton@vista.co"
-  sqlAdAdminObjectId: "65f202d5-8823-4ed2-a18e-468888d62118"
-  sqlPrivateEndpointName: "pve-${{ parameters.region }}-${{ parameters.env }}"
-  sqlPrivateEndpointNicName: "$(sqlPrivateEndpointName)-nic"
+# aks cluster
+- name: rgAksNodesName
+  value:  '$(rgName)-k8s'
+- name: aksNodeCount: 1
+- name: aksNodepoolName
+  value:  'default'
+- name: aksVmSize
+  value: 'Standard_B2s'
+- name: aksVNetName
+  value:  'aks-vnet-20115861'
 
-  # terraform
-  tfStateFileName: 'core.tfstate'
-  
-  # traefik
-  traefikChartName: "traefik"
-  traefikChartDescription: "Traefik Ingress Controller"
-  traefikChartVersion: "1.0.0"
-  traefikAppVersion: "v2.9"
-  traefikReleaseName: 'traefik'
-  traefikImageTag: '$(traefikAppVersion)'
+# azure sql
+- name: sqlElasticPoolSkuName
+  value:   'GP_Gen5'
+- name: sqlElasticPoolSkuTier
+  value:  'GeneralPurpose'
+- name: sqlElasticPoolSkuFamily
+  value:  'Gen5'
+- name: sqlElasticPoolSkuCapacity
+  value:  2
+- name: sqlAdAdminUsername
+  value:  "keith.d.patton@vista.co"
+- name: sqlAdAdminObjectId
+  value: "65f202d5-8823-4ed2-a18e-468888d62118"
+- name: sqlPrivateEndpointName
+  value:  "pve-${{ parameters.region }}-${{ parameters.env }}"
+- name: sqlPrivateEndpointNicName
+  value:  "$(sqlPrivateEndpointName)-nic"
+
+# terraform
+- name: tfStateFileName
+  value:  'core.tfstate'
+
+# traefik
+- name: traefikChartName
+  value:  "traefik"
+- name: traefikChartDescription
+  value: "Traefik Ingress Controller"
+- name: traefikChartVersion
+  value: "1.0.0"
+- name: traefikAppVersion
+  value: "v2.9"
+- name: traefikReleaseName
+  value:  'traefik'
+- name: traefikImageTag
+  value: '$(traefikAppVersion)'
