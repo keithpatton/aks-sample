@@ -7,9 +7,6 @@ parameters:
 - name: env
   displayName: 'Environment'
   type: string
-- name: rings
-  displayName: 'Rings'
-  type: object  
 variables:
 - name: aksFederatedIdentityNamePrefix
   value: 'fic-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)'

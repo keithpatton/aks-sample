@@ -21,25 +21,11 @@ parameters:
       env: dev
       ring: vnext  
 
-- name: rings
-  displayName: 'Deployment Rings'
-  type: object
-  default: 
-    - name: stable
-      region: au1
-      env: dev
-      version: "0.3.0"
-    - name: vnext
-      region: au1
-      env: dev
-      version: "0.3.0"
-
 stages:
 - template: ../Templates/stage-teardown.yml
   parameters:
     svcConnAzureRm: 'Keith Patton - VS Professional Sub'    
     tenants: ${{ parameters.tenants }}
-    rings: ${{ parameters.rings }}
     region: 'au1'
     env: 'dev'
     dependsOn: []

@@ -30,7 +30,6 @@ stages:
       parameters:
         region: ${{ parameters.region }}
         env: ${{ parameters.env }}  
-        rings: ${{ parameters.rings }}  
   dependsOn: ${{ parameters.dependsOn }}
   pool:
     vmImage: ubuntu-latest 
@@ -147,7 +146,6 @@ stages:
           - template:  ../../Common/Templates/stageTenantsVarStep.yml        
             parameters:
               tenants: ${{ parameters.tenants }}
-              rings: ${{ parameters.rings }}
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}      
           - task: AzureCLI@2

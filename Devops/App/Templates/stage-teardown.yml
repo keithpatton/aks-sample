@@ -3,8 +3,6 @@ parameters:
   type: string  
 - name: tenants
   type: object  
-- name: rings
-  type: object  
 - name: region
   type: string
 - name: env
@@ -24,7 +22,6 @@ stages:
       parameters:
         region: ${{ parameters.region }}
         env: ${{ parameters.env }}  
-        rings: ${{ parameters.rings }}  
   dependsOn: ${{ parameters.dependsOn }}
   pool:
     vmImage: ubuntu-latest 
@@ -61,7 +58,6 @@ stages:
           - template:  ../../Common/Templates/stageTenantsVarStep.yml        
             parameters:
               tenants: ${{ parameters.tenants }}
-              rings: ${{ parameters.rings }}
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}                   
           - task: replacetokens@5
