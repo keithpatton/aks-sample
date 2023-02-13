@@ -14,7 +14,8 @@ variables:
 # aks cluster
 - name: rgAksNodesName
   value:  '$(rgName)-k8s'
-- name: aksNodeCount: 1
+- name: aksNodeCount
+  value: 1
 - name: aksNodepoolName
   value:  'default'
 - name: aksVmSize
