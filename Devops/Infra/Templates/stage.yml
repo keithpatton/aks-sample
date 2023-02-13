@@ -76,10 +76,9 @@ stages:
             inputs:
               provider: 'azurerm'
               environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
-              backendServiceArm: ${{ parameters.svcConnAzureRm}}
               command: 'custom'
               customCommmand: 'workspace'
-              commandOptions: 'new $(tfWorkspaceName)'
+              commandOptions: 'workspace new $(tfWorkspaceName)'
               backendAzureRmResourceGroupName: $(tfStateResourceGroup)
               backendAzureRmStorageAccountName: $(tfStateStorageAccount)
               backendAzureRmContainerName: $(tfStateContainerName)
@@ -91,7 +90,7 @@ stages:
               environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
               command: 'custom'
               customCommmand: 'workspace'
-              commandOptions: 'set $(tfWorkspaceName)'
+              commandOptions: 'workspace set $(tfWorkspaceName)'
               backendAzureRmResourceGroupName: $(tfStateResourceGroup)
               backendAzureRmStorageAccountName: $(tfStateStorageAccount)
               backendAzureRmContainerName: $(tfStateContainerName)
