@@ -26,8 +26,12 @@ spec:
     - namespaceSelector:
         matchLabels:
           name: default
+    - namespaceSelector:
+        matchLabels:
           name: {{ $.Values.traefikAksNamespace }}
-          name: {{ $namespace }}
+    - namespaceSelector:
+        matchLabels:
+          name: {{ $namespace }}                    
   egress:
   - {}
 ---
