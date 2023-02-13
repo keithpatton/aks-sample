@@ -30,4 +30,5 @@ spec:
           name: {{ $namespace }}
   egress:
   - {}
+---
 {{- end }}
