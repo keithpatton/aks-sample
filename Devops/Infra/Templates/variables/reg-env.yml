@@ -1,9 +1,7 @@
 parameters:
 - name:  region
-  displayname:  'Region'
   type: string
 - name:  env
-  displayname:  'Environment'
   type: string
 
 variables:
