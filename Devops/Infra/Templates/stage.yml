@@ -70,31 +70,7 @@ stages:
               enableRecursion: false
               useLegacyPattern: false
               enableTelemetry: true   
-              verbosity: 'detailed'   
-          - task: TerraformTaskV3@3
-            displayName: Terraform Ensure Workspace 
-            inputs:
-              provider: 'azurerm'
-              environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
-              command: 'custom'
-              customCommmand: 'workspace'
-              commandOptions: 'workspace new $(tfWorkspaceName)'
-              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
-              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
-              backendAzureRmContainerName: $(tfStateContainerName)
-              backendAzureRmKey: $(tfStateFileName)    
-          - task: TerraformTaskV3@3
-            displayName: Terraform Set Workspace 
-            inputs:
-              provider: 'azurerm'
-              environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
-              command: 'custom'
-              customCommmand: 'workspace'
-              commandOptions: 'workspace set $(tfWorkspaceName)'
-              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
-              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
-              backendAzureRmContainerName: $(tfStateContainerName)
-              backendAzureRmKey: $(tfStateFileName)                             
+              verbosity: 'detailed'                     
           - task: TerraformTaskV3@3
             displayName: Terraform Init
             inputs:

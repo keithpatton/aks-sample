@@ -32,11 +32,9 @@ variables:
   value: 'rg-${{ parameters.region }}-${{ parameters.env }}-terraform'
 - name: tfStateStorageAccount
   value: 'stg${{ parameters.region }}${{ parameters.env }}tfstate'
-- name: tfStateFileName
-  value: 'terraform.tfstate'
 - name: tfStateContainerName
   value: '${{ parameters.region }}-${{ parameters.env }}'
-  
+
   # traefik
 - name: traefikAksNamespace
   value: "traefik"

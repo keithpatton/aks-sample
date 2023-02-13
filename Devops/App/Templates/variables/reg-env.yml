@@ -43,5 +43,5 @@ variables:
   value: '$(appName)'
 - name:  sqlFirewallRuleBuildAgentName
   value: "allow-build-agent" 
-- name: tfWorkspaceName
-  value: '$(appName)'
+- name: tfStateFileName
+  value: '$(appName).tfstate'

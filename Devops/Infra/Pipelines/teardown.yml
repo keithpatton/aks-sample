@@ -1,0 +1,14 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger: none
+
+resources:
+- repo: self
+
+stages:
+- template: ../Templates/stage-teardown.yml
+  parameters:
+    svcConnAzureRm: 'Keith Patton - VS Professional Sub'
+    region: 'au1'
+    env: 'dev'
+    dependsOn: []

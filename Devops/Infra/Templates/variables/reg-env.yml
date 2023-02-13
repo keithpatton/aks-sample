@@ -26,8 +26,8 @@ variables:
   sqlPrivateEndpointNicName: "$(sqlPrivateEndpointName)-nic"
 
   # terraform
-  tfWorkspaceName: 'core'
-
+  tfStateFileName: 'core.tfstate'
+  
   # traefik
   traefikChartName: "traefik"
   traefikChartDescription: "Traefik Ingress Controller"
