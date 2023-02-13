@@ -26,7 +26,7 @@ stages:
   jobs:
   - deployment: Infrastructure
     displayName: Ensure Shared Infra Resources
-    # for security reasons all environments must be provisioned by authorised person in advance
+    # all environments manually enabled by authorised person on first run 
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
       runOnce:
@@ -35,7 +35,7 @@ stages:
           - checkout: self
             clean: true              
           - task: AzureCLI@2
-            displayName: 'Enable Workload Identity Preview'
+            displayName: 'Enable Workload Identity Preview (One Time)'
             condition: eq(1,2)
             inputs:
               azureSubscription: ${{ parameters.svcConnAzureRm}}
@@ -45,55 +45,21 @@ stages:
                 az extension add --name aks-preview
                 az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
                 az provider register --namespace Microsoft.ContainerService
-          - task: AzureCLI@2
-            displayName: 'Ensure Terraform State Storage Account and Container'
-            inputs:
-              azureSubscription: ${{ parameters.svcConnAzureRm}}
-              scriptType: 'pscore'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                az group create --location $(location) --name $(tfStateResourceGroup)
-                az storage account create -n $(tfStateStorageAccount) -g $(tfStateResourceGroup) -l $(location) --sku Standard_LRS --encryption-services blob
-                az storage container create -n $(tfStateContainerName) --account-name $(tfStateStorageAccount) -g $(tfStateResourceGroup)
-          - task: replacetokens@5
-            displayName: 'Replace tokens with variables'
-            inputs:
+          - template: ../../Common/Templates/tfStateAzStg.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+          - template: ../../Common/Templates/replaceTokens.yml
+            parameters:
               targetFiles: |
-                Devops/Infra/Terraform/variables.tf
-              encoding: 'auto'
-              tokenPattern: 'default'
-              writeBOM: true
-              actionOnMissing: 'warn'
-              keepToken: false
-              actionOnNoFiles: 'warn'
-              enableTransforms: false
-              enableRecursion: false
-              useLegacyPattern: false
-              enableTelemetry: true   
-              verbosity: 'detailed'                     
-          - task: TerraformTaskV3@3
-            displayName: Terraform Init
-            inputs:
-              provider: 'azurerm'
-              backendServiceArm: ${{ parameters.svcConnAzureRm}}
-              command: 'init'
+                Devops/Infra/Terraform/variables.tf          
+          - template: ../../Common/Templates/tfInitAzRm.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
-              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
-              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
-              backendAzureRmContainerName: $(tfStateContainerName)
-              backendAzureRmKey: $(tfStateFileName)                               
-          - task: TerraformTaskV3@3
-            displayName: Terraform Apply
-            inputs:
-              provider: 'azurerm'
-              environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
-              command: 'apply'
+          - template: ../../Common/Templates/tfApplyAzRm.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
-              commandOptions: '--auto-approve'
-              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
-              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
-              backendAzureRmContainerName: $(tfStateContainerName)
-              backendAzureRmKey: $(tfStateFileName)
   - deployment: InfrastructureApps    
     displayName: Deploy Shared Infra Apps
     dependsOn: Infrastructure
@@ -103,34 +69,15 @@ stages:
         deploy:
           steps:
           - checkout: self
-            clean: true       
-          - task: replacetokens@5
-            displayName: 'Replace tokens with variables'
-            inputs:
+            clean: true   
+          - template: ../../Common/Templates/replaceTokens.yml
+            parameters:
               targetFiles: |
                 Devops/Infra/Helm/**/Chart.yaml
                 Devops/Infra/Helm/**/values.yaml
-              encoding: 'auto'
-              tokenPattern: 'default'
-              writeBOM: true
-              actionOnMissing: 'warn'
-              keepToken: false
-              actionOnNoFiles: 'warn'
-              enableTransforms: false
-              enableRecursion: false
-              useLegacyPattern: false
-              enableTelemetry: true   
-              verbosity: 'detailed'
-          - task: HelmDeploy@0
-            displayName: 'Deploy Traefik'      
-            inputs:
-              connectionType: 'Azure Resource Manager'
-              azureSubscription: ${{ parameters.svcConnAzureRm}}
-              azureResourceGroup: $(rgName)
-              kubernetesCluster: $(aksName)
-              namespace: $(traefikAksNamespace)
-              command: 'upgrade'
-              chartType: 'FilePath'
-              chartPath: '$(System.DefaultWorkingDirectory)/Devops/Infra/Helm/traefik'
+          - template: ../../Common/Templates/helmUpgrade.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }
               releaseName: $(traefikReleaseName)
-              arguments: '--debug --atomic --reset-values --create-namespace'
+              chartPath: '$(System.DefaultWorkingDirectory)/Devops/Infra/Helm/traefik'    
+              namespace: $(traefikAksNamespace)

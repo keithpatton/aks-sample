@@ -1,0 +1,22 @@
+# Replaces tokens in the target files with sensible defaults
+
+parameters:
+- name: targetFiles
+  type: object
+
+steps:
+- task: replacetokens@5
+    displayName: 'Replace tokens with variables'
+    inputs:
+      targetFiles: ${{ parameters.targetFiles }} 
+      encoding: 'auto'
+      tokenPattern: 'default'
+      writeBOM: true
+      actionOnMissing: 'warn'
+      keepToken: false
+      actionOnNoFiles: 'warn'
+      enableTransforms: false
+      enableRecursion: fals
+      useLegacyPattern: false
+      enableTelemetry: true   
+      verbosity: 'detailed'          
