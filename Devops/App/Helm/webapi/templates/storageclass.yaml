@@ -15,14 +15,16 @@ allowVolumeExpansion: true
 ---
 # tenanted storage class containers for each tenant for app
 {{- range .Values.tenants }}
+  {{- $storageClassName := printf "%s%s" $.Values.aksStorageClassNamePrefix .name }}
+  {{- $containerName := .name }}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ $.Values.aksStorageClassNamePrefix }}{{ .name }}
+  name: {{ $storageClassName }}
 provisioner: blob.csi.azure.com
 parameters:
   skuName: {{ $.Values.aksStorageClassSkuName }}
-  containerName: {{ .name }}
+  containerName: {{ $containerName }}
   protocol: nfs
 volumeBindingMode: Immediate
 reclaimPolicy: Retain

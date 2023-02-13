@@ -9,10 +9,12 @@ spec:
     - web
   routes:
   {{- range $.Values.tenants }}
+    {{- $serviceNamespace := printf "%s-%s" $.Values.appName .group }}
+    {{- $serviceName := printf "%s-%s" $.Values.appName .ring }}
   - match: PathPrefix(`/`) && Headers(`X-TenantId`, `{{ .name }}`)
     kind: Rule
     services:
-    - name: {{ $.Values.appName }}-{{ .ring }}
-      namespace: {{ $.Values.appName }}-{{ .group }} 
+    - name: {{ $serviceName }}
+      namespace: {{ $serviceNamespace }}
       port: 80
   {{- end }}

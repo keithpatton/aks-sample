@@ -10,12 +10,13 @@
 {{- end }}
 
 {{- range $group := $groups }}
-  {{- $namespace := (printf "%s-%s" $.Values.appName $group)}}
+  {{- $networkPolicyNamespace := (printf "%s-%s" $.Values.appName $group)}}
+  {{- $networkPolicyName := (printf "%s-%s" $networkPolicyNamespace "-group-isolation")}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ $namespace }}-group-isolation
-  namespace: {{ $namespace }}
+  name: {{ $networkPolicyName }}
+  namespace: {{ $networkPolicyNamespace }}
 spec:
   podSelector: {}
   policyTypes:
@@ -31,7 +32,7 @@ spec:
           name: {{ $.Values.traefikAksNamespace }}
     - namespaceSelector:
         matchLabels:
-          name: {{ $namespace }}                    
+          name: {{ $networkPolicyNamespace }}                    
   egress:
   - {}
 ---

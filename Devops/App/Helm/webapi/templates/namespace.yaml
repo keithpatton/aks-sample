@@ -8,12 +8,12 @@
 {{- end }}
 
 {{- range $groups }}
-  {{- $group := .}}
+  {{- $name := printf "%s-%s" $.Values.appName . }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ $.Values.appName }}-{{ $group }}
+  name: {{ $name }}
   labels:
-    name: {{ $.Values.appName }}-{{ $group }}
+    name: {{ $name }}
 ---
 {{- end }}

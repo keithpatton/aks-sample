@@ -26,7 +26,6 @@
     {{- end }}    
     {{- $deploymentNamespace := printf "%s-%s" $.Values.appName $group }}
     {{- $deploymentName := printf "%s-%s" $.Values.appName $ring }}
-    {{- $serviceName := $deploymentName }}
     {{- $configMapName := $deploymentName }}
   
 apiVersion: apps/v1
@@ -40,13 +39,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      service: {{ $serviceName }}
+      app: {{ $deploymentName }}
   template:
     metadata:
       labels:
         app: {{ $deploymentName }}
         azure.workload.identity/use: "true"
-        service: {{ $serviceName }}
     spec:
       serviceAccountName: {{ $.Values.aksWorkloadIdentityServiceAccountName }}
       containers:

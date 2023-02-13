@@ -17,11 +17,14 @@
   {{- $group := .}}
   {{- range $rings }}
     {{- $ring := .}}
+    {{- $serviceNamespace := printf "%s-%s" $.Values.appName $group }}
+    {{- $serviceName := printf "%s-%s" $.Values.appName $ring }}
+    {{- $appName := $serviceName }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $.Values.appName }}-{{ $ring }}
-  namespace: {{ $.Values.appName }}-{{ $group }}
+  name: {{ $serviceName }}
+  namespace: {{ $serviceNamespace }}
 spec:
   ports:
     - name: web
@@ -29,7 +32,7 @@ spec:
       targetPort: web
       protocol: TCP
   selector:
-    app: {{ $.Values.appName }}-{{ $ring }}
+    app: {{ $appName }}
 ---
   {{- end }}
 {{- end }}

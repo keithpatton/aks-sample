@@ -24,11 +24,13 @@
         {{- $ringVersion = .version }}
       {{- end }}
     {{- end }} 
+    {{- $configMapNamespace := printf "%s-%s" $.Values.appName $group }}
+    {{- $configMapName := printf "%s-%s" $.Values.appName $ring }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $.Values.appName }}-{{ $ring }}
-  namespace: {{ $.Values.appName }}-{{ $group }}
+  name: {{ $configMapName }}
+  namespace: {{ $configMapNamespace }}
 data:
   aks_keyvault: {{ $.Values.kvName }}
   sql_server_name: {{ $.Values.sqlServerName }}
