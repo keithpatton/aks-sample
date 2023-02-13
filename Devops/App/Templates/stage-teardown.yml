@@ -30,7 +30,26 @@ stages:
     vmImage: ubuntu-latest 
   jobs:
 
+ - deployment: Uninstall    
+    displayName: Uninstall App Helm Release
+    environment: ${{ parameters.region }}_${{ parameters.env }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: HelmDeploy@0
+            displayName: 'Uninstall $(appName)'
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: ${{ parameters.svcConnAzureRm}}
+              azureResourceGroup: $(rgName)
+              kubernetesCluster: $(aksName)
+              command: 'uninstall'
+              namespace: $(helmReleaseNamespace)
+              releaseName: $(helmReleaseName)
+              arguments: '--debug'
   - deployment: Infrastructure    
+    dependsOn: Uninstall
     displayName: Destroy App Specific Infra
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
