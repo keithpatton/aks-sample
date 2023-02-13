@@ -42,8 +42,7 @@ stages:
               kubernetesCluster: $(aksName)
               command: 'uninstall'
               namespace: $(helmReleaseNamespace)
-              releaseName: $(helmReleaseName)
-              arguments: '--debug'
+              arguments: '$(helmReleaseName) --debug'
   - deployment: Infrastructure    
     dependsOn: Uninstall
     displayName: Destroy App Specific Infra
