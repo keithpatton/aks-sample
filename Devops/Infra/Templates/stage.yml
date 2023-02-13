@@ -58,7 +58,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
           - template: ../../Common/Templates/tfApplyAzRm.yml
             parameters:
-              svcConnAzureRm: ${{ parameters.svcConnAzureRm }
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
   - deployment: InfrastructureApps    
     displayName: Deploy Shared Infra Apps
