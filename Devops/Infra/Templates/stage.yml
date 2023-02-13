@@ -77,7 +77,7 @@ stages:
                 Devops/Infra/Helm/**/values.yaml
           - template: ../../Common/Templates/helmUpgrade.yml
             parameters:
-              svcConnAzureRm: ${{ parameters.svcConnAzureRm }
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               releaseName: $(traefikReleaseName)
               chartPath: '$(System.DefaultWorkingDirectory)/Devops/Infra/Helm/traefik'    
               namespace: $(traefikAksNamespace)
