@@ -26,7 +26,7 @@ spec:
     - namespaceSelector:
         matchLabels:
           name: default
-          name: traefik
+          name: {{ $.Values.traefikAksNamespace }}
           name: {{ $namespace }}
   egress:
   - {}
