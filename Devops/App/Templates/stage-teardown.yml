@@ -14,14 +14,10 @@ stages:
 - stage: ${{ parameters.region }}_${{ parameters.env }}
   displayName: ${{ parameters.region }}_${{ parameters.env }}
   variables: 
-    - template: ../../Common/Templates/variables/reg-env.yml 
-      parameters:
-        region: ${{ parameters.region }}
-        env: ${{ parameters.env }}  
     - template: variables/reg-env.yml 
       parameters:
         region: ${{ parameters.region }}
-        env: ${{ parameters.env }}  
+        env: ${{ parameters.env }}
   dependsOn: ${{ parameters.dependsOn }}
   pool:
     vmImage: ubuntu-latest 
@@ -53,58 +49,23 @@ stages:
           steps:
           - checkout: self
             clean: true   
-          - template:  ../../Common/Templates/stageTenantsVarStep.yml        
+          - template:  ../../Common/Templates/stampSetVars.yml        
             parameters:
               tenants: ${{ parameters.tenants }}
               region: ${{ parameters.region }}
-              env: ${{ parameters.env }}                   
-          - task: replacetokens@5
-            displayName: 'Replace tokens with variables'
-            inputs:
+              env: ${{ parameters.env }}     
+          - template: ../../Common/Templates/replaceTokens.yml
+            parameters:
               targetFiles: |
-                Devops/App/Terraform/**/variables.tf
-              encoding: 'auto'
-              tokenPattern: 'default'
-              writeBOM: true
-              actionOnMissing: 'warn'
-              keepToken: false
-              actionOnNoFiles: 'warn'
-              enableTransforms: false
-              enableRecursion: false
-              useLegacyPattern: false
-              enableTelemetry: true   
-              verbosity: 'detailed'         
-          - task: AzureCLI@2
-            displayName: 'Ensure Build Agent Sql Access'
-            continueOnError: true
-            inputs:
-              azureSubscription: ${{ parameters.svcConnAzureRm}}
-              addSpnToEnvironment: true
-              scriptType: bash
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                build_agent_ip=$(curl https://ipv4.icanhazip.com/)
-                az sql server firewall-rule create -g $(rgName) --name "$(sqlFirewallRuleBuildAgentName)-pipeline" --server $(sqlServerName) --start-ip-address $build_agent_ip --end-ip-address $build_agent_ip              
-          - task: TerraformTaskV3@3
-            displayName: Terraform Init 
-            inputs:
-              provider: 'azurerm'
-              backendServiceArm: ${{ parameters.svcConnAzureRm}}
-              command: 'init'
+                Devops/App/Terraform/variables.tf              
+          - template: ../../Common/Templates/buildAgentSqlAccess.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+          - template: ../../Common/Templates/tfInitAzRm.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/App/Terraform'
-              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
-              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
-              backendAzureRmContainerName: $(tfStateContainerName)
-              backendAzureRmKey: $(tfStateFileName)
-          - task: TerraformTaskV3@3
-            displayName: Terraform Destroy
-            inputs:
-              provider: 'azurerm'
-              environmentServiceNameAzureRM: ${{ parameters.svcConnAzureRm}}
-              command: 'destroy'
+          - template: ../../Common/Templates/tfDestroyAzRm.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/App/Terraform'
-              commandOptions: '--auto-approve'
-              backendAzureRmResourceGroupName: $(tfStateResourceGroup)
-              backendAzureRmStorageAccountName: $(tfStateStorageAccount)
-              backendAzureRmContainerName: $(tfStateContainerName)
-              backendAzureRmKey: $(tfStateFileName)                              

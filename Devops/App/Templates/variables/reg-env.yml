@@ -7,38 +7,46 @@ parameters:
 - name: env
   displayName: 'Environment'
   type: string
+
 variables:
+
+# common variables
+- template: ../../../Common/Templates/variables/reg-env.yml
+  parameters:
+    region: "${{ parameters.region }}"
+    env: "${{ parameters.env }}"
+    
 - name: aksFederatedIdentityNamePrefix
-  value: 'fic-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)'
+  value: "fic-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)"
 - name: aksNamespacePrefix
-  value: $(appName)-
+  value: "$(appName)-"
 - name: aksWorkloadIdentityNamePrefix
-  value: 'aks-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)'
+  value: "aks-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)"
 - name: aksWorkloadIdentityServiceAccountName
-  value: 'sa-workload-identity-$(appName)'
+  value: "sa-workload-identity-$(appName)"
 - name: aksPvcName
-  value: 'azure-blob'
+  value: "azure-blob"
 - name: aksStorageClassNamePrefix
-  value: '$(appName)-azureblob-nfs-standard-'
+  value: "$(appName)-azureblob-nfs-standard-"
 - name: aksStorageClassSkuName
-  value: 'Standard_ZRS'
+  value: "Standard_ZRS"
 - name: appName
-  value: 'webapi'
+  value: "webapi"
 - name: helmAppVersion
-  value: '1.0.0'  
+  value: "1.0.0"  
 - name: helmChartDescription 
-  value: 'AKS Sample App'
+  value: "AKS Sample App"
 - name: helmChartName
-  value: $(appName) 
+  value: "$(appName)" 
 - name: helmChartVersion
-  value: '0.7.4'
+  value: "0.7.4"
 - name: helmReleaseName
-  value: $(appName)
+  value: "$(appName)"
 - name: helmReleaseNamespace
-  value: $(appName)
+  value: "$(appName)"
 - name: imageName
-  value: '$(appName)'
+  value: "$(appName)"
 - name:  sqlFirewallRuleBuildAgentName
   value: "allow-build-agent" 
 - name: tfStateFileName
-  value: '$(appName).tfstate'
+  value: "$(appName).tfstate"
