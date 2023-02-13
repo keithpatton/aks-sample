@@ -34,6 +34,11 @@ resource "azurerm_kubernetes_cluster" "default" {
     vm_size         = var.aks_vm_size
   }
 
+  network_profile {
+    network_plugin = "azure"
+    network_policy = "calico"
+  }
+
   identity {
     type = "SystemAssigned"
   }

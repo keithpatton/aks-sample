@@ -7,7 +7,7 @@ parameters:
   type: string
 
 variables:
-#- template: root.yml 
+#- template: root.yml # global vars, not yet required
 - template: reg_${{ parameters.region }}.yml 
 - template: env_${{ parameters.env }}.yml  
 - template: reg_${{ parameters.region }}-env_${{ parameters.env }}.yml  
