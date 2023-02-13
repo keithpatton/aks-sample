@@ -71,7 +71,7 @@ stages:
           steps:
           - checkout: self
             clean: true   
-          - template:  ../../Common/Templates/stageTenantsVarStep.yml        
+          - template:  ../../Common/Templates/stampSetVars.yml        
             parameters:
               tenants: ${{ parameters.tenants }}
               rings: ${{ parameters.rings }}
