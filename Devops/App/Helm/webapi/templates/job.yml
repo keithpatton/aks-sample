@@ -21,6 +21,7 @@ spec:
       name: {{ $jobName }}
       namespace: {{ $jobNamespace }}
     spec:
+      serviceAccountName: {{ $.Values.aksWorkloadIdentityServiceAccountName }}
       restartPolicy: Never
       containers:
         {{- range .Values.tenants }}
