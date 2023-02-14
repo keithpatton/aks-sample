@@ -5,25 +5,26 @@
 Provides a working example of :
 
 - Azure Devops YAML Pipelines which 
-    - Build and maintain infrastructure (Terraform)
-    - Handle workload deployments to an AKS Cluster (Helm)
+    - Build and maintain infrastructure 
+    - Handle workload deployments to an AKS Cluster 
 - AKS Workload Identity using the Asp.Net Core Api project template with minor modifications. 
     - Accessing Azure SQL with Managed Identity
     - Accessing Key Vault with Managed Identity
 - Multi-tenancy Aspects
-    - Tenants specified as pipeline parameters (e.g tenant1, tenant2)
+    - Tenants specified as data, allowing for tenatn groups and also deployment rings for specific workload versions
     - Infrastructure Deployment
-      - Azure SQL Database provisioned for each tenant
+      - Azure SQL Database provisioned for each tenant along with appropriate access
     - Application Deployment
       - A Persistent Volume Claim (PVC) automatically creates an NFS mount backed by a blob container for each tenant
       - Support for tenanted Deployment Rings (e.g. tenant1 to stable version and tenant2 gets vnext version)
-    - Application Runtime
-      - Tenant is inferred at runtime 
+    - Application Runtime 
+      - Tenant is inferred at runtime using a custom header
       - Tenanted SQL database access
-      - Tenanted Storage Mount (blob container) written to
+      - Tenanted Storage Mount (blob container) is written to.
       - Key Vault updated with tenanted secret (using tenant suffix)
 - Devops Aspects
     - Demonstates use of templates to share variables with a deployment stamp approach
+    - Demonstrates use of parameter data for tenants, tenant groups and deployment rings to create a dynamic deployment topology
 
 ## Pre-requisites
 - Azure Account (owner of an Azure Subscription)
@@ -48,44 +49,35 @@ All variables are stored in source control:
 - Variables specific to the app pipeline are held in /Devops/App/Templates
 
 A structure is employed to afford deploymen stamp control with region/environment variable combinations:
-- Devops/Common/Templates/env/dev/variables/yml
-- Devops/Common/Templates/region/au1/variables.yml
-- Devops/Common/Templates/region-env/au1-dev/variables.yml
+- Devops/Common/Templates/reg-env.yml - region and environment variables
+- Devops/Common/Templates/env_dev.yml - development environment only variables
+- Devops/Common/Templates/reg_au1-env_dev.yml - au1 region and dev environment specific variables
 
-It is advised only to update the app_name value (keep it under 12 alphanumeric chars) at /Devops/Common/Templates/variables.yml.
+It is advised to update the app_name value (keep it under 12 alphanumeric chars) at /Devops/App/Templates/variables/reg-eng.yml
 
 ## Infrastructure Pipeline
 This pipeline specifies the steps to be taken to ensure the infrastructure for an environment. 
 
-The pipeline is triggered manually and has several parameters:
-
-- region, environment 
-    - Fixed at present, but combined with the variable structure above showcases flexibility for various deployment stamps
-- tenants - Can be altered to add/remove tenants. 
-    - e.g. Each tenant is provisioned with their own database to which the AKS cluster has access
-- apply infra 
-    - Allows for control over whether infra is applied, defaults to true
-
 This pipeline is fully idempotent and needs to be run at least once before the application pipeline. 
-
 
 ## Run Application Pipeline
 The application pipeline does the following:
- - Builds and Publishes Image
- - Deploys to the AKS Cluster
+ - Builds and Publishes Image (Optional)
+ - Ensures App Specific Infrastructure (e.g. Managed Identities and SQL database access)
 
- A trigger will automatically run the pipeline if any chanages are made to the AksWorkloadIdentitySample.Api folder
+Note that the App Specific Infra requires that core Infrastructure pipeline has already run.
 
 ## Verify Application is Working
 - Execute the following to watch for the EXTERNAL_IP value to be published for the pod: ```watch kubectl get services```
-- Browse to the AKS hosted url endpoint, e.g. http://{{EXTERNAL-IP}}/WeatherForecast?tenant=tenant1 
+- Make a request to the AKS hosted url endpoint, e.g. http://{{EXTERNAL-IP}}/WeatherForecast with the X-TenantId header set to a tenant (e.g. tenant1)
+
 - You should receive the forecast data in the browser with '(tenant1 is Changeable)' as part of every summary which is the value that is from Key Vault.
+- The correct app version correspondign to the version assigned in the deployment ring should show
 - This proves the Azure AD Workload Identity is working correctly!
 - Files are also written to Azure Blob Containers which you can find within the dynamically provsioned azure storage account within the Kubernetes resource group
 - A table called 'example_table' is created if necessary for tenant1
 - You can also then change the tenant to say 'tenant2' to validate the request for a different tenant
-- (Note: Tenant would be inferred via domain and custom header or JWT token in production, TODO!)
-
+- (Note: Tenant would be inferred via domain and custom header or JWT token in production)
 
 ## Running Locally (TBC)
 

@@ -52,13 +52,14 @@ namespace AksWorkloadIdentitySample.Api.Controllers
             command.ExecuteNonQuery();
 
             var appVersion = IsInAks() ? Environment.GetEnvironmentVariable("app_version") : "0.0.1";
+            var tenantGroup = IsInAks() ? Environment.GetEnvironmentVariable("tenant_group") : "local";
 
             // return result
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = $"{Summaries[Random.Shared.Next(Summaries.Length)]} - {secret?.Value} - {appVersion}"
+                Summary = $"{Summaries[Random.Shared.Next(Summaries.Length)]} - {secret?.Value} - {tenantGroup} - {appVersion}"
             })
             .ToArray();
         }
