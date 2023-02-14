@@ -1,8 +1,8 @@
-# job run for each tenant before install/upgrade
+# job run before install/upgrade
 
-{{- range .Values.tenants }}
-  {{- $tenant := .name }}
-  {{- $jobName := printf "%s-job" $tenant }}
+{{- $jobName := printf "%s-%s" $.Values.appName "init-job"}}
+# helmReleaseNamespace should be used, job is not specific to tenant
+{{- $jobNamespace := $.Values.appName }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -13,19 +13,23 @@ metadata:
     "helm.sh/hook-weight": "-1"
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
+  parallelism: {{ .Values.tenants | length }}
+  completions: {{ .Values.tenants | length }}
   template:
     metadata:
       name: {{ $jobName }}
+      namespace: {{ $jobNamespace }}
     spec:
       restartPolicy: Never
       containers:
-      - name: db-migrations
+        {{- range .Values.tenants }}
+      - name: "{{ .name }}-init-job"
         image: {{ $.Values.acrName }}.azurecr.io/{{ $.Values.jobInitImageName }}:{{ $.Values.jobInitImageVersion}}
         imagePullPolicy: Always
         env:
         - name: TENANT
-          value: "{{ $tenant }}"
+          value: "{{ .name }}"
         - name: WAIT_FOR
           value: "{{ $.Values.jobInitWaitFor }}"
+        {{- end }}
 ---
-{{- end }}
