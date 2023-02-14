@@ -115,7 +115,7 @@ resource "mssql_user" "aks" {
 }
 
 ### Azure SQL Server DB User for app jobs managed identity
-resource "mssql_user" "aks" {
+resource "mssql_user" "aks-jobs" {
   for_each =  {for tenant in var.tenants:  tenant.name => tenant}
   server {
     host = data.azurerm_mssql_server.sql.fully_qualified_domain_name
