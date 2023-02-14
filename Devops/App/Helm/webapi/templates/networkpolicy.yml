@@ -11,7 +11,7 @@
 
 {{- range $group := $groups }}
   {{- $networkPolicyNamespace := (printf "%s-%s" $.Values.appName $group)}}
-  {{- $networkPolicyName := (printf "%s-%s" $networkPolicyNamespace "-group-isolation")}}
+  {{- $networkPolicyName := (printf "%s-%s" $networkPolicyNamespace "group-isolation")}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
