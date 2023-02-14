@@ -1,7 +1,7 @@
 # job run before install/upgrade
 
 {{- $jobName := printf "%s-%s" $.Values.appName "init-job"}}
-{{- $jobNamespace := printf "%s-%s" $.Values.appName $.Values.jobsAksNamespaceSuffix) }}
+{{- $jobNamespace := printf "%s-%s" $.Values.appName $.Values.jobsAksNamespaceSuffix }}
 apiVersion: batch/v1
 kind: Job
 metadata:
