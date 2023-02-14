@@ -24,8 +24,8 @@ spec:
         imagePullPolicy: Always
         env:
         - name: TENANT
-          value: {{ $tenant }}
+          value: "{{ $tenant }}"
         - name: WAIT_FOR
-          value: {{ $.Values.jobInitWaitFor }}        
+          value: "{{ $.Values.jobInitWaitFor }}"
 ---
 {{- end }}
