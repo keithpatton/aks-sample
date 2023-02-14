@@ -25,10 +25,10 @@ variable "aks_name" {
   default     = "#{aksName}#"
 }
 
-variable "aks_namespace_prefix" { 
-  description = "The namespace prefix to be used on AKS. Tenant Group added dynamically from Tenants List"
+variable "aks_namespace_default" { 
+  description = "The app's default namespace to be used on AKS."
   type        = string
-  default     = "#{aksNamespacePrefix}#"
+  default     = "#{aksNamespaceDefault}#"
 }
 
 variable "aks_workload_identity_name_prefix" { 

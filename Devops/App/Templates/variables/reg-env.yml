@@ -20,6 +20,8 @@ variables:
   value: "fic-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)"
 - name: aksNamespacePrefix
   value: "$(appName)-"
+- name: aksNamespaceDefault
+  value: "$(appName)"  
 - name: aksWorkloadIdentityNamePrefix
   value: "aks-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)"
 - name: aksWorkloadIdentityNameDefaultSuffix
