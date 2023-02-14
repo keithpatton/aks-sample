@@ -30,7 +30,7 @@ spec:
         env:
         - name: TENANT
           value: "{{ .name }}"
-        - name: WAIT_FOR
-          value: "{{ $.Values.jobInitWaitFor }}"
+        - name: SQL_SERVER_NAME
+          value: "{{ $.Values.sqlServerName }}"          
         {{- end }}
 ---

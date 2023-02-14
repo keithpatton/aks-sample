@@ -10,7 +10,7 @@ appName: #{appName}#
 imageName: #{imageName}#
 jobInitImageName: #{jobInitImageName}#
 jobInitImageVersion: #{jobInitImageVersion}#
-jobInitWaitFor: #{jobInitWaitFor}#
+
 kvName: #{kvName}#
 rings: #{ringsJson}#
 sqlServerName: #{sqlServerName}#
