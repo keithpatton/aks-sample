@@ -121,8 +121,8 @@ stages:
           - template: ../../Common/Templates/replaceTokens.yml
             parameters:
               targetFiles: |
-                Devops/App/Helm/**/Chart.yml
-                Devops/App/Helm/**/values.yml            
+                Devops/App/Helm/**/Chart.yaml
+                Devops/App/Helm/**/values.yaml            
           - template: ../../Common/Templates/helmUpgrade.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
