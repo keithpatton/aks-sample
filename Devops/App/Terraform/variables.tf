@@ -43,22 +43,16 @@ variable "aks_federated_identity_name_prefix" {
   default     = "#{aksFederatedIdentityNamePrefix}#"
 }
 
-variable "aks_workload_identity_jobs" { 
-  description = "The name of the service account to set on AKS."
-  type        = string
-  default     = "#{aksWorkloadIdentityServiceAccountName}#"
-}
-
 variable "aks_workload_identity_service_account_name" { 
   description = "The name of the service account to set on AKS."
   type        = string
   default     = "#{aksWorkloadIdentityServiceAccountName}#"
 }
 
-variable "jobs_aks_namespace_suffix" { 
-  description = "The namespace suffix to be used on AKS for app jobs"
+variable "aks_workload_identity_name_default_suffix" { 
+  description = "The namespace suffix to be used on AKS for app levelwork (e.g. jobs)"
   type        = string
-  default     = "#{jobsAksNamespaceSuffix}#"
+  default     = "#{aksWorkloadIdentityNameDefaultSuffix}#"
 }
 
 variable "kv_name" { 

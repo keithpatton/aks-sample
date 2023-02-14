@@ -22,6 +22,8 @@ variables:
   value: "$(appName)-"
 - name: aksWorkloadIdentityNamePrefix
   value: "aks-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)"
+- name: aksWorkloadIdentityNameDefaultSuffix
+  value: "default"  
 - name: aksWorkloadIdentityServiceAccountName
   value: "sa-workload-identity-$(appName)"
 - name: aksPvcName
@@ -51,9 +53,7 @@ variables:
 - name: jobInitImageVersion
   value: "1.0.0"
 - name: jobInitWaitFor
-  value: "10000" 
-- name: jobsAksNamespaceSuffix
-  value: "jobs"     
+  value: "10000"   
 - name:  sqlFirewallRuleBuildAgentName
   value: "allow-build-agent" 
 - name: tfStateFileName

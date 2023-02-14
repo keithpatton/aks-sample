@@ -3,6 +3,7 @@ acrName: #{acrName}#
 aksPvcName: #{aksPvcName}#
 aksManagedIdentities: #{aksManagedIdentities}#
 aksWorkloadIdentityServiceAccountName: #{aksWorkloadIdentityServiceAccountName}#
+aksWorkloadIdentityNameDefaultSuffix: #{aksWorkloadIdentityNameDefaultSuffix}#
 aksStorageClassNamePrefix: #{aksStorageClassNamePrefix}#
 aksStorageClassSkuName: #{aksStorageClassSkuName}#
 appName: #{appName}#
@@ -10,7 +11,6 @@ imageName: #{imageName}#
 jobInitImageName: #{jobInitImageName}#
 jobInitImageVersion: #{jobInitImageVersion}#
 jobInitWaitFor: #{jobInitWaitFor}#
-jobsAksNamespaceSuffix: #{jobsAksNamespaceSuffix}#
 kvName: #{kvName}#
 rings: #{ringsJson}#
 sqlServerName: #{sqlServerName}#

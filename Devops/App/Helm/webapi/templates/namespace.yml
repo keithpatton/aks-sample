@@ -17,14 +17,3 @@ metadata:
     name: {{ $name }}
 ---
 {{- end }}
-
-# namespace for app jobs
-
-{{- $name := printf "%s-%s" $.Values.appName $.Values.jobsAksNamespaceSuffix }}
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ $name }}
-  labels:
-    name: {{ $name }}
----

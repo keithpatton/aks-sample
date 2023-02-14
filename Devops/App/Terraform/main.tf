@@ -35,8 +35,8 @@ data "http" "myip" {
 ### Locals
 
 locals {
-  # identity for all tenant groups and app jobs
-  identity_names = concat(distinct( [for t in var.tenants: t.group]), [var.jobs_aks_namespace_suffix])
+  # identity for all tenant groups and app level
+  identity_names = concat(distinct( [for t in var.tenants: t.group]), [var.aks_workload_identity_name_default_suffix])
 }
 
 # AKS Workload Identities
@@ -114,8 +114,8 @@ resource "mssql_user" "aks" {
   depends_on = [ azurerm_mssql_database.default, azurerm_user_assigned_identity.aks ]
 }
 
-### Azure SQL Server DB User for app jobs managed identity
-resource "mssql_user" "aks-jobs" {
+### Azure SQL Server DB User for app default managed identity
+resource "mssql_user" "aks-default" {
   for_each =  {for tenant in var.tenants:  tenant.name => tenant}
   server {
     host = data.azurerm_mssql_server.sql.fully_qualified_domain_name
@@ -126,8 +126,8 @@ resource "mssql_user" "aks-jobs" {
   }
 
   database  = each.value.name
-  username  = lookup(azurerm_user_assigned_identity.aks[var.jobs_aks_namespace_suffix], "name")
-  object_id = lookup(azurerm_user_assigned_identity.aks[var.jobs_aks_namespace_suffix], "client_id")
+  username  = lookup(azurerm_user_assigned_identity.aks[var.aks_workload_identity_name_default_suffix], "name")
+  object_id = lookup(azurerm_user_assigned_identity.aks[var.aks_workload_identity_name_default_suffix], "client_id")
   roles     = ["db_owner"]
 
   depends_on = [ azurerm_mssql_database.default, azurerm_user_assigned_identity.aks ]
