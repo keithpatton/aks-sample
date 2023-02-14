@@ -36,11 +36,11 @@ parameters:
 
 
 - name: imageBuild
-  displayName: 'Build and Push Image'
+  displayName: 'Build and Push Images'
   type: boolean
   default: true
 - name: imageBuildTag
-  displayName: 'Image Build Tag'
+  displayName: 'App Image Build Tag'
   type: string
   default: "0.3.0"
 - name: apply

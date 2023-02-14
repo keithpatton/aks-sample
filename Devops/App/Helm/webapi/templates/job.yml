@@ -22,10 +22,10 @@ spec:
       - name: db-migrations
         image: {{ $.Values.acrName }}.azurecr.io/{{ $.Values.jobInitImageName }}:{{ $.Values.jobInitImageVersion}}
         imagePullPolicy: Always
-      env:
-      - name: TENANT
-        value: {{ $tenant }}
-      - name: WAIT_FOR
-        value: {{ $.Values.jobInitWaitFor }}        
+        env:
+        - name: TENANT
+          value: {{ $tenant }}
+        - name: WAIT_FOR
+          value: {{ $.Values.jobInitWaitFor }}        
 ---
 {{- end }}
