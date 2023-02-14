@@ -1,4 +1,5 @@
 acrName: #{acrName}#
+
 aksPvcName: #{aksPvcName}#
 aksManagedIdentities: #{aksManagedIdentities}#
 aksWorkloadIdentityServiceAccountName: #{aksWorkloadIdentityServiceAccountName}#
@@ -9,6 +10,7 @@ imageName: #{imageName}#
 jobInitImageName: #{jobInitImageName}#
 jobInitImageVersion: #{jobInitImageVersion}#
 jobInitWaitFor: #{jobInitWaitFor}#
+jobsAksNamespaceSuffix: #{jobsAksNamespaceSuffix}#
 kvName: #{kvName}#
 rings: #{ringsJson}#
 sqlServerName: #{sqlServerName}#

@@ -1,11 +1,12 @@
 # job run before install/upgrade
 
 {{- $jobName := printf "%s-%s" $.Values.appName "init-job"}}
-{{- $jobNamespace := $.Release.Namespace }}
+{{- $jobNamespace := printf "%s-%s" $.Release.Namespace "jobs"  $.Release.Namespace }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ $jobName }}
+  namespace: {{ $jobNamespace }}
   labels:
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade

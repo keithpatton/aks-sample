@@ -35,20 +35,21 @@ data "http" "myip" {
 ### Locals
 
 locals {
-  tenant_groups = distinct( [for t in var.tenants: t.group] )
+  # identity for all tenant groups and app jobs
+  identity_names = concat(distinct( [for t in var.tenants: t.group], [var.jobs_aks_namespace_suffix]) )
 }
 
-# AKS Workload Identity, one per tenant group
+# AKS Workload Identities
 
 resource "azurerm_user_assigned_identity" "aks" {
-  for_each =  {for group in local.tenant_groups: group => group}
+  for_each =  {for name in local.identity_names: name => name}
   location            = var.location
   name                = "${var.aks_workload_identity_name_prefix}${each.value}"
   resource_group_name = var.rg_name
 }
 
 resource "azurerm_federated_identity_credential" "aks" {
-  for_each =  {for group in local.tenant_groups: group => group}
+  for_each =  {for name in local.identity_names: name => name}
   name                  = "${var.aks_federated_identity_name_prefix}${each.value}"
   resource_group_name   = var.rg_name
   parent_id             = lookup(azurerm_user_assigned_identity.aks[each.value], "id")
@@ -57,10 +58,10 @@ resource "azurerm_federated_identity_credential" "aks" {
   subject               = "system:serviceaccount:${var.aks_namespace_prefix}${each.value}:${var.aks_workload_identity_service_account_name}"
 }
 
-### Key Vault Access Policy, one per tenant group
+### Key Vault Access Policies for each Managed Identity
 
 resource "azurerm_key_vault_access_policy" "aks" {
-  for_each =  {for group in local.tenant_groups: group => group}
+  for_each =  {for name in local.identity_names: name => name}
   key_vault_id = data.azurerm_key_vault.kv.id
 
   tenant_id = data.azurerm_client_config.current.tenant_id
@@ -108,6 +109,25 @@ resource "mssql_user" "aks" {
   database  = each.value.name
   username  = lookup(azurerm_user_assigned_identity.aks[each.value.group], "name")
   object_id = lookup(azurerm_user_assigned_identity.aks[each.value.group], "client_id")
+  roles     = ["db_owner"]
+
+  depends_on = [ azurerm_mssql_database.default, azurerm_user_assigned_identity.aks ]
+}
+
+### Azure SQL Server DB User for app jobs managed identity
+resource "mssql_user" "aks" {
+  for_each =  {for tenant in var.tenants:  tenant.name => tenant}
+  server {
+    host = data.azurerm_mssql_server.sql.fully_qualified_domain_name
+    login {
+      username = var.sql_admin_username
+      password = data.azurerm_key_vault_secret.sql.value
+    }
+  }
+
+  database  = each.value.name
+  username  = lookup(azurerm_user_assigned_identity.aks[var.jobs_aks_namespace_suffix], "name")
+  object_id = lookup(azurerm_user_assigned_identity.aks[var.jobs_aks_namespace_suffix], "client_id")
   roles     = ["db_owner"]
 
   depends_on = [ azurerm_mssql_database.default, azurerm_user_assigned_identity.aks ]

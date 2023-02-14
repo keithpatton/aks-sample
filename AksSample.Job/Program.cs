@@ -4,6 +4,9 @@
     {
         static void Main(string[] args)
         {
+            // a potentially long-running job for a tenant
+            // e.g. db migration
+
             var tenant = Environment.GetEnvironmentVariable("TENANT");
             var waitFor = Environment.GetEnvironmentVariable("WAIT_FOR");
             Console.WriteLine($"Running job for {tenant}, waiting for {waitFor}ms");

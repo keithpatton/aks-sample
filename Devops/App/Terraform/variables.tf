@@ -26,7 +26,7 @@ variable "aks_name" {
 }
 
 variable "aks_namespace_prefix" { 
-  description = "The namespace prefix to be set on AKS. Tenant Group added dynamically from Tenants List"
+  description = "The namespace prefix to be used on AKS. Tenant Group added dynamically from Tenants List"
   type        = string
   default     = "#{aksNamespacePrefix}#"
 }
@@ -43,10 +43,22 @@ variable "aks_federated_identity_name_prefix" {
   default     = "#{aksFederatedIdentityNamePrefix}#"
 }
 
+variable "aks_workload_identity_jobs" { 
+  description = "The name of the service account to set on AKS."
+  type        = string
+  default     = "#{aksWorkloadIdentityServiceAccountName}#"
+}
+
 variable "aks_workload_identity_service_account_name" { 
   description = "The name of the service account to set on AKS."
   type        = string
   default     = "#{aksWorkloadIdentityServiceAccountName}#"
+}
+
+variable "jobs_aks_namespace_suffix" { 
+  description = "The namespace suffix to be used on AKS for app jobs"
+  type        = string
+  default     = "#{jobsAksNamespaceSuffix}#"
 }
 
 variable "kv_name" { 
