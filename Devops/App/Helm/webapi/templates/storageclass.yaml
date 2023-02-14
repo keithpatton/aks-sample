@@ -11,6 +11,7 @@ parameters:
   containerName: common
   protocol: nfs
 volumeBindingMode: Immediate
+reclaimPolicy: Retain
 allowVolumeExpansion: true
 ---
 # tenanted storage class containers for each tenant for app
