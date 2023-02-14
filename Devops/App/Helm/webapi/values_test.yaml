@@ -6,6 +6,9 @@ aksStorageClassNamePrefix: webapi-azureblob-nfs-standard-
 aksStorageClassSkuName: Standard_ZRS
 appName: webapi
 imageName: webapi
+jobInitImageName: "webapi-init-job"
+jobInitImageVersion: "1.0.0"
+jobInitWaitFor: "10000"
 kvName: kv-au1-dev-01
 rings: [
   {

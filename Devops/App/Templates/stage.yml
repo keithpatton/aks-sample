@@ -31,7 +31,7 @@ stages:
     vmImage: ubuntu-latest 
   jobs:
   - deployment: Image
-    displayName: Build and Push Image
+    displayName: Build and Push Images
     condition: and(succeeded(), eq('${{ parameters.imageBuild }}', 'true'))
     # for security reasons all environments must be provisioned by authorised person in advance
     environment: ${{ parameters.region }}_${{ parameters.env }}
@@ -42,23 +42,35 @@ stages:
           - checkout: self
             clean: true   
           - task: Docker@2
-            displayName: Build Image
+            displayName: Build App Image
             inputs:
               command: build
               repository: $(imageName)
               dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
               buildContext: '$(Build.SourcesDirectory)'
               tags: ${{ parameters.imageBuildTag }}
+          - task: Docker@2
+            displayName: Build Job Init Image
+            inputs:
+              command: build
+              repository: "$(jobInitImageName)"
+              dockerfile: '$(Build.SourcesDirectory)/AksSample.Job/Dockerfile'
+              buildContext: '$(Build.SourcesDirectory)'
+              tags: $(jobInitImageVersion)
           - task: AzureCLI@2
-            displayName: 'Push Image'
+            displayName: 'Push Images'
             inputs:
               azureSubscription: ${{ parameters.svcConnAzureRm}}
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
                 az acr login --name $(acrName)
+                # push app image
                 docker tag $(imageName):${{ parameters.imageBuildTag }} $(acrName).azurecr.io/$(imageName):${{ parameters.imageBuildTag }}
-                docker push $(acrName).azurecr.io/$(imageName):${{ parameters.imageBuildTag }}
+                docker push $(acrName).azurecr.io/$(imageName):${{ parameters.imageBuildTag }}  
+                # push job init
+                docker tag $(jobInitImageName):$(jobInitImageVersion) $(acrName).azurecr.io/$(jobInitImageName):$(jobInitImageVersion)
+                docker push $(acrName).azurecr.io/$(jobInitImageName):$(jobInitImageVersion)                                    
 
   - deployment: Infrastructure    
     dependsOn: Image

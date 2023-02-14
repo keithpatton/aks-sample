@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AksWorkloadIdentitySample.Api", "AksWorkloadIdentitySample.Api\AksWorkloadIdentitySample.Api.csproj", "{070B3727-74E5-4B31-825B-6035EA0AD8DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AksSample.Job", "AksSample.Job\AksSample.Job.csproj", "{8F9EED45-B1AD-4EF9-B9FE-0482EAA31B20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{070B3727-74E5-4B31-825B-6035EA0AD8DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{070B3727-74E5-4B31-825B-6035EA0AD8DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{070B3727-74E5-4B31-825B-6035EA0AD8DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F9EED45-B1AD-4EF9-B9FE-0482EAA31B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F9EED45-B1AD-4EF9-B9FE-0482EAA31B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F9EED45-B1AD-4EF9-B9FE-0482EAA31B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F9EED45-B1AD-4EF9-B9FE-0482EAA31B20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

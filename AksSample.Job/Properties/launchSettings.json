@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "AksSample.Job": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "TENANT": "tenant1",
+        "WAIT_FOR": "10000"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "environmentVariables": {
+        "TENANT": "tenant1",
+        "WAIT_FOR": "10000"
+      }
+    }
+  }
+}

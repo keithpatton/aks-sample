@@ -46,6 +46,12 @@ variables:
   value: "$(appName)"
 - name: imageName
   value: "$(appName)"
+- name: jobInitImageName
+  value: "$(appName)-init-job"
+- name: jobInitImageVersion
+  value: "1.0.0"
+- name: jobInitWaitFor
+  value: "10000"    
 - name:  sqlFirewallRuleBuildAgentName
   value: "allow-build-agent" 
 - name: tfStateFileName
