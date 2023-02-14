@@ -1,8 +1,7 @@
 # job run before install/upgrade
 
 {{- $jobName := printf "%s-%s" $.Values.appName "init-job"}}
-# helmReleaseNamespace should be used, job is not specific to tenant
-{{- $jobNamespace := $.Values.appName }}
+{{- $jobNamespace := $.Release.Namespace }}
 apiVersion: batch/v1
 kind: Job
 metadata:
