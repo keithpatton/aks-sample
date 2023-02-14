@@ -36,7 +36,7 @@ data "http" "myip" {
 
 locals {
   # identity for all tenant groups and app jobs
-  identity_names = concat(distinct( [for t in var.tenants: t.group], [var.jobs_aks_namespace_suffix]) )
+  identity_names = concat(distinct( [for t in var.tenants: t.group]), [var.jobs_aks_namespace_suffix])
 }
 
 # AKS Workload Identities
