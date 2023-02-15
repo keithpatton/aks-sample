@@ -35,9 +35,11 @@ metadata:
   namespace: {{ $deploymentNamespace }}
   labels:
     app: {{ $deploymentName }}
+    group: {{ $group }}
+    ring: {{ $ring }}    
     {{- range $.Values.tenants }}
       {{- if and (eq $ring .ring) (eq $group .group)  }}
-    tenant: {{ .name }}
+    tenant-{{ .name }}: {{ .name }}
       {{- end }}
     {{- end }}
 spec:
@@ -50,9 +52,11 @@ spec:
       labels:
         app: {{ $deploymentName }}
         azure.workload.identity/use: "true"
+        group: {{ $group }}
+        ring: {{ $ring }}
         {{- range $.Values.tenants }}
           {{- if and (eq $ring .ring) (eq $group .group)  }}
-        tenant: {{ .name }}
+        tenant-{{ .name }}: {{ .name }}
           {{- end }}
         {{- end }}        
     spec:

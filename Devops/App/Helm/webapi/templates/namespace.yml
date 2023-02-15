@@ -16,9 +16,10 @@ metadata:
   name: {{ $name }}
   labels:
     name: {{ $name }}
+    group: {{ $group }}
     {{- range $.Values.tenants }}
       {{- if eq $group .group  }}
-    tenant: {{ .name }}
+    tenant-{{ .name }}: {{ .name }}
       {{- end }}
     {{- end }}    
 ---

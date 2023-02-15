@@ -8,6 +8,7 @@
 
 # pvc per namespaced tenant group for common storage
 {{- range $groups }}
+  {{- $group := .}}
   {{- $pvcName := $.Values.aksPvcName}}
   {{- $pvcNamespace := printf "%s-%s" $.Values.appName . }}
   {{- $storageClassName := printf "%s%s" $.Values.aksStorageClassNamePrefix "common" }}
@@ -16,6 +17,14 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ $pvcName }}
   namespace: {{ $pvcNamespace }}
+  labels:
+    name: {{ $pvcName }}
+    group: {{ . }}
+    {{- range $.Values.tenants }}
+      {{- if (eq $group .group)  }}
+    tenant-{{ .name }}: {{ .name }}
+      {{- end }}
+    {{- end }}        
 spec:
   accessModes:
   - ReadWriteOnce
@@ -38,7 +47,8 @@ metadata:
   namespace: {{ $pvcNamespace }}
   labels:
     name: {{ $pvcName }}
-    tenant: {{ .name }}
+    group: {{ .group }}
+    tenant-{{ .name }}: {{ .name }}
 spec:
   accessModes:
   - ReadWriteOnce

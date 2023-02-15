@@ -11,7 +11,7 @@ metadata:
   labels:
     name: {{ $jobName }}
     {{- range $.Values.tenants }}
-    tenant: {{ .name }}
+    tenant-{{ .name }}: {{ .name }}
     {{- end }}     
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
@@ -26,7 +26,7 @@ spec:
         name: {{ $jobName }}
         azure.workload.identity/use: "true"
         {{- range $.Values.tenants }}
-        tenant: {{ .name }}
+        tenant-{{ .name }}: {{ .name }}
         {{- end }}             
     spec:
       serviceAccountName: {{ $.Values.aksWorkloadIdentityServiceAccountName }}

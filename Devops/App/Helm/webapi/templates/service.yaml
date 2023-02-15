@@ -27,9 +27,11 @@ metadata:
   namespace: {{ $serviceNamespace }}
   labels:
     name: {{ $serviceName }}
+    group: {{ $group }}
+    ring: {{ $ring }}
     {{- range $.Values.tenants }}
       {{- if and (eq $ring .ring) (eq $group .group)  }}
-    tenant: {{ .name }}
+    tenant-{{ .name }}: {{ .name }}
       {{- end }}
     {{- end }}    
 spec:

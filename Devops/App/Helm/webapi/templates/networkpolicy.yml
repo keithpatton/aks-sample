@@ -19,9 +19,10 @@ metadata:
   namespace: {{ $networkPolicyNamespace }}
   labels:
     name: {{ $networkPolicyName }}
+    group: {{ $group }}
     {{- range $.Values.tenants }}
       {{- if (eq $group .group)  }}
-    tenant: {{ .name }}
+    tenant-{{ .name }}: {{ .name }}
       {{- end }}
     {{- end }}    
 spec:

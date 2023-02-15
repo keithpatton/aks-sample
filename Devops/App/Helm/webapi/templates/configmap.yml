@@ -33,9 +33,11 @@ metadata:
   namespace: {{ $configMapNamespace }}
   labels:
     name: {{ $configMapName }}
+    group: {{ $group }}
+    ring: {{ $ring }}
     {{- range $.Values.tenants }}
       {{- if and (eq $ring .ring) (eq $group .group)  }}
-    tenant: {{ .name }}
+    tenant-{{ .name }}: {{ .name }}
       {{- end }}
     {{- end }}  
 data:
