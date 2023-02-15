@@ -55,12 +55,8 @@ resource "azurerm_federated_identity_credential" "aks" {
   parent_id             = lookup(azurerm_user_assigned_identity.aks[each.value], "id")
   audience              = ["api://AzureADTokenExchange"]
   issuer                = data.azurerm_kubernetes_cluster.aks.oidc_issuer_url
-  subject               = <<EOF
-  ${each.value == var.aks_workload_identity_name_default_suffix ? 
-  "system:serviceaccount:${var.aks_namespace_default}:${var.aks_workload_identity_service_account_name}" : 
-  "system:serviceaccount:${var.aks_namespace_default}-${each.value}:${var.aks_workload_identity_service_account_name}"
-  }
-  EOF
+  subject = "${each.value == var.aks_workload_identity_name_default_suffix ? "system:serviceaccount:${var.aks_namespace_default}:${var.aks_workload_identity_service_account_name}" : "system:serviceaccount:${var.aks_namespace_default}-${each.value}:${var.aks_workload_identity_service_account_name}"}"
+
 }
 
 ### Key Vault Access Policies for each Managed Identity
