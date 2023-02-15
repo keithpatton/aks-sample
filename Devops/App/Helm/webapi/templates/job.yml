@@ -20,6 +20,9 @@ spec:
     metadata:
       name: {{ $jobName }}
       namespace: {{ $jobNamespace }}
+      labels:
+        name: {{ $jobName }}
+        azure.workload.identity/use: "true"      
     spec:
       serviceAccountName: {{ $.Values.aksWorkloadIdentityServiceAccountName }}
       restartPolicy: Never
