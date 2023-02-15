@@ -56,5 +56,11 @@ variables:
   value: "1.0.2"
 - name:  sqlFirewallRuleBuildAgentName
   value: "allow-build-agent" 
+- name: sqlDbSkuName
+  value: "Basic"
+- name: sqlDbLicenseType
+  value: "LicenseIncluded"
+- name: sqlDbStorageAccountType
+  value: "Local"
 - name: tfStateFileName
   value: "$(appName).tfstate"

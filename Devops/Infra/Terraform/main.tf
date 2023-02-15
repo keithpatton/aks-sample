@@ -127,26 +127,6 @@ resource "azurerm_mssql_server" "default" {
   }
 }
 
-resource "azurerm_mssql_elasticpool" "default" {
-  name                = var.sql_elasticpool_name
-  resource_group_name = azurerm_resource_group.default.name
-  location            = azurerm_resource_group.default.location
-  server_name         = azurerm_mssql_server.default.name
-  license_type        = "LicenseIncluded"
-  max_size_gb         = 5
-
-  sku {
-    name     = var.sql_elasticpool_sku_name
-    tier     = var.sql_elasticpool_sku_tier
-    family   = var.sql_elasticpool_sku_family
-    capacity = var.sql_elasticpool_sku_capacity
-  }
-
-  per_database_settings {
-    min_capacity = 0.25
-    max_capacity = 2
-  }
-}
 resource "azurerm_private_endpoint" "sql" {
   name                           = var.sql_private_endpoint_name
   location                       = azurerm_resource_group.default.location

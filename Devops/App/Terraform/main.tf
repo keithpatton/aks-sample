@@ -12,12 +12,6 @@ data "azurerm_mssql_server" "sql" {
   resource_group_name = var.rg_name
 }
 
-data "azurerm_mssql_elasticpool" "sql" {
-  name                = var.sql_elasticpool_name
-  resource_group_name = var.rg_name
-  server_name         = var.sql_server_name
-}
-
 data "azurerm_key_vault" "kv" {
   name                = var.kv_name
   resource_group_name = var.rg_name
@@ -90,7 +84,11 @@ resource "azurerm_mssql_database" "default" {
   for_each =  {for tenant in var.tenants:  tenant.name => tenant}
   name                = each.value.name
   server_id           = data.azurerm_mssql_server.sql.id
-  elastic_pool_id     = data.azurerm_mssql_elasticpool.sql.id
+  
+  max_size_gb          = 2
+  license_type         = var.sql_db_license_type
+  sku_name             = var.sql_db_sku_name
+  storage_account_type = var.sql_db_storage_account_type
 
   depends_on = [ azurerm_mssql_firewall_rule.default ]
 }

@@ -22,8 +22,6 @@ variables:
   value: 'kv-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)'
 - name: sqlAdminUsername
   value: "sql-admin"
-- name: sqlElasticPoolName
-  value: "elp-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)"
 - name: sqlServerName
   value: 'sql-${{ parameters.region }}-${{ parameters.env }}-$(uniqueSuffix)'
 

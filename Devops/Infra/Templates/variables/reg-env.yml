@@ -24,14 +24,6 @@ variables:
   value: "aks-vnet-20115861"
 
 # azure sql
-- name: sqlElasticPoolSkuName
-  value: "GP_Gen5"
-- name: sqlElasticPoolSkuTier
-  value: "GeneralPurpose"
-- name: sqlElasticPoolSkuFamily
-  value: "Gen5"
-- name: sqlElasticPoolSkuCapacity
-  value: 2
 - name: sqlAdAdminUsername
   value: "keith.d.patton@vista.co"
 - name: sqlAdAdminObjectId

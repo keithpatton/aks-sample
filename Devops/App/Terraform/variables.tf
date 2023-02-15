@@ -61,10 +61,22 @@ variable "kv_name" {
   default     = "#{kvName}#"
 }
 
-variable "sql_elasticpool_name" { 
-  description = "The name of the Azure SQL Elastic Pool."
+variable "sql_db_license_type" { 
+  description = "The license type of the SQL DB"
   type        = string
-  default     = "#{sqlElasticPoolName}#"
+  default     = "#{sqlDbLicenseType}#"
+}
+
+variable "sql_db_sku_name" { 
+  description = "The sku name of the SQL DB"
+  type        = string
+  default     = "#{sqlDbSkuName}#"
+}
+
+variable "sql_db_storage_account_type" { 
+  description = "The storage account type for the SQL DB"
+  type        = string
+  default     = "#{sqlDbStorageAccountType}#"
 }
 
 variable "sql_admin_username" { 
