@@ -28,7 +28,7 @@ metadata:
   labels:
     name: {{ $serviceName }}
     {{- range $.Values.tenants }}
-      {{- if (eq $group .group)  }}
+      {{- if and (eq $ring .ring) (eq $group .group)  }}
     tenant: {{ .name }}
       {{- end }}
     {{- end }}    
