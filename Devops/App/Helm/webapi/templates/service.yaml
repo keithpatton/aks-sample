@@ -25,6 +25,13 @@ kind: Service
 metadata:
   name: {{ $serviceName }}
   namespace: {{ $serviceNamespace }}
+  labels:
+    name: {{ $serviceName }}
+    {{- range $.Values.tenants }}
+      {{- if (eq $group .group)  }}
+    tenant: {{ .name }}
+      {{- end }}
+    {{- end }}    
 spec:
   ports:
     - name: web

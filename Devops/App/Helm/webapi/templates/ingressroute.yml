@@ -4,6 +4,11 @@ kind: IngressRoute
 metadata:
   name: {{ $.Values.appName }}
   namespace: {{ $.Values.traefikAksNamespace }}
+  labels:
+    name: {{ $.Values.appName }}
+    {{- range $.Values.tenants }}
+    tenant: {{ .name }}
+    {{- end }}       
 spec:
   entryPoints:
     - web

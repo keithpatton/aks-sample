@@ -22,6 +22,9 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: {{ $storageClassName }}
+  labels:
+    name: {{ $storageClassName }}
+    tenant: {{ .name }}   
 provisioner: blob.csi.azure.com
 parameters:
   skuName: {{ $.Values.aksStorageClassSkuName }}

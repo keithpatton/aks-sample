@@ -35,6 +35,11 @@ metadata:
   namespace: {{ $deploymentNamespace }}
   labels:
     app: {{ $deploymentName }}
+    {{- range $.Values.tenants }}
+      {{- if and (eq $ring .ring) (eq $group .group)  }}
+    tenant: {{ .name }}
+      {{- end }}
+    {{- end }}
 spec:
   replicas: 1
   selector:
@@ -45,6 +50,11 @@ spec:
       labels:
         app: {{ $deploymentName }}
         azure.workload.identity/use: "true"
+        {{- range $.Values.tenants }}
+          {{- if and (eq $ring .ring) (eq $group .group)  }}
+        tenant: {{ .name }}
+          {{- end }}
+        {{- end }}        
     spec:
       serviceAccountName: {{ $.Values.aksWorkloadIdentityServiceAccountName }}
       containers:

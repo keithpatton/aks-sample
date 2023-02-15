@@ -36,6 +36,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ $pvcName }}
   namespace: {{ $pvcNamespace }}
+  labels:
+    name: {{ $pvcName }}
+    tenant: {{ .name }}
 spec:
   accessModes:
   - ReadWriteOnce

@@ -8,6 +8,7 @@
 {{- end }}
 
 {{- range $groups }}
+  {{- $group := .}}
   {{- $name := printf "%s-%s" $.Values.appName . }}
 apiVersion: v1
 kind: Namespace
@@ -15,5 +16,10 @@ metadata:
   name: {{ $name }}
   labels:
     name: {{ $name }}
+    {{- range $.Values.tenants }}
+      {{- if eq $group .group  }}
+    tenant: {{ .name }}
+      {{- end }}
+    {{- end }}    
 ---
 {{- end }}

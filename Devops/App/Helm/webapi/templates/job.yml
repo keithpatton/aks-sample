@@ -9,6 +9,10 @@ metadata:
   name: {{ $jobName }}
   namespace: {{ $jobNamespace }}
   labels:
+    name: {{ $jobName }}
+    {{- range $.Values.tenants }}
+    tenant: {{ .name }}
+    {{- end }}     
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "-1"
@@ -22,7 +26,10 @@ spec:
       namespace: {{ $jobNamespace }}
       labels:
         name: {{ $jobName }}
-        azure.workload.identity/use: "true"      
+        azure.workload.identity/use: "true"
+        {{- range $.Values.tenants }}
+        tenant: {{ .name }}
+        {{- end }}             
     spec:
       serviceAccountName: {{ $.Values.aksWorkloadIdentityServiceAccountName }}
       restartPolicy: Never

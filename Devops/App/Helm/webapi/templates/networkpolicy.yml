@@ -17,6 +17,13 @@ kind: NetworkPolicy
 metadata:
   name: {{ $networkPolicyName }}
   namespace: {{ $networkPolicyNamespace }}
+  labels:
+    name: {{ $networkPolicyName }}
+    {{- range $.Values.tenants }}
+      {{- if (eq $group .group)  }}
+    tenant: {{ .name }}
+      {{- end }}
+    {{- end }}    
 spec:
   podSelector: {}
   policyTypes:

@@ -31,6 +31,13 @@ kind: ConfigMap
 metadata:
   name: {{ $configMapName }}
   namespace: {{ $configMapNamespace }}
+  labels:
+    name: {{ $configMapName }}
+    {{- range $.Values.tenants }}
+      {{- if and (eq $ring .ring) (eq $group .group)  }}
+    tenant: {{ .name }}
+      {{- end }}
+    {{- end }}  
 data:
   aks_keyvault: {{ $.Values.kvName }}
   sql_server_name: {{ $.Values.sqlServerName }}
