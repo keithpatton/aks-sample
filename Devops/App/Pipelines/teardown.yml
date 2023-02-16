@@ -19,7 +19,7 @@ parameters:
       group: common2
       region: au1
       env: dev
-      ring: vnext  
+      ring: latest  
 
 stages:
 - template: ../Templates/stage-teardown.yml

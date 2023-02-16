@@ -20,12 +20,12 @@ rings: [
     "version": "0.3.0"
   },
   {
-    "name": "vnext",
+    "name": "latest",
     "region": "au1",
     "env": "dev",
     "version": "0.3.0"
   }
 ]
 sqlServerName: sql-au1-dev-01
-tenants: [{"name":"tenant1","group":"common","region":"au1","env":"dev","ring":"stable"},{"name":"tenant2","group":"common2","region":"au1","env":"dev","ring":"vnext"}]
+tenants: [{"name":"tenant1","group":"common","region":"au1","env":"dev","ring":"stable"},{"name":"tenant2","group":"common2","region":"au1","env":"dev","ring":"latest"}]
 traefikAksNamespace: traefik

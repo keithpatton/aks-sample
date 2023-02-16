@@ -16,7 +16,7 @@ Provides a working example of :
       - Azure SQL Database provisioned for each tenant along with appropriate access
     - Application Deployment
       - A Persistent Volume Claim (PVC) automatically creates an NFS mount backed by a blob container for each tenant
-      - Support for tenanted Deployment Rings (e.g. tenant1 to stable version and tenant2 gets vnext version)
+      - Support for tenanted Deployment Rings (e.g. tenant1 to stable version and tenant2 gets latest version)
     - Application Runtime 
       - Tenant is inferred at runtime using a custom header
       - Tenanted SQL database access
