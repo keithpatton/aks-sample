@@ -1,0 +1,46 @@
+{{- define "app.service" (serviceName string )-}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "serviceName"
+  namespace: "serviceNamespace"
+  labels:
+    name: "serviceName"
+    group: {{ $group }}
+    ring: "ring"
+spec:
+  ports:
+    - name: web
+      port: 80
+      targetPort: web
+      protocol: TCP
+  selector:
+    app: "appName"
+{{- end }}
+
+# service for each ring per namespaced tenant group 
+{{- $groups := list }}
+{{- range $.Values.tenants }}
+  {{- if not (has .group $groups) }}
+  {{- $groups = append $groups .group}}
+  {{- end }}
+{{- end }}
+
+{{- $rings := list }}
+{{- range $.Values.rings }}
+  {{- if not (has .name $rings) }}
+  {{- $rings = append $rings .name}}
+  {{- end }}
+{{- end }}
+
+{{- range $groups }}
+  {{- $group := .}}
+  {{- range $rings }}
+    {{- $ring := .}}
+    {{- $serviceNamespace := printf "%s-%s" $.Values.appName $group }}
+    {{- $serviceName := printf "%s-%s" $.Values.appName $ring }}
+    {{- $appName := $serviceName }}
+{{- template "app.service" . }}
+---
+  {{- end }}
+{{- end }}
