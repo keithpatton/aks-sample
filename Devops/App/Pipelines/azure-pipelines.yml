@@ -51,7 +51,7 @@ parameters:
 stages:
 - template: ../Templates/stage.yml
   parameters:
-    svcConnAzureRm: 'Keith Patton - VS Professional Sub'    
+    svcConnAzureRm: $(svcConnAzureRmDefault)
     tenants: ${{ parameters.tenants }}
     region: 'au1'
     env: 'dev'
