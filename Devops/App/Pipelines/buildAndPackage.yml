@@ -20,7 +20,7 @@ stages:
     displayName: Get Version
     steps:
       - checkout: self
-        clean: true   
+        fetchDepth: 0
       - task: gitversion/setup@0
         displayName: Install GitVersion
         inputs:
