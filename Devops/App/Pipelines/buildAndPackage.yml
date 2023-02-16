@@ -11,7 +11,7 @@ variables:
     value: acrau1dev01 # Hard coded because build is not regional
 
 stages:
-- stage: build-package
+- stage: build_package
   displayName: Build and Package
   pool:
     vmImage: ubuntu-latest 
