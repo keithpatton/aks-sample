@@ -35,6 +35,8 @@ stages:
   - job: BuildAndPush
     displayName: Build and Push Images
     dependsOn: Version
+    variables: 
+      semVer: $[ dependencies.setVars.outputs['vars.semVer'] ]
     steps:
       - task: Docker@2
         displayName: Build App Image
