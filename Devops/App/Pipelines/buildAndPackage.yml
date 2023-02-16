@@ -11,13 +11,13 @@ variables:
     value: acrau1dev01 # Hard coded because build is not regional
 
 stages:
-- stage: BuildPackage
+- stage: build-package
   displayName: Build and Package
   pool:
     vmImage: ubuntu-latest 
   jobs:
-  - job: Version
-    displayName: Get Version
+  - job: build-package
+    displayName: Build and Package
     steps:
       - checkout: self
         fetchDepth: 0
@@ -29,15 +29,6 @@ stages:
         displayName: Determine Version
         env:
           DOTNET_ROLL_FORWARD: "Major"
-      - script: |
-          echo '##vso[task.setvariable variable=semVer;isOutput=true]$(GitVersion.SemVer)'
-          echo $(GitVersion.SemVer)            
-  - job: BuildAndPush
-    displayName: Build and Push Images
-    dependsOn: Version
-    variables: 
-      semVer: $[ dependencies.setVars.outputs['vars.semVer'] ]
-    steps:
       - task: Docker@2
         displayName: Build App Image
         inputs:
@@ -46,7 +37,7 @@ stages:
           dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
           buildContext: '$(Build.SourcesDirectory)'
           tags: |
-            $(semVer)
+            $(GitVersion.SemVer)
       - task: Docker@2
         displayName: Build Job Init Image
         inputs:
@@ -55,7 +46,7 @@ stages:
           dockerfile: '$(Build.SourcesDirectory)/AksSample.Job/Dockerfile'
           buildContext: '$(Build.SourcesDirectory)'
           tags: |
-            $(semVer)
+            $(GitVersion.SemVer)
       - task: AzureCLI@2
         displayName: 'Push Images'
         inputs:
@@ -65,8 +56,11 @@ stages:
           inlineScript: |
             az acr login --name $(acrName)
             # push app image
-            docker tag $(imageName):$(semVer) $(acrName).azurecr.io/$(imageName):$(semVer)
-            docker push $(acrName).azurecr.io/$(imageName):$(semVer)
+            docker tag $(imageName):$(GitVersion.SemVer) $(acrName).azurecr.io/$(imageName):$(GitVersion.SemVer)
+            docker push $(acrName).azurecr.io/$(imageName):$(GitVersion.SemVer)
             # push job init
-            docker tag $(jobInitImageName):$(semVer) $(acrName).azurecr.io/$(jobInitImageName):$(semVer)
-            docker push $(acrName).azurecr.io/$(jobInitImageName):$(semVer)               
+            docker tag $(jobInitImageName):$(GitVersion.SemVer) $(acrName).azurecr.io/$(jobInitImageName):$(GitVersion.SemVer)
+            docker push $(acrName).azurecr.io/$(jobInitImageName):$(GitVersion.SemVer)             
+
+
+
