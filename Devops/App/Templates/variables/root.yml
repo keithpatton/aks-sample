@@ -5,5 +5,5 @@ variables:
   value: "$(appName)"
 - name: jobInitImageName
   value: "$(appName)-init-job"
-  name: svcConnAzureRmDefault
+- name: svcConnAzureRmDefault
   value: 'Keith Patton - VS Professional Sub'  
