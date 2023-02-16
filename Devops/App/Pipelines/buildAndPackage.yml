@@ -48,17 +48,3 @@ stages:
               buildContext: '$(Build.SourcesDirectory)'
               tags: |
                 $(semVer)
-          # - task: AzureCLI@2
-          #   displayName: 'Push Images'
-          #   inputs:
-          #     azureSubscription: ${{ parameters.svcConnAzureRm}}
-          #     scriptType: 'pscore'
-          #     scriptLocation: 'inlineScript'
-          #     inlineScript: |
-          #       az acr login --name $(acrName)
-          #       # push app image
-          #       docker tag $(imageName):${{ parameters.imageBuildTag }} $(acrName).azurecr.io/$(imageName):${{ parameters.imageBuildTag }}
-          #       docker push $(acrName).azurecr.io/$(imageName):${{ parameters.imageBuildTag }}
-          #       # push job init
-          #       docker tag $(jobInitImageName):$(jobInitImageVersion) $(acrName).azurecr.io/$(jobInitImageName):$(jobInitImageVersion)
-          #       docker push $(acrName).azurecr.io/$(jobInitImageName):$(jobInitImageVersion)
