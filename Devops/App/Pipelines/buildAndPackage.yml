@@ -16,7 +16,7 @@ stages:
   pool:
     vmImage: ubuntu-latest 
   jobs:
-  - job: setVars
+  - job: Version
     displayName: Get Version
     steps:
       - checkout: self
@@ -34,6 +34,7 @@ stages:
           echo $(GitVersion.SemVer)            
   - job: BuildAndPush
     displayName: Build and Push Images
+    dependsOn: Version
     steps:
       - task: Docker@2
         displayName: Build App Image
