@@ -10,6 +10,9 @@ resources:
     source: Aks.App.BuildAndPackage.Poc # The name of the pipeline referenced by this pipeline resource.
     trigger: true # Run this pipeline when any run of the source pipeline completes  
 
+variables: 
+  - template: ../Templates/variables/root.yml 
+
 parameters:
 - name: tenants
   displayName: 'Tenants'
