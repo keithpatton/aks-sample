@@ -11,13 +11,13 @@ variables:
     value: acrau1dev01 # Hard coded because build is not regional
 
 stages:
-- stage: build_package
-  displayName: Build and Package
+- stage: package
+  displayName: Build and Push Images
   pool:
     vmImage: ubuntu-latest 
   jobs:
-  - job: build-package
-    displayName: Build and Package
+  - job: package
+    displayName: Build and Push Images
     steps:
       - checkout: self
         fetchDepth: 0
