@@ -1,0 +1,23 @@
+#next-version: 5.0.13
+mode: Mainline
+commit-message-incrementing: MergeMessageOnly
+branches:
+  develop:
+    mode: ContinuousDeployment
+    tag: alpha
+    increment: Patch
+  release:
+    mode: ContinuousDeployment
+    tag: beta
+    increment: Patch
+  hotfix:
+    mode: ContinuousDeployment
+    tag: beta
+    increment: Patch
+  main:
+    tag: ""
+    increment: Patch
+  feature:
+    mode: ContinuousDelivery
+    tag: useBranchName
+    increment: Inherit
