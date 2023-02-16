@@ -3,7 +3,12 @@ name: $(Date:yyyyMMdd)$(Rev:.r)
 trigger: none
 
 resources:
-- repo: self
+  repositories:
+  - repository: self
+  pipelines:
+  - pipeline: Aks.App.Poc # Name of the pipeline resource.
+    source: Aks.App.BuildAndPackage.Poc # The name of the pipeline referenced by this pipeline resource.
+    trigger: true # Run this pipeline when any run of the source pipeline completes  
 
 parameters:
 - name: tenants
