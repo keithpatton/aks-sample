@@ -1,0 +1,7 @@
+variables:
+- name: appName
+  value: "webapi"
+- name: imageName
+  value: "$(appName)"
+- name: jobInitImageName
+  value: "$(appName)-init-job"

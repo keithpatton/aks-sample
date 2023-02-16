@@ -11,6 +11,7 @@ parameters:
 variables:
 
 # common variables
+- template: root.yml 
 - template: ../../../Common/Templates/variables/reg-env.yml
   parameters:
     region: "${{ parameters.region }}"
@@ -34,8 +35,6 @@ variables:
   value: "$(appName)-azureblob-nfs-standard-"
 - name: aksStorageClassSkuName
   value: "Standard_ZRS"
-- name: appName
-  value: "webapi"
 - name: helmAppVersion
   value: "1.0.0"  
 - name: helmChartDescription 
@@ -48,10 +47,6 @@ variables:
   value: "$(appName)"
 - name: helmReleaseNamespace
   value: "$(appName)"
-- name: imageName
-  value: "$(appName)"
-- name: jobInitImageName
-  value: "$(appName)-init-job"
 - name: jobInitImageVersion
   value: "1.0.2"
 - name:  sqlFirewallRuleBuildAgentName
