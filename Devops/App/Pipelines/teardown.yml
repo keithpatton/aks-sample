@@ -5,22 +5,6 @@ trigger: none
 resources:
 - repo: self
 
-parameters:
-- name: tenants
-  displayName: 'Tenants'
-  type: object
-  default:
-    - name: tenant1
-      group: common
-      region: au1
-      env: dev
-      ring: stable
-    - name: tenant2
-      group: common2
-      region: au1
-      env: dev
-      ring: latest  
-
 variables: 
   - template: ../Templates/variables/root.yml   
 
@@ -28,7 +12,13 @@ stages:
 - template: ../Templates/stage-teardown.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
-    tenants: ${{ parameters.tenants }}
     region: 'au1'
     env: 'dev'
+    dependsOn: []
+
+- template: ../Templates/stage-teardown.yml
+  parameters:
+    svcConnAzureRm: $(svcConnAzureRmDefault)
+    region: 'au1'
+    env: 'qa'
     dependsOn: []

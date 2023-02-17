@@ -1,8 +1,6 @@
 parameters:
 - name: svcConnAzureRm
   type: string  
-- name: tenants
-  type: object  
 - name: region
   type: string
 - name: env
@@ -51,7 +49,6 @@ stages:
             clean: true   
           - template:  ../../Common/Templates/stampSetVars.yml        
             parameters:
-              tenants: ${{ parameters.tenants }}
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}     
           - template: ../../Common/Templates/replaceTokens.yml
