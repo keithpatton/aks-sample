@@ -34,4 +34,4 @@ stages:
     region: 'au1'
     env: 'qa'
     apply: ${{ parameters.apply }}
-    dependsOn: []    
+    dependsOn: au1-dev    
