@@ -47,8 +47,6 @@ variables:
   value: "$(appName)"
 - name: helmReleaseNamespace
   value: "$(appName)"
-- name: jobInitImageVersion
-  value: "1.0.2"
 - name:  sqlFirewallRuleBuildAgentName
   value: "allow-build-agent" 
 - name: sqlDbSkuName
