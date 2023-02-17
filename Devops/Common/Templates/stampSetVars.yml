@@ -1,12 +1,7 @@
-# Sets $tenantsJson and $ringsJson vars to represent active 
-# tenants and rings data for a particular stage (region and environment)
+# Sets $tenantsJson and $ringsJson vars to represent active tenants/rings for a stage (region/environment) 
+# Assumes $tenants and $rings variables are already available
 
 parameters:
-- name: tenants
-  type: object
-- name: rings
-  type: object
-  default: []
 - name: region
   type: string
 - name: env
@@ -20,14 +15,15 @@ steps:
     script: |
       region=$(echo "${{parameters.region}}")
       env=$(echo "${{parameters.env}}")
-      allTenantsJson=$(echo '${{ convertToJson(parameters.tenants) }}')
-      echo $allTenantsJson
-      tenantsJson=$(echo "$allTenantsJson" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
+      echo "All Tenants:"
+      echo $tenants
+      tenantsJson=$(echo "$tenants" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
       echo "##vso[task.setvariable variable=tenantsJson;]$tenantsJson"
-      echo $tenantsJson
-
-      allRingsJson=$(echo '${{ convertToJson(parameters.rings) }}')
-      echo $allRingsJson
-      ringsJson=$(echo "$allRingsJson" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
+      echo "Stage Tenants:"
+      echo $tenantsJson    
+      echo "All Rings:"
+      echo $rings
+      ringsJson=$(echo "$rings" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
       echo "##vso[task.setvariable variable=ringsJson;]$ringsJson"
+      echo "Stage Rings:"
       echo $ringsJson

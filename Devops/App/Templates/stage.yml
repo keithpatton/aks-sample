@@ -1,10 +1,6 @@
 parameters:
 - name: svcConnAzureRm
   type: string  
-- name: tenants
-  type: object  
-- name: rings
-  type: object  
 - name: region
   type: string
 - name: env
@@ -35,21 +31,9 @@ stages:
         deploy:
           steps:
           - checkout: self
-            clean: true   
-          - script: |
-              echo $(resources.pipeline.build_and_package.pipelineID)
-              echo $(resources.pipeline.build_and_package.runName)
-              echo $(resources.pipeline.build_and_package.runID)
-              echo $(resources.pipeline.build_and_package.runURI)
-              echo $(resources.pipeline.build_and_package.sourceBranch)
-              echo $(resources.pipeline.build_and_package.sourceCommit)
-              echo $(resources.pipeline.build_and_package.sourceProvider)
-              echo $(resources.pipeline.build_and_package.requestedFor)
-              echo $(resources.pipeline.build_and_package.requestedForID)            
+            clean: true           
           - template:  ../../Common/Templates/stampSetVars.yml        
             parameters:
-              tenants: ${{ parameters.tenants }}
-              rings: ${{ parameters.rings }}
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}                   
           - template: ../../Common/Templates/replaceTokens.yml
@@ -78,8 +62,6 @@ stages:
             clean: true   
           - template:  ../../Common/Templates/stampSetVars.yml        
             parameters:
-              tenants: ${{ parameters.tenants }}
-              rings: ${{ parameters.rings }}
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}      
           - task: AzureCLI@2

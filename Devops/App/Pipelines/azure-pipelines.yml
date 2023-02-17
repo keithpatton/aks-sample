@@ -8,52 +8,22 @@ resources:
   pipelines:
   - pipeline: build_and_package # Name of the pipeline resource.
     source: Aks.App.BuildAndPackage.Poc # The name of the pipeline referenced by this pipeline resource.
-    trigger: true # Run this pipeline when any run of the source pipeline completes      
+    trigger: true 
   
 parameters:
-- name: tenants
-  displayName: 'Tenants'
-  type: object
-  default:
-    - name: tenant1
-      group: common
-      region: au1
-      env: dev
-      ring: latest
-    - name: tenant2
-      group: common2
-      region: au1
-      env: dev
-      ring: latest  
-
-- name: rings
-  displayName: 'Deployment Rings'
-  type: object
-  default: 
-    # - name: stable
-    #   region: au1
-    #   env: dev
-    #   version: "0.1.8"
-    - name: latest
-      region: au1
-      env: dev
-      version: "latest"
-
 - name: apply
   displayName: 'Apply Infra'
   type: boolean
   default: true
 
 variables: 
-  - template: ../Templates/variables/root.yml 
+  - template: ../Templates/variables/root.yml   
 
 stages:
 - template: ../Templates/stage.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
-    tenants: ${{ parameters.tenants }}
     region: 'au1'
     env: 'dev'
-    dependsOn: []
-    rings: ${{ parameters.rings }}
     apply: ${{ parameters.apply }}
+    dependsOn: []
