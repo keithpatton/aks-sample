@@ -17,7 +17,13 @@ variables:
       "ring": "latest"
     }]
 - name: rings
-  value: '[{"name":"latest","region":"au1","env":"dev","version":"$(buildVersion)"}]'
+  value: |-
+    [{
+      "name": "latest",
+      "region": "au1",
+      "env": "dev",
+      "version": "$(buildVersion)"
+    }]
   # build pipeline resource sets run name to version using GitVersion
 - name: buildVersion
   value: $(resources.pipeline.build_and_package.runName)
