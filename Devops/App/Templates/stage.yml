@@ -22,6 +22,20 @@ stages:
   pool:
     vmImage: ubuntu-latest 
   jobs:
+  - deployment: ManaulValidation
+    displayName: 'Approval Required'
+    condition: ne('${{ parameters.env }}', 'dev')
+    environment: ${{ parameters.region }}_${{ parameters.env }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: ManualValidation@0
+            inputs:
+              instructions: 'Please review the changes and approve or reject the deployment.'
+              onTimeout: 'reject'
+              timeoutInMinutes: 1440
+              notifyUsers: none
   - deployment: Infrastructure    
     condition: eq('${{ parameters.apply }}', 'true')
     displayName: Ensure App Specific Infra
