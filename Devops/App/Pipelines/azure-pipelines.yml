@@ -46,8 +46,6 @@ parameters:
 
 variables: 
   - template: ../Templates/variables/root.yml 
-  - name: latestVersion
-    value: ${{ parameters.tenants }}
 
 stages:
 - template: ../Templates/stage.yml
