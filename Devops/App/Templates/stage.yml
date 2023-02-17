@@ -11,10 +11,6 @@ parameters:
   type: string
 - name: dependsOn  
   type: object
-- name: imageBuild
-  type: boolean
-- name: imageBuildTag
-  type: string
 - name: apply
   type: boolean
 
@@ -30,48 +26,6 @@ stages:
   pool:
     vmImage: ubuntu-latest 
   jobs:
-  - deployment: Image
-    displayName: Build and Push Images
-    condition: and(succeeded(), eq('${{ parameters.imageBuild }}', 'true'))
-    # for security reasons all environments must be provisioned by authorised person in advance
-    environment: ${{ parameters.region }}_${{ parameters.env }}
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - checkout: self
-            clean: true   
-          - task: Docker@2
-            displayName: Build App Image
-            inputs:
-              command: build
-              repository: $(imageName)
-              dockerfile: '$(Build.SourcesDirectory)/AksWorkloadIdentitySample.Api/Dockerfile'
-              buildContext: '$(Build.SourcesDirectory)'
-              tags: ${{ parameters.imageBuildTag }}
-          - task: Docker@2
-            displayName: Build Job Init Image
-            inputs:
-              command: build
-              repository: "$(jobInitImageName)"
-              dockerfile: '$(Build.SourcesDirectory)/AksSample.Job/Dockerfile'
-              buildContext: '$(Build.SourcesDirectory)'
-              tags: $(jobInitImageVersion)
-          - task: AzureCLI@2
-            displayName: 'Push Images'
-            inputs:
-              azureSubscription: ${{ parameters.svcConnAzureRm}}
-              scriptType: 'pscore'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                az acr login --name $(acrName)
-                # push app image
-                docker tag $(imageName):${{ parameters.imageBuildTag }} $(acrName).azurecr.io/$(imageName):${{ parameters.imageBuildTag }}
-                docker push $(acrName).azurecr.io/$(imageName):${{ parameters.imageBuildTag }}  
-                # push job init
-                docker tag $(jobInitImageName):$(jobInitImageVersion) $(acrName).azurecr.io/$(jobInitImageName):$(jobInitImageVersion)
-                docker push $(acrName).azurecr.io/$(jobInitImageName):$(jobInitImageVersion)                                    
-
   - deployment: Infrastructure    
     dependsOn: Image
     condition: and(eq('${{ parameters.apply }}', 'true'), in(dependencies.Image.result, 'Succeeded', 'Skipped'))
@@ -83,6 +37,16 @@ stages:
           steps:
           - checkout: self
             clean: true   
+          - script: |
+              echo $(resources.pipeline.build_and_package.pipelineID)
+              echo $(resources.pipeline.build_and_package.runName)
+              echo $(resources.pipeline.build_and_package.runID)
+              echo $(resources.pipeline.build_and_package.runURI)
+              echo $(resources.pipeline.build_and_package.sourceBranch)
+              echo $(resources.pipeline.build_and_package.sourceCommit)
+              echo $(resources.pipeline.build_and_package.sourceProvider)
+              echo $(resources.pipeline.build_and_package.requestedFor)
+              echo $(resources.pipeline.build_and_package.requestedForID)            
           - template:  ../../Common/Templates/stampSetVars.yml        
             parameters:
               tenants: ${{ parameters.tenants }}

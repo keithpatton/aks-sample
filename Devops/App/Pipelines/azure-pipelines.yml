@@ -6,13 +6,10 @@ resources:
   repositories:
   - repository: self
   pipelines:
-  - pipeline: Aks.App.BuildAndPackage.Poc # Name of the pipeline resource.
+  - pipeline: build_and_package # Name of the pipeline resource.
     source: Aks.App.BuildAndPackage.Poc # The name of the pipeline referenced by this pipeline resource.
-    trigger: true # Run this pipeline when any run of the source pipeline completes  
-
-variables: 
-  - template: ../Templates/variables/root.yml 
-
+    trigger: true # Run this pipeline when any run of the source pipeline completes      
+  
 parameters:
 - name: tenants
   displayName: 'Tenants'
@@ -22,7 +19,7 @@ parameters:
       group: common
       region: au1
       env: dev
-      ring: stable
+      ring: latest
     - name: tenant2
       group: common2
       region: au1
@@ -33,28 +30,24 @@ parameters:
   displayName: 'Deployment Rings'
   type: object
   default: 
-    - name: stable
-      region: au1
-      env: dev
-      version: "0.3.0"
+    # - name: stable
+    #   region: au1
+    #   env: dev
+    #   version: "0.1.8"
     - name: latest
       region: au1
       env: dev
-      version: "0.3.0"
+      version: "latest"
 
-
-- name: imageBuild
-  displayName: 'Build and Push Images'
-  type: boolean
-  default: true
-- name: imageBuildTag
-  displayName: 'App Image Build Tag'
-  type: string
-  default: "0.3.0"
 - name: apply
   displayName: 'Apply Infra'
   type: boolean
   default: true
+
+variables: 
+  - template: ../Templates/variables/root.yml 
+  - name: latestVersion
+    value: ${{ parameters.tenants }}
 
 stages:
 - template: ../Templates/stage.yml
@@ -65,6 +58,4 @@ stages:
     env: 'dev'
     dependsOn: []
     rings: ${{ parameters.rings }}
-    imageBuild: ${{ parameters.imageBuild }}
-    imageBuildTag: ${{ parameters.imageBuildTag }}
     apply: ${{ parameters.apply }}
