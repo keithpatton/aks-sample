@@ -27,7 +27,7 @@ stages:
     vmImage: ubuntu-latest 
   jobs:
   - deployment: Infrastructure    
-    condition: and(eq('${{ parameters.apply }}', 'true'), in(dependencies.Image.result, 'Succeeded', 'Skipped'))
+    condition: and(eq('${{ parameters.apply }}', 'true'))
     displayName: Ensure App Specific Infra
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
@@ -68,7 +68,6 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/App/Terraform'  
   - deployment: Deploy    
     dependsOn: Infrastructure
-    condition: and(in(dependencies.Image.result, 'Succeeded', 'Skipped'), in(dependencies.Infrastructure.result, 'Succeeded', 'Skipped'))
     displayName: Deploy Application
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
