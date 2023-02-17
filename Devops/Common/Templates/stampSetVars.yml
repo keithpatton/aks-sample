@@ -13,15 +13,18 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      env
       region=$(echo "${{parameters.region}}")
       env=$(echo "${{parameters.env}}")
+      
+      tenants=$(echo '$(tenants)')
       echo "All Tenants:"
       echo $tenants
       tenantsJson=$(echo "$tenants" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
       echo "##vso[task.setvariable variable=tenantsJson;]$tenantsJson"
       echo "Stage Tenants:"
       echo $tenantsJson    
+
+      rings=$(echo '$(rings)')
       echo "All Rings:"
       echo $rings
       ringsJson=$(echo "$rings" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
