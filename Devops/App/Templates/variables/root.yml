@@ -1,4 +1,5 @@
 variables:
+- template: ../../../Common/Templates/variables/root.yml 
 - name: appName
   value: "webapi"
 - name: tenants
@@ -33,5 +34,3 @@ variables:
   value: "$(appName)-init-job"
 - name: jobInitImageVersion
   value: $(buildVersion)
-- name: svcConnAzureRmDefault
-  value: 'Keith Patton - VS Professional Sub'

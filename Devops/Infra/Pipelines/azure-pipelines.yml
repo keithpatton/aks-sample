@@ -5,10 +5,20 @@ trigger: none
 resources:
 - repo: self
 
+variables: 
+  - template: ../Templates/variables/root.yml   
+
 stages:
 - template: ../Templates/stage.yml
   parameters:
-    svcConnAzureRm: 'Keith Patton - VS Professional Sub'
+    svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'dev'
     dependsOn: []
+
+- template: ../Templates/stage.yml
+  parameters:
+    svcConnAzureRm: $(svcConnAzureRmDefault)
+    region: 'au1'
+    env: 'qa'
+    dependsOn: []    

@@ -21,10 +21,13 @@ parameters:
       env: dev
       ring: latest  
 
+variables: 
+  - template: ../Templates/variables/root.yml   
+
 stages:
 - template: ../Templates/stage-teardown.yml
   parameters:
-    svcConnAzureRm: 'Keith Patton - VS Professional Sub'    
+    svcConnAzureRm: $(svcConnAzureRmDefault)
     tenants: ${{ parameters.tenants }}
     region: 'au1'
     env: 'dev'
