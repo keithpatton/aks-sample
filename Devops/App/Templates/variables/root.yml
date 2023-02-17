@@ -18,7 +18,7 @@ variables:
       "ring": "latest"
     }, {  
       "name": "tenant2",
-      "group": "common",
+      "group": "common2",
       "region": "au1",
       "env": "dev",
       "ring": "latest"
