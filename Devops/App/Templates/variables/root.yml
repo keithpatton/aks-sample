@@ -2,33 +2,9 @@ variables:
 - name: appName
   value: "webapi"
 - name: tenants
-  value: |-
-    [
-      {
-        "name": "tenant1",
-        "group": "common",
-        "region": "au1",
-        "env": "dev",
-        "ring": "latest"
-      },
-      {
-        "name": "tenant2",
-        "group": "common2",
-        "region": "au1",
-        "env": "dev",
-        "ring": "latest"
-      }
-    ]
+  value: [{"name":"tenant1","group":"common","region":"au1","env":"dev","ring":"latest"},{"name":"tenant2","group":"common2","region":"au1","env":"dev","ring":"latest"}]
 - name: rings
-  value: |-
-    [
-      {
-        "name": "latest",
-        "region": "au1",
-        "env": "dev",
-        "version": "$(buildVersion)"
-      }
-    ]
+  value: [{"name":"latest","region":"au1","env":"dev","version":"$(buildVersion)"}]
   # build pipeline resource sets run name to version using GitVersion
 - name: buildVersion
   value: $(resources.pipeline.build_and_package.runName)
