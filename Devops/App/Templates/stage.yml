@@ -52,6 +52,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/App/Terraform'  
   - deployment: Deploy    
     dependsOn: Infrastructure
+    condition: in(dependencies.Infrastructure.result, 'Succeeded', 'Skipped')
     displayName: Deploy Application
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:

@@ -10,6 +10,7 @@ appName: webapi
 imageName: webapi
 jobInitImageName: "webapi-init-job"
 jobInitImageVersion: "1.0.0"
+
 kvName: kv-au1-dev-01
 rings: [
   {
