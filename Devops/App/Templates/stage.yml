@@ -27,7 +27,6 @@ stages:
     vmImage: ubuntu-latest 
   jobs:
   - deployment: Infrastructure    
-    dependsOn: Image
     condition: and(eq('${{ parameters.apply }}', 'true'), in(dependencies.Image.result, 'Succeeded', 'Skipped'))
     displayName: Ensure App Specific Infra
     environment: ${{ parameters.region }}_${{ parameters.env }}
