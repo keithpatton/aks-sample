@@ -7,7 +7,7 @@ namespace AksSample.Job
         static void Main(string[] args)
         {
             // a potentially long-running job for a tenant
-            // e.g. db migration
+            // e.g. db migration - Test
 
             var tenant = Environment.GetEnvironmentVariable("TENANT");
             var sqlServerName = Environment.GetEnvironmentVariable("SQL_SERVER_NAME");
