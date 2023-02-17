@@ -26,6 +26,7 @@ stages:
     displayName: 'Approval Required'
     condition: ne('${{ parameters.env }}', 'dev')
     environment: ${{ parameters.region }}_${{ parameters.env }}
+    pool: server
     strategy:
       runOnce:
         deploy:
