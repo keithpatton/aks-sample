@@ -5,11 +5,11 @@ parameters:
   type: string
 
 variables:
-# common variables
 - template: ../../../Common/Templates/variables/reg-env.yml
   parameters:
     region: ${{ parameters.region }}
     env: ${{ parameters.env }}  
+- template: reg_${{ parameters.region }}-env_${{ parameters.env }}.yml  
 
 # aks cluster
 - name: rgAksNodesName
@@ -20,8 +20,6 @@ variables:
   value: "default"
 - name: aksVmSize
   value: "Standard_B2s"
-- name: aksVNetName
-  value: "aks-vnet-20115861"
 
 # azure sql
 - name: sqlAdAdminUsername

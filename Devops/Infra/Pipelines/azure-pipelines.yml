@@ -21,4 +21,4 @@ stages:
     svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'qa'
-    dependsOn: au1_dev
+    dependsOn: []

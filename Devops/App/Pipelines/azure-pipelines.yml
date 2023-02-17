@@ -27,3 +27,11 @@ stages:
     env: 'dev'
     apply: ${{ parameters.apply }}
     dependsOn: []
+
+- template: ../Templates/stage.yml
+  parameters:
+    svcConnAzureRm: $(svcConnAzureRmDefault)
+    region: 'au1'
+    env: 'qa'
+    apply: ${{ parameters.apply }}
+    dependsOn: []    
