@@ -15,7 +15,7 @@ variables:
   parameters:
     region: "${{ parameters.region }}"
     env: "${{ parameters.env }}"
-    
+  
 - name: aksFederatedIdentityNamePrefix
   value: "fic-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)"
 - name: aksNamespacePrefix

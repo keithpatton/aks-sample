@@ -1,4 +1,4 @@
-acrName: #{acrName}#
+acrName: acrau1dev01 # fix this 
 
 aksPvcName: #{aksPvcName}#
 aksManagedIdentities: #{aksManagedIdentities}#
