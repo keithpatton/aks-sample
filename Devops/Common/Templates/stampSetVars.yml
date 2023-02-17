@@ -13,6 +13,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      env
       region=$(echo "${{parameters.region}}")
       env=$(echo "${{parameters.env}}")
       echo "All Tenants:"
