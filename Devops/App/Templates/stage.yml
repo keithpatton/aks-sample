@@ -22,7 +22,7 @@ stages:
   pool:
     vmImage: ubuntu-latest 
   jobs:
-  - deployment: ManaulValidation
+  - deployment: Approval
     displayName: 'Approval Required'
     condition: ne('${{ parameters.env }}', 'dev')
     environment: ${{ parameters.region }}_${{ parameters.env }}
@@ -38,6 +38,7 @@ stages:
               timeoutInMinutes: 1440
               notifyUsers: none
   - deployment: Infrastructure    
+    dependsOn: Approval
     condition: eq('${{ parameters.apply }}', 'true')
     displayName: Ensure App Specific Infra
     environment: ${{ parameters.region }}_${{ parameters.env }}
