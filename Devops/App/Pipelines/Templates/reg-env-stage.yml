@@ -22,21 +22,6 @@ stages:
   pool:
     vmImage: ubuntu-latest 
   jobs:
-  - deployment: Approval
-    displayName: 'Approval Required'
-    condition: ne('${{ parameters.env }}', 'dev')
-    environment: ${{ parameters.region }}_${{ parameters.env }}
-    pool: server
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: ManualValidation@0
-            inputs:
-              instructions: 'Please review the changes and approve or reject the deployment.'
-              onTimeout: 'reject'
-              timeoutInMinutes: 1440
-              notifyUsers: none
   - deployment: Infrastructure    
     dependsOn: Approval
     condition: eq('${{ parameters.apply }}', 'true')
