@@ -11,7 +11,7 @@ resources:
 - repo: self
 
 variables: 
-  - template: ../Templates/variables/root.yml 
+  - template: Templates/variables/root.yml 
 
 stages:
 - stage: package

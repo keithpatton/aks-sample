@@ -6,25 +6,25 @@ resources:
 - repo: self
 
 variables: 
-  - template: ../Templates/variables/root.yml   
+  - template: Templates/variables/root.yml   
 
 stages:
 
-- template: ../Templates/stage-teardown.yml
+- template: Templates/reg-env-teardown.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'dev'
     dependsOn: []
 
-- template: ../Templates/stage-teardown.yml
+- template: Templates/reg-env-teardown.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'qa'
     dependsOn: []
 
-- template: ../Templates/common-teardown.yml
+- template: Templates/common-teardown.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'

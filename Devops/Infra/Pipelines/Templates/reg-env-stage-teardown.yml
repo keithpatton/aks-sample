@@ -12,7 +12,7 @@ stages:
 - stage: ${{ parameters.region }}_${{ parameters.env }}
   displayName: ${{ parameters.region }}_${{ parameters.env }}
   variables: 
-    - template: variables/reg-env.yml 
+    - template: Variables/reg-env.yml 
       parameters:
         region: ${{ parameters.region }}
         env: ${{ parameters.env }}
@@ -30,15 +30,15 @@ stages:
           steps:
           - checkout: self
             clean: true               
-          - template: ../../Common/Templates/replaceTokens.yml
+          - template: $(System.DefaultWorkingDirectory)/Devops/Common/Templates/replaceTokens.yml
             parameters:
               targetFiles: |
-                Devops/Infra/Terraform/variables.tf                                    
-          - template: ../../Common/Templates/tfInitAzRm.yml
+                Devops/Infra/Terraform/RegEnv/variables.tf                                    
+          - template: $(System.DefaultWorkingDirectory)/Devops/Common/Templates/tfInitAzRm.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
-          - template: ../../Common/Templates/tfDestroyAzRm.yml
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
+          - template: $(System.DefaultWorkingDirectory)/Devops/Common/Templates/tfDestroyAzRm.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
