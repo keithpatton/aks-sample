@@ -41,18 +41,18 @@ stages:
                 az extension add --name aks-preview
                 az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
                 az provider register --namespace Microsoft.ContainerService
-          - template: $(System.DefaultWorkingDirectory)/Devops/Common/Templates/tfStateAz.yml
+          - template: ../../../Common/Templates/tfStateAz.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-          - template: $(System.DefaultWorkingDirectory)/Devops/Common/Templates/replaceTokens.yml
+          - template: ../../../Common/Templates/replaceTokens.yml
             parameters:
               targetFiles: |
                 Devops/Infra/Terraform/RegEnv/variables.tf          
-          - template: $(System.DefaultWorkingDirectory)/Devops/Common/Templates/tfInitAzRm.yml
+          - template: ../../../Common/Templates/tfInitAzRm.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
-          - template: $(System.DefaultWorkingDirectory)/Devops/Common/Templates/tfApplyAzRm.yml
+          - template: ../../../Common/Templates/tfApplyAzRm.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
@@ -66,12 +66,12 @@ stages:
           steps:
           - checkout: self
             clean: true   
-          - template: $(System.DefaultWorkingDirectory)/Devops/Common/Templates/replaceTokens.yml
+          - template: ../../../Common/Templates/replaceTokens.yml
             parameters:
               targetFiles: |
                 Devops/Infra/Helm/**/Chart.yaml
                 Devops/Infra/Helm/**/values.yaml
-          - template: $(System.DefaultWorkingDirectory)/Devops/Common/Templates/helmUpgrade.yml
+          - template: ../../../Common/Templates/helmUpgrade.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               releaseName: $(traefikReleaseName)
