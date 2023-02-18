@@ -17,7 +17,7 @@ parameters:
   default: true
 
 variables: 
-  - template: Templates/variables/root.yml   
+  - template: Templates/Variables/root.yml   
 
 stages:
 - template: Templates/reg-env.yml
