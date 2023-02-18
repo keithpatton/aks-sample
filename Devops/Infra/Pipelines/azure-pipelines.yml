@@ -9,16 +9,22 @@ variables:
   - template: ../Templates/variables/root.yml   
 
 stages:
-- template: ../Templates/stage.yml
+
+- template: ../Templates/common.yml
+  parameters:
+    svcConnAzureRm: $(svcConnAzureRmDefault)
+    dependsOn: []
+
+- template: ../Templates/reg-env.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'dev'
-    dependsOn: []
+    dependsOn: [common]
 
-- template: ../Templates/stage.yml
+- template: ../Templates/reg-env.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'qa'
-    dependsOn: []
+    dependsOn: [common]

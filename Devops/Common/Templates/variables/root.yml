@@ -3,3 +3,9 @@
 variables:
 - name: svcConnAzureRmDefault
   value: 'Keith Patton - VS Professional Sub'
+
+- name: rgCommonName
+  value: 'rg-common'
+
+- name: acrName
+  value: 'acrcommon01'

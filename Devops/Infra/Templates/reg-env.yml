@@ -21,7 +21,7 @@ stages:
     vmImage: ubuntu-latest 
   jobs:
   - deployment: Infrastructure
-    displayName: Ensure Shared Infra Resources
+    displayName: Ensure Shared Region/Env Infra Resources
     # all environments manually enabled by authorised person on first run 
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
@@ -47,17 +47,17 @@ stages:
           - template: ../../Common/Templates/replaceTokens.yml
             parameters:
               targetFiles: |
-                Devops/Infra/Terraform/variables.tf          
+                Devops/Infra/Terraform/RegEnv/variables.tf          
           - template: ../../Common/Templates/tfInitAzRm.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
           - template: ../../Common/Templates/tfApplyAzRm.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
   - deployment: InfrastructureApps    
-    displayName: Deploy Shared Infra Apps
+    displayName: Deploy Shared Region/Env Infra Apps
     dependsOn: Infrastructure
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:

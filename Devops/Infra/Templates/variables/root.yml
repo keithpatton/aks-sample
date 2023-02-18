@@ -1,2 +1,15 @@
 variables:
 - template: ../../../Common/Templates/variables/root.yml 
+
+- name: location
+  value: 'australiaeast'
+
+# terraform state
+- name: tfStateResourceGroup
+  value: 'rg-common-terraform'
+- name: tfStateStorageAccount
+  value: 'stgcommontfstate'
+- name: tfStateContainerName
+  value: 'common'
+- name: tfStateFileName
+  value: "core.tfstate"

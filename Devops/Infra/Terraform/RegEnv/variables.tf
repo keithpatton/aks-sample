@@ -1,7 +1,13 @@
 ﻿variable "rg_name" {
   type        = string
-  description = "The name of the resource group to be used to provision core Azure resources."
+  description = "The name of the stage resource group to be used to provision stage Azure resources."
   default     = "#{rgName}#"
+}
+
+variable "rg_common_name" {
+  type        = string
+  description = "The name of the common resource group to be used to provision common Azure resources."
+  default     = "#{rgCommonName}#"
 }
 
 variable "rg_aks_nodes_name" {

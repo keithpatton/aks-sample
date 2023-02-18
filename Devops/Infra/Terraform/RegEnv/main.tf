@@ -1,17 +1,16 @@
-﻿data "azurerm_client_config" "current" {}
+﻿### Data Blocks
+
+data "azurerm_client_config" "current" {}
+
+data "azurerm_container_registry" "default" {
+  name                = var.acr_name
+  resource_group_name = var.rg_common_name
+}
 
 ### Core Resource Group
 resource "azurerm_resource_group" "default" {
   name     = "${var.rg_name}"
   location = var.location
-}
-
-### Azure Container Registry
-resource "azurerm_container_registry" "default" {
-  name                = "${var.acr_name}"
-  resource_group_name = azurerm_resource_group.default.name
-  location            = azurerm_resource_group.default.location
-  sku                 = "Basic"
 }
 
 ### AKS Cluster
@@ -60,7 +59,7 @@ data "azurerm_subnet" "aks" {
 resource "azurerm_role_assignment" "default" {
   principal_id                     = azurerm_kubernetes_cluster.default.kubelet_identity[0].object_id
   role_definition_name             = "AcrPull"
-  scope                            = azurerm_container_registry.default.id
+  scope                            = data.zurerm_container_registry.default.id
   skip_service_principal_aad_check = true
 }
 

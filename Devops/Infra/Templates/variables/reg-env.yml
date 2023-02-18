@@ -31,10 +31,6 @@ variables:
 - name: sqlPrivateEndpointNicName
   value: "$(sqlPrivateEndpointName)-nic"
 
-# terraform
-- name: tfStateFileName
-  value: "core.tfstate"
-
 # traefik
 - name: traefikChartName
   value: "traefik"
