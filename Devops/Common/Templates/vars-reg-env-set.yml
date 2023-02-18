@@ -10,7 +10,7 @@ parameters:
 
 steps:
 - task: Bash@3
-  displayName: 'Sets Tenants and Rings Vars for Region/Env'
+  displayName: 'Sets Tenants and Rings Vars for ${{ parameters.region }}_${{ parameters.env }}'
   inputs:
     targetType: 'inline'
     script: |

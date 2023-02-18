@@ -22,8 +22,7 @@ stages:
   pool:
     vmImage: ubuntu-latest 
   jobs:
-  - deployment: Infrastructure    
-    dependsOn: Approval
+  - deployment: Infrastructure
     condition: eq('${{ parameters.apply }}', 'true')
     displayName: Ensure App Specific Infra
     environment: ${{ parameters.region }}_${{ parameters.env }}
