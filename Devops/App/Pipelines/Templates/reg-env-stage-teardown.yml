@@ -47,11 +47,11 @@ stages:
           steps:
           - checkout: self
             clean: true   
-          - template:  ../../../Common/Templates/reg-env-set-vars.yml        
+          - template:  ../../../Common/Templates/vars-reg-env-set.yml        
             parameters:
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}     
-          - template: ../../../Common/Templates/replace-tokens.yml
+          - template: ../../../Common/Templates/vars-replace-tokens.yml
             parameters:
               targetFiles: |
                 Devops/App/Terraform/variables.tf              

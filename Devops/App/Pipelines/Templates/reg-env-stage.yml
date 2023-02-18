@@ -52,7 +52,7 @@ stages:
             parameters:
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}                   
-          - template: ../../../Common/Templates/replace-tokens.yml
+          - template: ../../../Common/Templates/vars-replace-tokens.yml
             parameters:
               targetFiles: Devops/App/Terraform/variables.tf
           - template: ../../../Common/Templates/agent-sql-access.yml
@@ -77,7 +77,7 @@ stages:
           steps:
           - checkout: self
             clean: true   
-          - template:  ../../../Common/Templates/reg-env-set-vars.yml        
+          - template:  ../../../Common/Templates/vars-reg-env-set.yml        
             parameters:
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}      
@@ -90,8 +90,8 @@ stages:
               inlineScript: |
                 aksManagedIdentities=$(az identity list -g $(rgName) --query "[?starts_with(name,'$(aksWorkloadIdentityNamePrefix)')].{client_id: clientId, name: name}" -o json | jq -c '.')
                 echo "##vso[task.setvariable variable=aksManagedIdentities;]$aksManagedIdentities"
-                echo $replace-tokens
-          - template: ../../../Common/Templates/replace-tokens.yml
+                echo $vars-replace-tokens
+          - template: ../../../Common/Templates/vars-replace-tokens.yml
             parameters:
               targetFiles: |
                 Devops/App/Helm/**/Chart.yaml

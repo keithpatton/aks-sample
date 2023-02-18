@@ -24,7 +24,7 @@ stages:
           - template: ../../../Common/Templates/tf-state-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-          - template: ../../../Common/Templates/replace-tokens.yml
+          - template: ../../../Common/Templates/vars-replace-tokens.yml
             parameters:
               targetFiles: |
                 Devops/Infra/Terraform/Common/variables.tf          

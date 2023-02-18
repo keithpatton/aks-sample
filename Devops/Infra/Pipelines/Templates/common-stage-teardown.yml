@@ -25,7 +25,7 @@ stages:
           steps:
           - checkout: self
             clean: true               
-          - template: ../../../Common/Templates/replace-tokens.yml
+          - template: ../../../Common/Templates/vars-replace-tokens.yml
             parameters:
               targetFiles: |
                 Devops/Infra/Terraform/Common/variables.tf                                    
