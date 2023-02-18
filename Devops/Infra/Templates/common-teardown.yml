@@ -9,21 +9,16 @@ parameters:
   type: object
 
 stages:
-- stage: ${{ parameters.region }}_${{ parameters.env }}
-  displayName: ${{ parameters.region }}_${{ parameters.env }}
-  variables: 
-    - template: variables/reg-env.yml 
-      parameters:
-        region: ${{ parameters.region }}
-        env: ${{ parameters.env }}
+- stage: common
+  displayName: common
   dependsOn: ${{ parameters.dependsOn }}
   pool:
     vmImage: ubuntu-latest 
   jobs:
   - deployment: Infrastructure
-    displayName: Destroy Region/Env Infra Resources
+    displayName: Destroy Common Infra Resources
     # all environments manually enabled by authorised person on first run 
-    environment: ${{ parameters.region }}_${{ parameters.env }}
+    environment: common
     strategy:
       runOnce:
         deploy:
@@ -37,8 +32,8 @@ stages:
           - template: ../../Common/Templates/tfInitAzRm.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/Common'
           - template: ../../Common/Templates/tfDestroyAzRm.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/Common'

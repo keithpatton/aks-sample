@@ -59,7 +59,7 @@ data "azurerm_subnet" "aks" {
 resource "azurerm_role_assignment" "default" {
   principal_id                     = azurerm_kubernetes_cluster.default.kubelet_identity[0].object_id
   role_definition_name             = "AcrPull"
-  scope                            = data.zurerm_container_registry.default.id
+  scope                            = data.azurerm_container_registry.default.id
   skip_service_principal_aad_check = true
 }
 

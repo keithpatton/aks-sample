@@ -9,6 +9,7 @@ variables:
   - template: ../Templates/variables/root.yml   
 
 stages:
+
 - template: ../Templates/stage-teardown.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
@@ -22,3 +23,10 @@ stages:
     region: 'au1'
     env: 'qa'
     dependsOn: []
+
+- template: ../Templates/common-teardown.yml
+  parameters:
+    svcConnAzureRm: $(svcConnAzureRmDefault)
+    region: 'au1'
+    env: 'dev'
+    dependsOn: [au1_dev,au1_qa]
