@@ -1,5 +1,4 @@
-acrName: acrau1dev01 # fix this 
-
+acrName: #{acrName}#
 aksPvcName: #{aksPvcName}#
 aksManagedIdentities: #{aksManagedIdentities}#
 aksWorkloadIdentityServiceAccountName: #{aksWorkloadIdentityServiceAccountName}#

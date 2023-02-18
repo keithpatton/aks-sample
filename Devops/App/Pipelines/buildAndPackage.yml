@@ -12,8 +12,6 @@ resources:
 
 variables: 
   - template: ../Templates/variables/root.yml 
-  - name: acrName
-    value: acrau1dev01 # Hard coded because build is not regional, needs to be know in advance
 
 stages:
 - stage: package
