@@ -6,7 +6,7 @@ parameters:
 
 steps:
 - task: replacetokens@5
-  displayName: 'Replace tokens with variables'
+  displayName: 'Replace tokens with var'
   inputs:
     targetFiles: ${{ parameters.targetFiles }} 
     encoding: 'auto'

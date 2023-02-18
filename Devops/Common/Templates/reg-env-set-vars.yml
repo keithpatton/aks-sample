@@ -1,3 +1,4 @@
+# Set dynamic vars for region and environment
 # Sets $tenantsJson and $ringsJson vars to represent active tenants/rings for a stage (region/environment) 
 # Assumes $tenants and $rings variables are already available
 
@@ -9,7 +10,7 @@ parameters:
 
 steps:
 - task: Bash@3
-  displayName: 'Sets Tenants and Rings Json Stage Vars'
+  displayName: 'Sets Tenants and Rings Vars for Region/Env'
   inputs:
     targetType: 'inline'
     script: |

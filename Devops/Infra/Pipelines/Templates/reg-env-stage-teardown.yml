@@ -30,15 +30,15 @@ stages:
           steps:
           - checkout: self
             clean: true               
-          - template: ../../../Common/Templates/replaceTokens.yml
+          - template: ../../../Common/Templates/replace-tokens.yml
             parameters:
               targetFiles: |
                 Devops/Infra/Terraform/RegEnv/variables.tf                                    
-          - template: ../../../Common/Templates/tfInitAzRm.yml
+          - template: ../../../Common/Templates/tf-init-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
-          - template: ../../../Common/Templates/tfDestroyAzRm.yml
+          - template: ../../../Common/Templates/tf-destroy-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
