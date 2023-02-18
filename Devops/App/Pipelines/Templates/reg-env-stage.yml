@@ -48,7 +48,7 @@ stages:
           steps:
           - checkout: self
             clean: true           
-          - template:  ../../../Common/Templates/stampSetVars.yml        
+          - template:  ../../../Common/Templates/vars-reg-env-set.yml        
             parameters:
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}                   
