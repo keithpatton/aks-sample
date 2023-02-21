@@ -2,6 +2,8 @@ variables:
 - template: ../../../../Common/Templates/variables/root.yml 
 - name: appName
   value: "webapi"
+- name: appTenantsDataPath
+  value: $(Build.SourcesDirectory)/Devops/App/data/tenants     
 - name: rings
   value: |-
     [{
