@@ -70,7 +70,7 @@ stages:
             parameters:
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}    
-          - template:  ../../../../common/pipelines/templates/steps/vars-reg-env-set.yml        
+          - template:  ../../../Common/Templates/steps/vars-reg-env-set.yml        
             parameters:
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}  
