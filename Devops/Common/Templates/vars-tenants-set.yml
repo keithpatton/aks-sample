@@ -3,8 +3,6 @@
 # requiredData is a string containing a comma separated list of requried field names (e.g. "group,ring"), tenants will not be returned if they don't have these values
 
 parameters:
-- name: svcConnAzureRm
-  type: string
 - name: region
   type: string
 - name: env
