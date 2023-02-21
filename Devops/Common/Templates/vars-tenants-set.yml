@@ -9,15 +9,15 @@ parameters:
   type: string  
 - name: tenantsDataPaths
   type: string
-  default: ""
+  default: "@()"
 - name: requiredData
   type: string
-  default: ""
+  default: "@()"
 
 steps:
   - task: PowerShell@2
     displayName: 'Sets Tenants Json Var for ${{ parameters.region }}_${{ parameters.env }}'
     inputs:
       filePath: '$(Build.SourcesDirectory)/Devops/Common/scripts/ps/Set_TenantsJson.ps1'
-      arguments: '-reg ${{ parameters.region }} -env ${{ parameters.env }} -tenantsDataPaths "$(${{ parameters.tenantsDataPaths }})" -requiredData "$(${{ parameters.requiredData }})"'
+      arguments: '-reg ${{ parameters.region }} -env ${{ parameters.env }} -tenantsDataPaths ${{ parameters.tenantsDataPaths }} -requiredData ${{ parameters.requiredData }}'
       #arguments: '-reg ${{ parameters.region }} -env ${{ parameters.env }} -tenantsDataPaths @("$(appTenantsDataPath)") -requiredData @("group","ring")'  

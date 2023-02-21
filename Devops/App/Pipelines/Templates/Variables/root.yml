@@ -3,9 +3,9 @@ variables:
 - name: appName
   value: "webapi"
 - name: tenantsDataPaths
-  value: '"$(Build.SourcesDirectory)/Devops/App/data/tenants"'  
+  value: '@("$(Build.SourcesDirectory)/Devops/App/data/tenants")'
 - name: tenantsRequiredData
-  value: '"group","ring"'
+  value: '@("group","ring")'
 - name: rings
   value: |-
     [{
