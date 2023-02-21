@@ -5,6 +5,10 @@
 parameters:
 - name: svcConnAzureRm
   type: string
+- name: region
+  type: string
+- name: env
+  type: string  
 - name: tenantsDataPaths
   type: string
   default: ""
