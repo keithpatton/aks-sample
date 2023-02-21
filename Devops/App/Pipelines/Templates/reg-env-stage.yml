@@ -32,6 +32,11 @@ stages:
           steps:
           - checkout: self
             clean: true           
+          - task: PowerShell@2
+            displayName: 'Sets Tenants Json Var for ${{ parameters.region }}_${{ parameters.env }}'
+            inputs:
+              filePath: '$(Build.SourcesDirectory)/Devops/Common/scripts/ps/Set_TenantsJson.ps1'
+              arguments: '-reg ${{ parameters.region }} -env ${{ parameters.env }} -tenantsDataPaths @($appTenantsDataPath) -requiredData @("group","ring")'                    
           - template:  ../../../Common/Templates/vars-reg-env-set.yml        
             parameters:
               region: ${{ parameters.region }}
@@ -64,7 +69,16 @@ stages:
           - template:  ../../../Common/Templates/vars-reg-env-set.yml        
             parameters:
               region: ${{ parameters.region }}
-              env: ${{ parameters.env }}      
+              env: ${{ parameters.env }}    
+          - template:  ../../../../common/pipelines/templates/steps/vars-reg-env-set.yml        
+            parameters:
+              region: ${{ parameters.region }}
+              env: ${{ parameters.env }}  
+          - task: PowerShell@2
+            displayName: 'Sets Tenants Json Var for ${{ parameters.region }}_${{ parameters.env }}'
+            inputs:
+              filePath: '$(Build.SourcesDirectory)/Devops/Common/scripts/ps/Set_TenantsJson.ps1'
+              arguments: '-reg ${{ parameters.region }} -env ${{ parameters.env }} -tenantsDataPaths @($appTenantsDataPath) -requiredData @("group","ring")'                
           - task: AzureCLI@2
             displayName: Get Azure Managed Workload Identities
             inputs:

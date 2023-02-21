@@ -7,8 +7,8 @@ parameters:
   type: string
 
 variables:
-- template: reg_${{ parameters.region }}.yml 
 - template: env_${{ parameters.env }}.yml  
+- template: reg_${{ parameters.region }}.yml 
 - template: reg_${{ parameters.region }}-env_${{ parameters.env }}.yml  
 
 - name: rgName

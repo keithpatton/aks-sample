@@ -1,0 +1,12 @@
+[
+    {
+        "name": "group",
+        "value": "common2",
+        "description": "different group in qa"
+    },
+    {
+        "name": "ring",
+        "value": "stable",
+        "description": "different ring in qa"
+    }
+]

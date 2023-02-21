@@ -2,33 +2,6 @@ variables:
 - template: ../../../../Common/Templates/variables/root.yml 
 - name: appName
   value: "webapi"
-- name: tenants
-  value: |-
-    [{
-      "name": "tenant1",
-      "group": "common",
-      "region": "au1",
-      "env": "dev",
-      "ring": "latest"
-    }, {
-      "name": "tenant1",
-      "group": "common",
-      "region": "au1",
-      "env": "qa",
-      "ring": "latest"
-    }, {  
-      "name": "tenant2",
-      "group": "common2",
-      "region": "au1",
-      "env": "dev",
-      "ring": "latest"
-    }, {
-      "name": "tenant2",
-      "group": "common2",
-      "region": "au1",
-      "env": "qa",
-      "ring": "latest"
-    }]
 - name: rings
   value: |-
     [{

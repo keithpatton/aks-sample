@@ -1,6 +1,6 @@
 # Set dynamic vars for region and environment
-# Sets $tenantsJson and $ringsJson vars to represent active tenants/rings for a stage (region/environment) 
-# Assumes $tenants and $rings variables are already available
+# Sets $ringsJson vars to represent active rings for a stage (region/environment) 
+# Assumes $rings variable is already available
 
 parameters:
 - name: region
@@ -10,21 +10,13 @@ parameters:
 
 steps:
 - task: Bash@3
-  displayName: 'Sets Tenants and Rings Vars for ${{ parameters.region }}_${{ parameters.env }}'
+  displayName: 'Sets Vars for ${{ parameters.region }}_${{ parameters.env }}'
   inputs:
     targetType: 'inline'
     script: |
       region=$(echo "${{parameters.region}}")
       env=$(echo "${{parameters.env}}")
       
-      tenants=$(echo '$(tenants)')
-      echo "All Tenants:"
-      echo $tenants
-      tenantsJson=$(echo "$tenants" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
-      echo "##vso[task.setvariable variable=tenantsJson;]$tenantsJson"
-      echo "Stage Tenants:"
-      echo $tenantsJson    
-
       rings=$(echo '$(rings)')
       echo "All Rings:"
       echo $rings
