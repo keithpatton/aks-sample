@@ -47,22 +47,22 @@ stages:
           steps:
           - checkout: self
             clean: true   
-          - template:  ../../../Common/Templates/vars-reg-env-set.yml        
+          - template:  ../../../../common/templates/steps/vars-reg-env-set.yml        
             parameters:
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}     
-          - template: ../../../Common/Templates/vars-replace-tokens.yml
+          - template: ../../../../common/templates/steps/vars-replace-tokens.yml
             parameters:
               targetFiles: |
                 Devops/App/Terraform/variables.tf              
-          - template: ../../../Common/Templates/agent-sql-access.yml
+          - template: ../../../../common/templates/steps/agent-sql-access.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-          - template: ../../../Common/Templates/tf-init-az.yml
+          - template: ../../../../common/templates/steps/tf-init-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/App/Terraform'
-          - template: ../../../Common/Templates/tf-destroy-az.yml
+          - template: ../../../../common/templates/steps/tf-destroy-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/App/Terraform'

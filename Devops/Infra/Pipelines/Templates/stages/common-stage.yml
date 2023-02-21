@@ -21,18 +21,18 @@ stages:
           steps:
           - checkout: self
             clean: true              
-          - template: ../../../Common/Templates/tf-state-az.yml
+          - template: ../../../../common/templates/steps/tf-state-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-          - template: ../../../Common/Templates/vars-replace-tokens.yml
+          - template: ../../../../common/templates/steps/vars-replace-tokens.yml
             parameters:
               targetFiles: |
                 Devops/Infra/Terraform/Common/variables.tf          
-          - template: ../../../Common/Templates/tf-init-az.yml
+          - template: ../../../../common/templates/steps/tf-init-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/Common'
-          - template: ../../../Common/Templates/tf-apply-az.yml
+          - template: ../../../../common/templates/steps/tf-apply-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/Common'

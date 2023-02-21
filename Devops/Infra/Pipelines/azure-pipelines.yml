@@ -6,23 +6,23 @@ resources:
 - repo: self
 
 variables: 
-  - template: Templates/Variables/root.yml   
+  - template: templates/variables/root.yml   
 
 stages:
 
-- template: Templates/common-stage.yml
+- template: templates/stages/common-stage.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
     dependsOn: []
 
-- template: Templates/reg-env-stage.yml
+- template: templates/stages/reg-env-stage.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'dev'
     dependsOn: [common]
 
-- template: Templates/reg-env-stage.yml
+- template: templates/stages/reg-env-stage.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'

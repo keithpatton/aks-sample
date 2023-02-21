@@ -17,10 +17,10 @@ parameters:
   default: true
 
 variables: 
-  - template: Templates/Variables/root.yml   
+  - template: templates/variables/root.yml   
 
 stages:
-- template: Templates/reg-env-stage.yml
+- template: templates/stages/reg-env-stage.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
@@ -28,7 +28,7 @@ stages:
     apply: ${{ parameters.apply }}
     dependsOn: []
 
-- template: Templates/reg-env-stage.yml
+- template: templates/stages/reg-env-stage.yml
   parameters:
     svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'

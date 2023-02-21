@@ -5,7 +5,7 @@ parameters:
   type: string
 
 variables:
-- template: ../../../../Common/Templates/variables/reg-env.yml
+- template: ../../../../common/templates/variables/reg-env.yml
   parameters:
     region: ${{ parameters.region }}
     env: ${{ parameters.env }}  

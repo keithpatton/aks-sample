@@ -41,18 +41,18 @@ stages:
                 az extension add --name aks-preview
                 az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
                 az provider register --namespace Microsoft.ContainerService
-          - template: ../../../Common/Templates/tf-state-az.yml
+          - template: ../../../../common/templates/steps/tf-state-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-          - template: ../../../Common/Templates/vars-replace-tokens.yml
+          - template: ../../../../common/templates/steps/vars-replace-tokens.yml
             parameters:
               targetFiles: |
                 Devops/Infra/Terraform/RegEnv/variables.tf          
-          - template: ../../../Common/Templates/tf-init-az.yml
+          - template: ../../../../common/templates/steps/tf-init-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
-          - template: ../../../Common/Templates/tf-apply-az.yml
+          - template: ../../../../common/templates/steps/tf-apply-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
@@ -66,12 +66,12 @@ stages:
           steps:
           - checkout: self
             clean: true   
-          - template: ../../../Common/Templates/vars-replace-tokens.yml
+          - template: ../../../../common/templates/steps/vars-replace-tokens.yml
             parameters:
               targetFiles: |
                 Devops/Infra/Helm/**/Chart.yaml
                 Devops/Infra/Helm/**/values.yaml
-          - template: ../../../Common/Templates/helm-upgrade.yml
+          - template: ../../../../common/templates/steps/helm-upgrade.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               releaseName: $(traefikReleaseName)
