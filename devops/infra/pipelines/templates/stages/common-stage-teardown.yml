@@ -28,12 +28,12 @@ stages:
           - template: ../../../../common/templates/steps/vars-replace-tokens.yml
             parameters:
               targetFiles: |
-                Devops/Infra/Terraform/Common/variables.tf                                    
+                devops/infra/terraform/common/variables.tf                                    
           - template: ../../../../common/templates/steps/tf-init-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/Common'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/common'
           - template: ../../../../common/templates/steps/tf-destroy-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/Common'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/common'

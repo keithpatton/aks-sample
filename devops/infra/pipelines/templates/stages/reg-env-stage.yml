@@ -47,15 +47,15 @@ stages:
           - template: ../../../../common/templates/steps/vars-replace-tokens.yml
             parameters:
               targetFiles: |
-                Devops/Infra/Terraform/RegEnv/variables.tf          
+                devops/infra/terraform/regenv/variables.tf          
           - template: ../../../../common/templates/steps/tf-init-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/regenv'
           - template: ../../../../common/templates/steps/tf-apply-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/regenv'
   - deployment: InfrastructureApps    
     displayName: Deploy ${{ parameters.region }}_${{ parameters.env }} Infra Apps
     dependsOn: Infrastructure
