@@ -4,7 +4,7 @@
 {{- range $.Values.groups }}
   {{- $group := .name}}
   {{- $pvcName := $.Values.aksPvcName}}
-  {{- $pvcNamespace := printf "%s-%s" $.Values.appName . }}
+  {{- $pvcNamespace := printf "%s-%s" $.Values.appName $group }}
   {{- $storageClassName := printf "%s%s" $.Values.aksStorageClassNamePrefix "common" }}
 apiVersion: v1
 kind: PersistentVolumeClaim
