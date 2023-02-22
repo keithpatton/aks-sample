@@ -13,7 +13,7 @@ metadata:
   namespace: {{ $pvcNamespace }}
   labels:
     name: {{ $pvcName }}
-    group: {{ . }}
+    group: {{ $group }}
     {{- range $.Values.tenants }}
       {{- if (eq $group .group)  }}
     tenant-{{ .name }}: {{ .name }}
