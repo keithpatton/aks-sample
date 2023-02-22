@@ -35,7 +35,9 @@ stages:
           - template:  ../../../../common/templates/steps/vars-reg-env-set.yml        
             parameters:
               region: ${{ parameters.region }}
-              env: ${{ parameters.env }}           
+              env: ${{ parameters.env }}        
+              groupsDataFilePath: $(groupsDataFilePath)   
+              ringsDataFilePath: $(ringsDataFilePath)                    
           - template:  ../../../../common/templates/steps/vars-tenants-set.yml   
             parameters:
               region: ${{ parameters.region }}
@@ -75,6 +77,8 @@ stages:
             parameters:
               region: ${{ parameters.region }}
               env: ${{ parameters.env }}  
+              groupsDataFilePath: $(groupsDataFilePath)   
+              ringsDataFilePath: $(ringsDataFilePath)                 
           - template:  ../../../../common/templates/steps/vars-tenants-set.yml   
             parameters:
               region: ${{ parameters.region }}

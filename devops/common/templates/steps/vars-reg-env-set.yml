@@ -1,12 +1,17 @@
 # Set dynamic vars for region and environment
 # Sets $ringsJson vars to represent active rings for a stage (region/environment) 
-# Assumes $rings and $groups variables already available
+# Sets $groupsJson vars to represent active groups for a stage (region/environment) 
+# Note: loads from data json files
 
 parameters:
 - name: region
   type: string
 - name: env
   type: string
+- name: groupsDataFilePath
+  type: string
+- name: ringsDataFilePath
+  type: string  
 
 steps:
 - task: Bash@3
@@ -17,18 +22,14 @@ steps:
       region=$(echo "${{parameters.region}}")
       env=$(echo "${{parameters.env}}")
       
-      rings=$(echo '$(rings)')
-      echo "All Rings:"
-      echo $rings
-      ringsJson=$(echo "$rings" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
+      # Load rings data from file path
+      ringsJson=$(cat ${{ parameters.ringsDataFilePath }} | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
       echo "##vso[task.setvariable variable=ringsJson;]$ringsJson"
       echo "Stage Rings:"
       echo $ringsJson
 
-      rings=$(echo '$(groups)')
-      echo "All Groups:"
-      echo $groups
-      groupsJson=$(echo "$groups" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
+      # Load groups data from file path
+      groupsJson=$(cat ${{ parameters.groupsDataFilePath }} | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
       echo "##vso[task.setvariable variable=groupsJson;]$groupsJson"
       echo "Stage Groups:"
-      echo $groupsJson 
+      echo $groupsJson
