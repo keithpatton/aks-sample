@@ -1,14 +1,14 @@
 [{
     "name": "common",
     "region": "au1",
-    "env": "dev",
+    "env": "dev", 
     "cpuQuota": "1",
     "memoryQuota": "1Gi",
     "podsQuota": "2", 
     "limitsCpuQuota": "2",
     "limitsMemoryQuota": "2Gi",
-    "requestsCpuPod": "500m",
-    "requestsMemoryPod": "500Mi",
+    "cpuPod": "500m",
+    "memoryPod": "500Mi",
     "limitsCpuPod": "1",
     "limitsMemoryPod": "1Gi"    
   },
