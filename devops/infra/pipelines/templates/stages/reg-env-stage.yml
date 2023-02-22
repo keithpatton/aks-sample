@@ -75,5 +75,5 @@ stages:
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               releaseName: $(traefikReleaseName)
-              chartPath: '$(System.DefaultWorkingDirectory)/Devops/Infra/Helm/traefik'    
+              chartPath: '$(System.DefaultWorkingDirectory)/devops/infra/helm/traefik'    
               namespace: $(traefikAksNamespace)
