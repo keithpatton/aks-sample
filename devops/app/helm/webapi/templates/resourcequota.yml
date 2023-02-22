@@ -19,12 +19,12 @@ metadata:
     {{- end }}      
 spec:
   hard:
-    cpu: {{- $group.cpu }}
-    memory: {{- $group.memory }}
-    pods: {{- $group.pods }}
-    requests.cpu: {{- $group.requestsCpu }}
-    requests.memory: {{- $group.requestsMemory }}
-    limits.cpu: {{- $group.limitsCpu }}
-    limits.memory: {{- $group.limitsMemory }}
+    cpu: {{ $group.cpu }}
+    memory: {{ $group.memory }}
+    pods: {{ $group.pods }}
+    requests.cpu: {{ $group.requestsCpu }}
+    requests.memory: {{ $group.requestsMemory }}
+    limits.cpu: {{ $group.limitsCpu }}
+    limits.memory: {{ $group.limitsMemory }}
 ---
 {{- end }}
