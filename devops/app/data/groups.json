@@ -10,7 +10,8 @@
     "cpuPod": "500m",
     "memoryPod": "500Mi",
     "limitsCpuPod": "1",
-    "limitsMemoryPod": "1Gi"    
+    "limitsMemoryPod": "1Gi",
+    "replicas": 1 
   },
   {
     "name": "common",
@@ -24,5 +25,6 @@
     "cpuPod": "500m",
     "memoryPod": "500Mi",
     "limitsCpuPod": "1",
-    "limitsMemoryPod": "1Gi"    
+    "limitsMemoryPod": "1Gi",
+    "replicas": 1
   }]
