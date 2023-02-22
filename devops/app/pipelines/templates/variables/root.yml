@@ -21,7 +21,7 @@ variables:
     }]
 - name: groups
   value: |-
-    [{
+    '[{
       "name": "common",
       "region": "au1",
       "env": "dev",
@@ -44,7 +44,7 @@ variables:
       "requestsMemory": "500Mi",
       "limitsCpu": "1",
       "limitsMemory": "1Gi"
-    }]
+    }]'
   # build pipeline resource sets run name to version using GitVersion
 - name: buildVersion
   value: $(resources.pipeline.build_and_package.runName)
