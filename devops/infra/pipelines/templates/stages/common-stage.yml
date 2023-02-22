@@ -35,4 +35,4 @@ stages:
           - template: ../../../../common/templates/steps/tf-apply-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
-              workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/common
+              workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/common'
