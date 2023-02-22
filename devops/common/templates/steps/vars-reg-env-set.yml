@@ -49,8 +49,8 @@ steps:
       echo "Stage Groups:"
       echo $groupsJson
 
-  - task: PowerShell@2
-    displayName: 'Sets Tenants Json Var for ${{ parameters.region }}_${{ parameters.env }}'
-    inputs:
-      filePath: '${{ parameters.tenantsScriptFilePath }}'
-      arguments: '-reg ${{ parameters.region }} -env ${{ parameters.env }} -tenantsDataPaths ${{ parameters.tenantsDataPaths }} -requiredData ${{ parameters.tenantsRequiredData }}'
+- task: PowerShell@2
+  displayName: 'Sets Tenants Json Var for ${{ parameters.region }}_${{ parameters.env }}'
+  inputs:
+    filePath: '${{ parameters.tenantsScriptFilePath }}'
+    arguments: '-reg ${{ parameters.region }} -env ${{ parameters.env }} -tenantsDataPaths ${{ parameters.tenantsDataPaths }} -requiredData ${{ parameters.tenantsRequiredData }}'
