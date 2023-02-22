@@ -2,15 +2,17 @@ variables:
 - template: ../../../../common/templates/variables/root.yml 
 - name: appName
   value: "webapi"
-- name: tenantsDataPaths
-  value: '@("$(Build.SourcesDirectory)/devops/app/data/tenants")'
 - name: groupsDataFilePath
   value: '$(Build.SourcesDirectory)/devops/app/data/groups.json'
 - name: ringsDataFilePath
   value: '$(Build.SourcesDirectory)/devops/app/data/rings.json'  
+- name: tenantsDataPaths
+  value: '@("$(Build.SourcesDirectory)/devops/app/data/tenants")'
 - name: tenantsRequiredData
   value: '@("group","ring")'
-  # build pipeline resource sets run name to version using GitVersion
+- name: tenantsScriptFilePath
+  value: '$(Build.SourcesDirectory)/devops/common/scripts/ps/Set_TenantsJson.ps1'
+# build pipeline resource sets run name to version using GitVersion
 - name: buildVersion
   value: $(resources.pipeline.build_and_package.runName)
 - name: imageName

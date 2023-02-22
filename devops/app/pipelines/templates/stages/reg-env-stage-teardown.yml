@@ -53,6 +53,9 @@ stages:
               env: ${{ parameters.env }}  
               groupsDataFilePath: $(groupsDataFilePath)   
               ringsDataFilePath: $(ringsDataFilePath)   
+              tenantsDataPaths: $(tenantsDataPaths)
+              tenantsRequiredData: $(tenantsRequiredData)  
+              tenantsScriptFilePath: $(tenantsScriptFilePath)    
           - template: ../../../../common/templates/steps/vars-replace-tokens.yml
             parameters:
               targetFiles: |

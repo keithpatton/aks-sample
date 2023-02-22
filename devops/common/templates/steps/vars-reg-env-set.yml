@@ -1,6 +1,7 @@
 # Set dynamic vars for region and environment
-# Sets $ringsJson vars to represent active rings for a stage (region/environment) 
-# Sets $groupsJson vars to represent active groups for a stage (region/environment) 
+# Sets $ringsJson vars to represent active rings
+# Sets $groupsJson vars to represent active groups
+# Sets $tenantsJson vars to represent active tenants
 # Note: loads from data json files
 
 parameters:
@@ -12,8 +13,22 @@ parameters:
   type: string
 - name: ringsDataFilePath
   type: string  
+- name: tenantsScriptFilePath
+  type: string
+  default: "@()"  
+- name: tenantsDataPaths
+  type: string
+  default: "@()"
+- name: tenantsRequiredData
+  type: string
+  default: "@()"
 
 steps:
+- template: vars-replace-tokens.yml
+  parameters:
+    targetFiles: |
+      $(groupsDataFilePath)
+      $(ringsDataFilePath)
 - task: Bash@3
   displayName: 'Sets Groups and Rings Vars for ${{ parameters.region }}_${{ parameters.env }}'
   inputs:
@@ -33,3 +48,9 @@ steps:
       echo "##vso[task.setvariable variable=groupsJson;]$groupsJson"
       echo "Stage Groups:"
       echo $groupsJson
+
+  - task: PowerShell@2
+    displayName: 'Sets Tenants Json Var for ${{ parameters.region }}_${{ parameters.env }}'
+    inputs:
+      filePath: '${{ parameters.tenantsScriptFilePath }}'
+      arguments: '-reg ${{ parameters.region }} -env ${{ parameters.env }} -tenantsDataPaths ${{ parameters.tenantsDataPaths }} -requiredData ${{ parameters.tenantsRequiredData }}'
