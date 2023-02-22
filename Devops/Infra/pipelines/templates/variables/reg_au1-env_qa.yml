@@ -1,4 +1,0 @@
-# au1 qa variables
-variables:
-- name: aksVNetName
-  value: "aks-vnet-19765185"
