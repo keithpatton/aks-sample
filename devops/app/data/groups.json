@@ -2,29 +2,35 @@
     "name": "common",
     "region": "au1",
     "env": "dev", 
-    "cpuQuota": "2",
+
+    "cpuQuota": "1250m",
     "memoryQuota": "2Gi",
-    "podsQuota": "3", 
-    "limitsCpuQuota": "3",
+    "limitsCpuQuota": "1800m",
     "limitsMemoryQuota": "3Gi",
-    "cpuPod": "500m",
-    "memoryPod": "500Mi",
-    "limitsCpuPod": "1",
-    "limitsMemoryPod": "1Gi",
+    "podsQuota": "4", 
+
+    "cpuPod": "250m",
+    "memoryPod": "400Mi",
+    "limitsCpuPod": "400m",
+    "limitsMemoryPod": "600Mi",
+    
     "replicas": 1 
   },
   {
     "name": "common",
     "region": "au1",
     "env": "qa", 
-    "cpuQuota": "2",
+    
+    "cpuQuota": "1250m",
     "memoryQuota": "2Gi",
-    "podsQuota": "3", 
-    "limitsCpuQuota": "3",
+    "limitsCpuQuota": "1800m",
     "limitsMemoryQuota": "3Gi",
-    "cpuPod": "500m",
-    "memoryPod": "500Mi",
-    "limitsCpuPod": "1",
-    "limitsMemoryPod": "1Gi",
-    "replicas": 1
+    "podsQuota": "4", 
+
+    "cpuPod": "250m",
+    "memoryPod": "400Mi",
+    "limitsCpuPod": "400m",
+    "limitsMemoryPod": "600Mi",
+    
+    "replicas": 1 
   }]
