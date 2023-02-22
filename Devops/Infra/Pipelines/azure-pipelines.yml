@@ -6,7 +6,7 @@ resources:
 - repo: self
 
 variables: 
-  - template: templates/variables/root.yml   
+  - template: templates/variables/root.yml    
 
 stages:
 
