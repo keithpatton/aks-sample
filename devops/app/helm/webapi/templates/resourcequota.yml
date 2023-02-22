@@ -3,10 +3,20 @@
 {{- range $.Values.groups }}
   {{- $group := .}}
   {{- $name := printf "%s-%s" $.Values.appName $group.name }}
+  {{- $namespace := $name }}
 apiVersion: v1
 kind: ResourceQuota
 metadata:
   name:  {{ $name }}
+  namespace: {{ $namespace }}
+  labels:
+    name: {{ $name }}
+    group: {{ $group.name }}
+    {{- range $.Values.tenants }}
+      {{- if eq $group.name .group  }}
+    tenant-{{ .name }}: {{ .name }}
+      {{- end }}
+    {{- end }}      
 spec:
   hard:
     cpu: {{- $group.cpu }}
