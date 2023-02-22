@@ -8,4 +8,14 @@
   "region": "au1",
   "env": "qa",
   "version": "$(buildVersion)"
+}, {
+  "name": "stable",
+  "region": "au1",
+  "env": "dev",
+  "version": "0.1.97"
+}, {
+  "name": "stable",
+  "region": "au1",
+  "env": "qa",
+  "version": "0.1.97"
 }]

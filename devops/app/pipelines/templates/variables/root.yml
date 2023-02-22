@@ -12,6 +12,7 @@ variables:
   value: '@("group","ring")'
 - name: tenantsScriptFilePath
   value: '$(Build.SourcesDirectory)/devops/common/scripts/ps/Set_TenantsJson.ps1'
+  
 # build pipeline resource sets run name to version using GitVersion
 - name: buildVersion
   value: $(resources.pipeline.build_and_package.runName)
