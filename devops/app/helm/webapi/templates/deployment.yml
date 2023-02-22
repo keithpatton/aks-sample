@@ -8,7 +8,7 @@
 {{- end }}
 
 {{- range $.Values.groups }}
-  {{- $group := .name }}
+  {{- $group := . }}
   {{- range $rings }}
     {{- $ring := .}}
     {{- $ringVersion := "" }}
@@ -17,7 +17,7 @@
         {{- $ringVersion = .version }}
       {{- end }}
     {{- end }}    
-    {{- $deploymentNamespace := printf "%s-%s" $.Values.appName $group }}
+    {{- $deploymentNamespace := printf "%s-%s" $.Values.appName $group.name }}
     {{- $deploymentName := printf "%s-%s" $.Values.appName $ring }}
     {{- $configMapName := $deploymentName }}
   
@@ -28,10 +28,10 @@ metadata:
   namespace: {{ $deploymentNamespace }}
   labels:
     app: {{ $deploymentName }}
-    group: {{ $group }}
+    group: {{ $group.name }}
     ring: {{ $ring }}    
     {{- range $.Values.tenants }}
-      {{- if and (eq $ring .ring) (eq $group .group)  }}
+      {{- if and (eq $ring .ring) (eq $group.name .group)  }}
     tenant-{{ .name }}: {{ .name }}
       {{- end }}
     {{- end }}
@@ -45,10 +45,10 @@ spec:
       labels:
         app: {{ $deploymentName }}
         azure.workload.identity/use: "true"
-        group: {{ $group }}
+        group: {{ $group.name }}
         ring: {{ $ring }}
         {{- range $.Values.tenants }}
-          {{- if and (eq $ring .ring) (eq $group .group)  }}
+          {{- if and (eq $ring .ring) (eq $group.name .group)  }}
         tenant-{{ .name }}: {{ .name }}
           {{- end }}
         {{- end }}        
@@ -58,6 +58,13 @@ spec:
         - name: {{ $deploymentName }}
           image: {{ $.Values.acrName }}.azurecr.io/{{ $.Values.imageName }}:{{ $ringVersion }}
           imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: {{ $group.limitsCpuPod }}
+              memory: {{ $group.limitsMemoryPod }}
+            requests:
+              cpu: {{ $group.cpuPod }}
+              memory: {{ $group.memoryPod }}
           ports:
             - name: web
               containerPort: 80
@@ -72,7 +79,7 @@ spec:
             - mountPath: /var/common
               name: common
               {{- range $.Values.tenants }}
-                {{- if eq $group .group }}
+                {{- if eq $group.name .group }}
             - mountPath: /var/{{ .name }}
               name: {{ .name }}
                 {{- end }}
@@ -82,7 +89,7 @@ spec:
           persistentVolumeClaim:
              claimName: {{ $.Values.aksPvcName }}        
           {{- range $.Values.tenants }}
-            {{- if eq $group .group }}
+            {{- if eq $group.name .group }}
         - name: {{ .name }}
           persistentVolumeClaim:
             claimName: {{ $.Values.aksPvcName }}-{{ .name }}
