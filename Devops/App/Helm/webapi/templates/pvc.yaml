@@ -1,14 +1,8 @@
 # pvcs 
-{{- $groups := list }}
-{{- range $.Values.tenants }}
-  {{- if not (has .group $groups) }}
-  {{- $groups = append $groups .group}}
-  {{- end }}
-{{- end }}
 
 # pvc per namespaced tenant group for common storage
 {{- range $groups }}
-  {{- $group := .}}
+  {{- $group := .name}}
   {{- $pvcName := $.Values.aksPvcName}}
   {{- $pvcNamespace := printf "%s-%s" $.Values.appName . }}
   {{- $storageClassName := printf "%s%s" $.Values.aksStorageClassNamePrefix "common" }}

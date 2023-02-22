@@ -1,12 +1,5 @@
 
 # config map for each ring within per namespaced tenant group 
-{{- $groups := list }}
-{{- range $.Values.tenants }}
-  {{- if not (has .group $groups) }}
-  {{- $groups = append $groups .group}}
-  {{- end }}
-{{- end }}
-
 {{- $rings := list }}
 {{- range $.Values.rings }}
   {{- if not (has .name $rings) }}
@@ -14,8 +7,8 @@
   {{- end }}
 {{- end }}
 
-{{- range $groups }}
-  {{- $group := .}}
+{{- range $.Values.groups }}
+  {{- $group := .name }}
   {{- range $rings }}
     {{- $ring := .}}
     {{- $ringVersion := "" }}

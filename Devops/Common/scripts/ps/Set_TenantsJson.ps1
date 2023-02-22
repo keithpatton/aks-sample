@@ -13,16 +13,16 @@
     .PARAMETER env
         The environment that the tenant data is related to.
     .PARAMETER tenantsDataPaths
-        The data paths containing the tenant data. As they will be processed in the order they are supplied tt is expected that a common path is follwoed by an
-        application specific path to allow for application specific overrides to apply correctly.
+        The data paths containing the tenant data. As they will be processed in the order they are supplied as it is expected that a common path is followed by an
+        app specific path to allow for app specific overrides to apply correctly.
     .PARAMETER requiredData
         The required data that must exist for a tenant, for that tenant data to be returned. For example, this
         could be the values 'group' and 'ring' for an MT deploy, filtering out any tenants that
-        aren't supported for an MT deploy for this region an enviornment
+        aren't supported for an MT deploy for this region and enviornment
     .OUTPUTS
         A JSON array containing the filtered and merged tenant data for all tenants.
     .EXAMPLE
-        GetTenantsData -reg "au1" -env "qa" -tenantsDataPaths @("{path}\Common\Data\Tenants","{path}\Application\Data\Tenants") -requiredData @("group", "ring")
+        . .\Set_TenantsJson.ps1 -reg "au1" -env "qa" -tenantsDataPaths @("{path}\Common\Data\Tenants","{path}\Application\Data\Tenants") -requiredData @("group", "ring")
 #>    
 param(
     [Parameter(Mandatory)]

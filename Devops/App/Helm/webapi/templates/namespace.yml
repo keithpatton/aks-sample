@@ -1,15 +1,7 @@
 # namespace for each namespaced tenant group 
-
-{{- $groups := list }}
-{{- range $.Values.tenants }}
-  {{- if not (has .group $groups) }}
-  {{- $groups = append $groups .group}}
-  {{- end }}
-{{- end }}
-
-{{- range $groups }}
-  {{- $group := .}}
-  {{- $name := printf "%s-%s" $.Values.appName . }}
+{{- range $.Values.groups }}
+  {{- $group := .name }}
+  {{- $name := printf "%s-%s" $.Values.appName $group }}
 apiVersion: v1
 kind: Namespace
 metadata:

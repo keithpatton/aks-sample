@@ -19,6 +19,32 @@ variables:
       "env": "qa",
       "version": "$(buildVersion)"
     }]
+- name: groups
+  value: |-
+    [{
+      "name": "common",
+      "region": "au1",
+      "env": "dev",
+      "cpu": "1"
+      "memory": 1Gi,
+      "pods": "1",
+      "requestsCpu": "500m"
+      "requestsMemory": 500Mi
+      "limitsCpu": "1"
+      "limitsMemory": 1Gi
+    },
+    {
+      "name": "common",
+      "region": "au1",
+      "env": "qa",
+      "cpu": "1"
+      "memory": 1Gi,
+      "pods": "1",
+      "requestsCpu": "500m"
+      "requestsMemory": 500Mi
+      "limitsCpu": "1"
+      "limitsMemory": 1Gi
+    }]
   # build pipeline resource sets run name to version using GitVersion
 - name: buildVersion
   value: $(resources.pipeline.build_and_package.runName)

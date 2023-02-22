@@ -6,6 +6,7 @@ aksWorkloadIdentityNameDefaultSuffix: #{aksWorkloadIdentityNameDefaultSuffix}#
 aksStorageClassNamePrefix: #{aksStorageClassNamePrefix}#
 aksStorageClassSkuName: #{aksStorageClassSkuName}#
 appName: #{appName}#
+groups: #{groupsJson}#
 imageName: #{imageName}#
 jobInitImageName: #{jobInitImageName}#
 jobInitImageVersion: #{jobInitImageVersion}#
