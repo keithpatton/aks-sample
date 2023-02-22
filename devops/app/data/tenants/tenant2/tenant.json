@@ -6,7 +6,7 @@
     },
     {
         "name": "ring",
-        "value": "stable",
+        "value": "latest",
         "description": "default ring for tenant2"
     }
 ]
