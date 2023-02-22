@@ -96,5 +96,5 @@ stages:
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               releaseName: $(helmReleaseName)
-              chartPath: '$(System.DefaultWorkingDirectory)/Devops/App/Helm/$(appName)'
+              chartPath: '$(System.DefaultWorkingDirectory)/devops/app/helm/$(appName)'
               namespace: $(helmReleaseNamespace)
