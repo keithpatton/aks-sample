@@ -1,0 +1,46 @@
+parameters:
+- name: region
+  type: string
+- name: env
+  type: string
+
+variables:
+- template: ../../../../common/templates/variables/reg-env.yml
+  parameters:
+    region: ${{ parameters.region }}
+    env: ${{ parameters.env }}  
+- template: reg_${{ parameters.region }}-env_${{ parameters.env }}.yml  
+
+# aks cluster
+- name: rgAksNodesName
+  value: "$(rgName)-k8s"
+- name: aksNodeCount
+  value: 1
+- name: aksNodepoolName
+  value: "default"
+- name: aksVmSize
+  value: "Standard_B2s"
+
+# azure sql
+- name: sqlAdAdminUsername
+  value: "keith.d.patton@vista.co"
+- name: sqlAdAdminObjectId
+  value: "65f202d5-8823-4ed2-a18e-468888d62118"
+- name: sqlPrivateEndpointName
+  value: "pve-${{ parameters.region }}-${{ parameters.env }}"
+- name: sqlPrivateEndpointNicName
+  value: "$(sqlPrivateEndpointName)-nic"
+
+# traefik
+- name: traefikChartName
+  value: "traefik"
+- name: traefikChartDescription
+  value: "Traefik Ingress Controller"
+- name: traefikChartVersion
+  value: "1.0.0"
+- name: traefikAppVersion
+  value: "v2.9"
+- name: traefikReleaseName
+  value: "traefik"
+- name: traefikImageTag
+  value: "$(traefikAppVersion)"

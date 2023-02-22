@@ -1,0 +1,14 @@
+[
+    {
+        "name": "group",
+        "value": null,
+        "label": "Tenant Group",
+        "description": "Tenant group for multi-tenant deploys, must be assigned for each tenant"
+    },
+    {
+        "name": "ring",
+        "value": null,
+        "label": "Deployment Ring",
+        "description": "Deployment ring for the tenant for multi-tenant deploys (see var.rings in root.yml for available rings)"
+    }
+]

@@ -1,0 +1,25 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger: none
+
+resources:
+- repo: self
+
+variables: 
+  - template: templates/variables/root.yml   
+
+stages:
+
+- template: templates/stages/reg-env-stage-teardown.yml
+  parameters:
+    svcConnAzureRm: $(svcConnAzureRmDefault)
+    region: 'au1'
+    env: 'dev'
+    dependsOn: []
+
+- template: templates/stages/reg-env-stage-teardown.yml
+  parameters:
+    svcConnAzureRm: $(svcConnAzureRmDefault)
+    region: 'au1'
+    env: 'qa'
+    dependsOn: []

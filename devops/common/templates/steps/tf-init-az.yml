@@ -1,0 +1,21 @@
+# Performs Terraform Init for Azure Resource Manager
+# Note: Assumes tf backend variables are set
+
+parameters:
+- name: svcConnAzureRm
+  type: string
+- name: workingDirectory
+  type: string
+
+steps:
+- task: TerraformTaskV3@3
+  displayName: Terraform Init
+  inputs:
+    provider: 'azurerm'
+    backendServiceArm: ${{ parameters.svcConnAzureRm}}
+    command: 'init'
+    workingDirectory: '${{ parameters.workingDirectory}}'
+    backendAzureRmResourceGroupName: $(tfStateResourceGroup)
+    backendAzureRmStorageAccountName: $(tfStateStorageAccount)
+    backendAzureRmContainerName: $(tfStateContainerName)
+    backendAzureRmKey: $(tfStateFileName)     

@@ -1,0 +1,79 @@
+parameters:
+- name: svcConnAzureRm
+  type: string
+- name: region
+  type: string
+- name: env
+  type: string
+- name: dependsOn  
+  type: object
+
+stages:
+- stage: ${{ parameters.region }}_${{ parameters.env }}
+  displayName: ${{ parameters.region }}_${{ parameters.env }}
+  variables: 
+    - template: Variables/reg-env.yml 
+      parameters:
+        region: ${{ parameters.region }}
+        env: ${{ parameters.env }}
+  dependsOn: ${{ parameters.dependsOn }}
+  pool:
+    vmImage: ubuntu-latest 
+  jobs:
+  - deployment: Infrastructure
+    displayName: Ensure ${{ parameters.region }}_${{ parameters.env }} Infra Resources
+    # all environments manually enabled by authorised person on first run 
+    environment: ${{ parameters.region }}_${{ parameters.env }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+            clean: true              
+          - task: AzureCLI@2
+            displayName: 'Enable Workload Identity Preview (One Time)'
+            condition: eq(1,2)
+            inputs:
+              azureSubscription: ${{ parameters.svcConnAzureRm}}
+              scriptType: 'pscore'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az extension add --name aks-preview
+                az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
+                az provider register --namespace Microsoft.ContainerService
+          - template: ../../../../common/templates/steps/tf-state-az.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+          - template: ../../../../common/templates/steps/vars-replace-tokens.yml
+            parameters:
+              targetFiles: |
+                Devops/Infra/Terraform/RegEnv/variables.tf          
+          - template: ../../../../common/templates/steps/tf-init-az.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
+          - template: ../../../../common/templates/steps/tf-apply-az.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
+  - deployment: InfrastructureApps    
+    displayName: Deploy ${{ parameters.region }}_${{ parameters.env }} Infra Apps
+    dependsOn: Infrastructure
+    environment: ${{ parameters.region }}_${{ parameters.env }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+            clean: true   
+          - template: ../../../../common/templates/steps/vars-replace-tokens.yml
+            parameters:
+              targetFiles: |
+                Devops/Infra/Helm/**/Chart.yaml
+                Devops/Infra/Helm/**/values.yaml
+          - template: ../../../../common/templates/steps/helm-upgrade.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+              releaseName: $(traefikReleaseName)
+              chartPath: '$(System.DefaultWorkingDirectory)/Devops/Infra/Helm/traefik'    
+              namespace: $(traefikAksNamespace)

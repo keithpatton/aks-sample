@@ -1,0 +1,42 @@
+# cluster wide resources, not namespaced
+
+# common blob container for app
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ $.Values.aksStorageClassNamePrefix }}common
+  labels:
+    name: {{ $.Values.aksStorageClassNamePrefix }}common
+    {{- range $.Values.tenants }}
+    tenant-{{ .name }}: {{ .name }}
+    {{- end }} 
+provisioner: blob.csi.azure.com
+parameters:
+  skuName: {{ $.Values.aksStorageClassSkuName }}
+  containerName: common
+  protocol: nfs
+volumeBindingMode: Immediate
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+---
+# tenanted storage class containers for each tenant for app
+{{- range .Values.tenants }}
+  {{- $storageClassName := printf "%s%s" $.Values.aksStorageClassNamePrefix .name }}
+  {{- $containerName := .name }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ $storageClassName }}
+  labels:
+    name: {{ $storageClassName }}
+    tenant-{{ .name }}: {{ .name }}
+provisioner: blob.csi.azure.com
+parameters:
+  skuName: {{ $.Values.aksStorageClassSkuName }}
+  containerName: {{ $containerName }}
+  protocol: nfs
+volumeBindingMode: Immediate
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+---
+{{- end }}

@@ -1,0 +1,23 @@
+# Sets $tenantsJson variable for region and envrionment based on tenant data
+# tenantDataPaths is a string containing a comma separarted list of paths where tenants data is stored
+# requiredData is a string containing a comma separated list of requried field names (e.g. "group,ring"), tenants will not be returned if they don't have these values
+
+parameters:
+- name: region
+  type: string
+- name: env
+  type: string  
+- name: tenantsDataPaths
+  type: string
+  default: "@()"
+- name: requiredData
+  type: string
+  default: "@()"
+
+steps:
+  - task: PowerShell@2
+    displayName: 'Sets Tenants Json Var for ${{ parameters.region }}_${{ parameters.env }}'
+    inputs:
+      filePath: '$(Build.SourcesDirectory)/Devops/common/scripts/ps/Set_TenantsJson.ps1'
+      arguments: '-reg ${{ parameters.region }} -env ${{ parameters.env }} -tenantsDataPaths ${{ parameters.tenantsDataPaths }} -requiredData ${{ parameters.requiredData }}'
+      #arguments: '-reg ${{ parameters.region }} -env ${{ parameters.env }} -tenantsDataPaths @("$(appTenantsDataPath)") -requiredData @("group","ring")'  

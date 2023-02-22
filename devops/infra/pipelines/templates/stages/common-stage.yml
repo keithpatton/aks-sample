@@ -1,0 +1,38 @@
+parameters:
+- name: svcConnAzureRm
+  type: string
+- name: dependsOn  
+  type: object
+
+stages:
+- stage: common
+  displayName: Common
+  dependsOn: ${{ parameters.dependsOn }}
+  pool:
+    vmImage: ubuntu-latest 
+  jobs:
+  - deployment: Infrastructure
+    displayName: Ensure Common Infra Resources
+    # all environments manually enabled by authorised person on first run 
+    environment: common
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+            clean: true              
+          - template: ../../../../common/templates/steps/tf-state-az.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+          - template: ../../../../common/templates/steps/vars-replace-tokens.yml
+            parameters:
+              targetFiles: |
+                Devops/Infra/Terraform/Common/variables.tf          
+          - template: ../../../../common/templates/steps/tf-init-az.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/Common'
+          - template: ../../../../common/templates/steps/tf-apply-az.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/Common'

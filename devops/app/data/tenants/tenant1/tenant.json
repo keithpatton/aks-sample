@@ -1,0 +1,12 @@
+[
+    {
+        "name": "group",
+        "value": "common",
+        "description": "default group for tenant1"
+    },
+    {
+        "name": "ring",
+        "value": "latest",
+        "description": "default ring for tenant1"
+    }
+]

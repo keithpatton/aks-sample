@@ -1,0 +1,44 @@
+parameters:
+- name: svcConnAzureRm
+  type: string
+- name: region
+  type: string
+- name: env
+  type: string
+- name: dependsOn  
+  type: object
+
+stages:
+- stage: ${{ parameters.region }}_${{ parameters.env }}
+  displayName: ${{ parameters.region }}_${{ parameters.env }}
+  variables: 
+    - template: Variables/reg-env.yml 
+      parameters:
+        region: ${{ parameters.region }}
+        env: ${{ parameters.env }}
+  dependsOn: ${{ parameters.dependsOn }}
+  pool:
+    vmImage: ubuntu-latest 
+  jobs:
+  - deployment: Infrastructure
+    displayName: Destroy ${{ parameters.region }}_${{ parameters.env }} Infra Resources
+    # all environments manually enabled by authorised person on first run 
+    environment: ${{ parameters.region }}_${{ parameters.env }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+            clean: true               
+          - template: ../../../../common/templates/steps/vars-replace-tokens.yml
+            parameters:
+              targetFiles: |
+                Devops/Infra/Terraform/RegEnv/variables.tf                                    
+          - template: ../../../../common/templates/steps/tf-init-az.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'
+          - template: ../../../../common/templates/steps/tf-destroy-az.yml
+            parameters:
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Devops/Infra/Terraform/RegEnv'

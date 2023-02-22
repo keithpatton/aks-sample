@@ -1,0 +1,45 @@
+# job run before install/upgrade
+# note: placed within the release namespace 
+
+{{- $jobName := printf "%s-%s" $.Values.appName "init-job"}}
+{{- $jobNamespace := $.Release.Namespace}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $jobName }}
+  namespace: {{ $jobNamespace }}
+  labels:
+    name: {{ $jobName }}
+    {{- range $.Values.tenants }}
+    tenant-{{ .name }}: {{ .name }}
+    {{- end }}     
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-1"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    metadata:
+      name: {{ $jobName }}
+      namespace: {{ $jobNamespace }}
+      labels:
+        name: {{ $jobName }}
+        azure.workload.identity/use: "true"
+        {{- range $.Values.tenants }}
+        tenant-{{ .name }}: {{ .name }}
+        {{- end }}             
+    spec:
+      serviceAccountName: {{ $.Values.aksWorkloadIdentityServiceAccountName }}
+      restartPolicy: Never
+      containers:
+        {{- range .Values.tenants }}
+      - name: "{{ .name }}-init-job"
+        image: {{ $.Values.acrName }}.azurecr.io/{{ $.Values.jobInitImageName }}:{{ $.Values.jobInitImageVersion}}
+        imagePullPolicy: Always
+        env:
+        - name: TENANT
+          value: "{{ .name }}"
+        - name: SQL_SERVER_NAME
+          value: "{{ $.Values.sqlServerName }}"          
+        {{- end }}
+---

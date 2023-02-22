@@ -1,0 +1,34 @@
+# Set dynamic vars for region and environment
+# Sets $ringsJson vars to represent active rings for a stage (region/environment) 
+# Assumes $rings and $groups variable is already available
+
+parameters:
+- name: region
+  type: string
+- name: env
+  type: string
+
+steps:
+- task: Bash@3
+  displayName: 'Sets Groups and Rings Vars for ${{ parameters.region }}_${{ parameters.env }}'
+  inputs:
+    targetType: 'inline'
+    script: |
+      region=$(echo "${{parameters.region}}")
+      env=$(echo "${{parameters.env}}")
+      
+      rings=$(echo '$(rings)')
+      echo "All Rings:"
+      echo $rings
+      ringsJson=$(echo "$rings" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
+      echo "##vso[task.setvariable variable=ringsJson;]$ringsJson"
+      echo "Stage Rings:"
+      echo $ringsJson
+
+      rings=$(echo '$(groups)')
+      echo "All Groups:"
+      echo $groups
+      groupsJson=$(echo "$groups" | jq -c --arg region "$region" --arg env "$env" '[.[] | select(.region == $region) | select(.env == $env)]')
+      echo "##vso[task.setvariable variable=groupsJson;]$groupsJson"
+      echo "Stage Groups:"
+      echo $groupsJson 
