@@ -1,6 +1,6 @@
 # Set dynamic vars for region and environment
 # Sets $ringsJson vars to represent active rings for a stage (region/environment) 
-# Assumes $rings and $groups variable is already available
+# Assumes $rings and $groups variables already available
 
 parameters:
 - name: region
