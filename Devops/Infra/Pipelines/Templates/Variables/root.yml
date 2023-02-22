@@ -2,7 +2,7 @@ variables:
 - template: ../../../../common/templates/variables/root.yml 
 
 - name: location
-  value: 'australiaeast'
+  value: 'australiaeast' 
 
 # terraform state
 - name: tfStateResourceGroup
