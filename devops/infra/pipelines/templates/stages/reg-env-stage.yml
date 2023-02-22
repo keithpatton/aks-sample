@@ -41,7 +41,7 @@ stages:
                 az extension add --name aks-preview
                 az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
                 az provider register --namespace Microsoft.ContainerService
-          - template: $(pipeline.workspace)/devops/common/templates/steps/tf-state-az.yml
+          - template: ../../../../devops/common/templates/steps/tf-state-az.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
           - template: /devops/common/templates/steps/vars-replace-tokens.yml
