@@ -2,12 +2,12 @@
   "name": "latest",
   "region": "au1",
   "env": "dev",
-  "version": "$(buildVersion)"
+  "version": "#{buildVersion}#"
 }, {
   "name": "latest",
   "region": "au1",
   "env": "qa",
-  "version": "$(buildVersion)"
+  "version": "#{buildVersion}#"
 }, {
   "name": "stable",
   "region": "au1",
