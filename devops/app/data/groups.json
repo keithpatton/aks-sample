@@ -5,7 +5,7 @@
 
     "cpuQuota": "1500m",
     "memoryQuota": "2.5Gi",
-    "limitsCpuQuota": "1900m",
+    "limitsCpuQuota": "2",
     "limitsMemoryQuota": "3.5Gi",
     "podsQuota": "5", 
 
@@ -23,7 +23,7 @@
     
     "cpuQuota": "1500m",
     "memoryQuota": "2.5Gi",
-    "limitsCpuQuota": "1900m",
+    "limitsCpuQuota": "2",
     "limitsMemoryQuota": "3.5Gi",
     "podsQuota": "5", 
 
