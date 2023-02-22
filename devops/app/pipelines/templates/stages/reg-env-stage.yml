@@ -44,7 +44,7 @@ stages:
               requiredData: $(tenantsRequiredData)                      
           - template: ../../../../common/templates/steps/vars-replace-tokens.yml
             parameters:
-              targetFiles: Devops/App/Terraform/variables.tf
+              targetFiles: devops/app/terraform/variables.tf
           - template: ../../../../common/templates/steps/agent-sql-access.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
@@ -90,8 +90,8 @@ stages:
           - template: ../../../../common/templates/steps/vars-replace-tokens.yml
             parameters:
               targetFiles: |
-                Devops/App/Helm/**/Chart.yaml
-                Devops/App/Helm/**/values.yaml            
+                devops/app/helm/**/Chart.yaml
+                devops/app/helm/**/values.yaml            
           - template: ../../../../common/templates/steps/helm-upgrade.yml
             parameters:
               svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
