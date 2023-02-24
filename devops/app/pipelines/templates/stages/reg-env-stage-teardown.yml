@@ -38,7 +38,7 @@ stages:
               namespace: $(helmReleaseNamespace)
               arguments: '$(helmReleaseName) --debug'
   - deployment: Infrastructure    
-
+    dependsOn: Uninstall
     displayName: Destroy App Specific Infra
     environment: ${{ parameters.region }}_${{ parameters.env }}
     strategy:
