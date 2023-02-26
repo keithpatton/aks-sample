@@ -25,6 +25,12 @@ variable "aks_name" {
   default     = "#{aksName}#"
 }
 
+variable "aks_namespace_parent" { 
+  description = "The app's parent namespace to be used on AKS."
+  type        = string
+  default     = "#{aksNamespaceParent}#"
+}
+
 variable "aks_namespace_default" { 
   description = "The app's default namespace to be used on AKS."
   type        = string
