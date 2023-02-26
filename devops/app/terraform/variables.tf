@@ -25,16 +25,16 @@ variable "aks_name" {
   default     = "#{aksName}#"
 }
 
-variable "aks_namespace_parent" { 
-  description = "The app's parent namespace to be used on AKS."
+variable "aks_namespace_jobs" { 
+  description = "The app's jobs namespace to be used on AKS."
   type        = string
-  default     = "#{aksNamespaceParent}#"
+  default     = "#{aksNamespaceJobs}#"
 }
 
-variable "aks_namespace_default" { 
-  description = "The app's default namespace to be used on AKS."
+variable "aks_namespace_prefix" { 
+  description = "The app's namespace prefix to be used on AKS, with tenant group added as suffix."
   type        = string
-  default     = "#{aksNamespaceDefault}#"
+  default     = "#{aksNamespacePrefix}#"
 }
 
 variable "aks_workload_identity_name_prefix" { 
