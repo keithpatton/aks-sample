@@ -21,7 +21,7 @@ metadata:
 
 # namespace for app level jobs work
 
-{{- $jobsNamespace := printf "%s-%s" $.Values.appName "-jobs" }}
+{{- $jobsNamespace := printf "%s-%s" $.Values.appName "jobs" }}
 apiVersion: v1
 kind: Namespace
 metadata:
