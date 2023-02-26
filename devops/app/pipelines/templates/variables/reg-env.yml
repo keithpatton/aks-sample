@@ -10,7 +10,6 @@ parameters:
 
 variables:
 
-# common variables
 - template: ../../../../common/templates/variables/reg-env.yml
   parameters:
     region: "${{ parameters.region }}"
@@ -18,41 +17,7 @@ variables:
   
 - name: aksFederatedIdentityNamePrefix
   value: "fic-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)"
-- name: aksNamespacePrefix
-  value: "$(appName)-"
-- name: aksNamespaceDefault
-  value: "$(appName)"  
 - name: aksWorkloadIdentityNamePrefix
   value: "aks-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)"
 - name: aksWorkloadIdentityNameDefaultSuffix
   value: "default"  
-- name: aksWorkloadIdentityServiceAccountName
-  value: "sa-workload-identity-$(appName)"
-- name: aksPvcName
-  value: "azure-blob"
-- name: aksStorageClassNamePrefix
-  value: "$(appName)-azureblob-nfs-standard-"
-- name: aksStorageClassSkuName
-  value: "Standard_ZRS"
-- name: helmAppVersion
-  value: "1.0.0"  
-- name: helmChartDescription 
-  value: "AKS Sample App"
-- name: helmChartName
-  value: "$(appName)" 
-- name: helmChartVersion
-  value: "0.7.4"
-- name: helmReleaseName
-  value: "$(appName)"
-- name: helmReleaseNamespace
-  value: "$(appName)"
-- name:  sqlFirewallRuleBuildAgentName
-  value: "allow-build-agent" 
-- name: sqlDbSkuName
-  value: "Basic"
-- name: sqlDbLicenseType
-  value: "LicenseIncluded"
-- name: sqlDbStorageAccountType
-  value: "Local"
-- name: tfStateFileName
-  value: "$(appName).tfstate"

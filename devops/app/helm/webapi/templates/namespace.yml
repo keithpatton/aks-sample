@@ -6,6 +6,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
   labels:
     name: {{ $name }}
     group: {{ $group }}

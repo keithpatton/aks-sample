@@ -1,8 +1,8 @@
 # job run before install/upgrade
 # note: placed within the release namespace 
 
-{{- $jobName := printf "%s-%s" $.Values.appName "init-job"}}
-{{- $jobNamespace := $.Release.Namespace}}
+{{- $jobName := printf "%s-%s" $.Values.appName "init-job" }}
+{{- $jobNamespace := $.Values.appName }}
 apiVersion: batch/v1
 kind: Job
 metadata:

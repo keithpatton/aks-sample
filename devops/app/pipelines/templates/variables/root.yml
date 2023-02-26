@@ -2,6 +2,8 @@ variables:
 - template: ../../../../common/templates/variables/root.yml 
 - name: appName
   value: "webapi"
+- name: release
+  value: "webapi"
 - name: groupsDataFilePath
   value: '$(Build.SourcesDirectory)/devops/app/data/groups.json'
 - name: ringsDataFilePath
@@ -13,6 +15,43 @@ variables:
 - name: tenantsScriptFilePath
   value: '$(Build.SourcesDirectory)/devops/common/scripts/ps/Set_TenantsJson.ps1'
   
+- name: aksNamespacePrefix
+  value: "$(appName)-"
+- name: aksNamespaceDefault
+  value: "$(appName)"  
+- name: aksWorkloadIdentityNameDefaultSuffix
+  value: "default"  
+- name: aksWorkloadIdentityServiceAccountName
+  value: "sa-workload-identity-$(appName)"
+- name: aksPvcName
+  value: "azure-blob"
+- name: aksStorageClassNamePrefix
+  value: "$(appName)-azureblob-nfs-standard-"
+- name: aksStorageClassSkuName
+  value: "Standard_ZRS"
+- name: helmAppVersion
+  value: "1.0.0"  
+- name: helmChartDescription 
+  value: "AKS Sample App"
+- name: helmChartName
+  value: "$(appName)" 
+- name: helmChartVersion
+  value: "0.7.4"
+- name: helmReleaseName
+  value: "$(appName)"
+- name: helmReleaseNamespace
+  value: "akssample"
+- name:  sqlFirewallRuleBuildAgentName
+  value: "allow-build-agent" 
+- name: sqlDbSkuName
+  value: "Basic"
+- name: sqlDbLicenseType
+  value: "LicenseIncluded"
+- name: sqlDbStorageAccountType
+  value: "Local"
+- name: tfStateFileName
+  value: "$(appName).tfstate"
+
 # build pipeline resource sets run name to version using GitVersion
 - name: buildVersion
   value: $(resources.pipeline.build_and_package.runName)
