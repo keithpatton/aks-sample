@@ -2,7 +2,8 @@
 # note: placed within the release namespace 
 
 {{- $jobName := printf "%s-%s" $.Values.appName "init-job" }}
-{{- $jobNamespace := printf "%s-%s" $.Values.appName "jobs" }}
+# {{- $jobNamespace := printf "%s-%s" $.Values.appName "jobs" }}
+{{- $jobNamespace := $.Release.namespace }}
 apiVersion: batch/v1
 kind: Job
 metadata:
