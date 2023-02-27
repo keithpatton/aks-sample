@@ -21,8 +21,10 @@ parameters:
     - live
 
 resources:
+  
   repositories:
   - repository: self
+
   pipelines:
   - pipeline: build_and_package # Name of the pipeline resource.
     source: Aks.App.BuildPackage.Poc # The name of the pipeline referenced by this pipeline resource.
@@ -31,13 +33,16 @@ resources:
   containers:
     - container: webapi-init-job
       type: acr
-      ${{ if eq(parameters['registry'], 'internal') }}:
+      ${{ if eq(variables['resources.pipelines.build_and_package.sourceBranch'], 'master') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
+        resourceGroup: rg-common
+        registry: acrcommon01
+        repository: webapi-init-job        
       ${{ else }}:
         azureSubscription: 'Keith Patton - VS Professional Sub2'
-      resourceGroup: rg-common
-      registry: acrcommon01
-      repository: webapi-init-job
+        resourceGroup: rg-common2
+        registry: acrcommon02
+        repository: webapi-init-job
 
 
 stages:
