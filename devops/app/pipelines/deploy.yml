@@ -2,6 +2,9 @@ name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger: none
 
+variables: 
+  - template: templates/variables/root.yml   
+
 resources:
   repositories:
   - repository: self
@@ -13,9 +16,9 @@ resources:
   containers:
     - container: webapi-init-job
       type: acr
-      ${{ if(eq('test', 'refs/heads/master') }}
+      ${{ if(eq('test', 'refs/heads/master') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
-      ${{ else }}
+      ${{ else }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
       resourceGroup: rg-common
       registry: acrcommon01
@@ -26,9 +29,6 @@ parameters:
   displayName: 'Apply Infra'
   type: boolean
   default: true
-
-variables: 
-  - template: templates/variables/root.yml   
 
 stages:
 - template: templates/stages/reg-env-stage.yml
