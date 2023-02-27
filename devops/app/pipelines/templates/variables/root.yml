@@ -14,12 +14,10 @@ variables:
   value: '@("group","ring")'
 - name: tenantsScriptFilePath
   value: '$(Build.SourcesDirectory)/devops/common/scripts/ps/Set_TenantsJson.ps1'
-- name: aksNamespaceParent
-  value: "akssample"
+- name: aksNamespaceJobs
+  value: "$(appName)"
 - name: aksNamespacePrefix
   value: "$(appName)-"
-- name: aksNamespaceDefault
-  value: "$(appName)"  
 - name: aksWorkloadIdentityNameDefaultSuffix
   value: "default"  
 - name: aksWorkloadIdentityServiceAccountName
@@ -41,7 +39,7 @@ variables:
 - name: helmReleaseName
   value: "$(appName)"
 - name: helmReleaseNamespace
-  value: $(aksNamespaceParent)
+  value: $(appName)
 - name:  sqlFirewallRuleBuildAgentName
   value: "allow-build-agent" 
 - name: sqlDbSkuName
