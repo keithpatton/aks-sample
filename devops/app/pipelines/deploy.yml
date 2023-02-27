@@ -42,7 +42,7 @@ resources:
         azureSubscription: 'Keith Patton - VS Professional Sub2'
         resourceGroup: rg-common2
         registry: acrcommon02
-        repository: webapi-init-job
+        repository: $(resources.pipelines.build_and_package.sourceBranch)
 
 
 stages:
