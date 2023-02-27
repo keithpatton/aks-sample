@@ -18,7 +18,7 @@ resources:
   containers:
     - container: webapi-init-job
       type: acr
-      azureSubscription: $(svcConnAzureRmTest)
+      azureSubscription: 'Keith Patton - VS Professional Sub'
       resourceGroup: rg-common
       registry: acrcommon01
       repository: webapi-init-job
