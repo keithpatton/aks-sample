@@ -7,6 +7,12 @@ variables:
     value: $(Build.SourceBranchName)
   - template: templates/variables/root.yml   
 
+parameters:
+ - name: test
+   displayname: Test
+   type: string
+   default: 'test'
+
 resources:
   repositories:
   - repository: self
@@ -18,8 +24,7 @@ resources:
   containers:
     - container: webapi-init-job
       type: acr
-
-      ${{ if eq(variables['buildBranch'], 'master') }}:
+      ${{ if eq(parameters['test'], 'test') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
       ${{ else }}:
         azureSubscription: 'Keith Patton - VS Professional Sub2'
