@@ -13,7 +13,10 @@ resources:
   containers:
     - container: webapi-init-job
       type: acr
-      azureSubscription: ${{ if(eq('test', 'refs/heads/master'), 'Keith Patton - VS Professional Sub', 'Keith Patton - VS Professional Sub') }}
+      ${{ if(eq('test', 'refs/heads/master') }}
+        azureSubscription: 'Keith Patton - VS Professional Sub'
+      ${{ else }}
+        azureSubscription: 'Keith Patton - VS Professional Sub'
       resourceGroup: rg-common
       registry: acrcommon01
       repository: webapi-init-job
