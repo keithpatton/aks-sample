@@ -7,11 +7,17 @@ variables:
     value: $(Build.SourceBranchName)
   - template: templates/variables/root.yml   
 
+
 parameters:
- - name: test
-   displayName: Test
-   type: string
-   default: 'test'
+- name: apply
+  displayName: 'Apply Infra'
+  type: boolean
+  default: true
+- name: test
+  displayName: Test
+  type: string
+  default: 'test'  
+
 
 resources:
   repositories:
@@ -31,13 +37,6 @@ resources:
       resourceGroup: rg-common
       registry: acrcommon01
       repository: webapi-init-job
-
-parameters:
-- name: apply
-  displayName: 'Apply Infra'
-  type: boolean
-  default: true
-
 
 
 stages:
