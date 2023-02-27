@@ -42,7 +42,8 @@ resources:
         azureSubscription: 'Keith Patton - VS Professional Sub2'
         resourceGroup: rg-common2
         registry: acrcommon02
-        repository: ${{ variables['Build.SourceBranchName'] }}
+        #repository: ${{ variables['Build.SourceBranchName'] }}
+        repository: webapi-init-job
 
 # resources.pipelines.build_and_package.sourceBranch
 
