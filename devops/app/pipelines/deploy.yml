@@ -15,7 +15,7 @@ resources:
       type: acr
       azureSubscription: "Keith Patton - VS Professional Sub"
       resourceGroup: "rg-common"
-      registry: acrcommon01"
+      registry: acrcommon01
       repository: webapi-init-job
 
 parameters:
