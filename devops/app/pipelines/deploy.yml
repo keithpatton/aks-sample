@@ -33,7 +33,7 @@ resources:
   containers:
     - container: webapi-init-job
       type: acr
-      ${{ if eq(variables['resources.pipelines.build_and_package.sourceBranch'], 'master') }}:
+      ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
         resourceGroup: rg-common
         registry: acrcommon01
@@ -42,8 +42,8 @@ resources:
         azureSubscription: 'Keith Patton - VS Professional Sub2'
         resourceGroup: rg-common2
         registry: acrcommon02
-        #repository: ${{ variables['Build.SourceBranchName'] }}
-        repository: webapi-init-job
+        repository: ${{ variables['Build.SourceBranchName'] }}
+        #repository: webapi-init-job
 
 # resources.pipelines.build_and_package.sourceBranch
 
