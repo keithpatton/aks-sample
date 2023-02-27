@@ -3,8 +3,8 @@ name: $(Date:yyyyMMdd)$(Rev:.r)
 trigger: none
 
 variables: 
-  - name: azRmTest
-    value: test
+  - name: buildBranch
+    value: $(Build.SourceBranchName)
   - template: templates/variables/root.yml   
 
 resources:
@@ -19,7 +19,7 @@ resources:
     - container: webapi-init-job
       type: acr
 
-      ${{ if eq(variables['azRmTest'], 'test') }}:
+      ${{ if eq(variables['buildBranch'], 'master') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
       ${{ else }}:
         azureSubscription: 'Keith Patton - VS Professional Sub2'
