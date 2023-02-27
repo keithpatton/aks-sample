@@ -9,7 +9,7 @@ variables:
 
 parameters:
  - name: test
-   displayname: Test
+   displayName: Test
    type: string
    default: 'test'
 
