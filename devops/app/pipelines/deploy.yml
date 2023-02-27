@@ -2,6 +2,11 @@ name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger: none
 
+variables: 
+  - name: svcConnAzureRmTest
+    value: 'Keith Patton - VS Professional Sub'
+  - template: templates/variables/root.yml   
+
 resources:
   repositories:
   - repository: self
@@ -13,7 +18,7 @@ resources:
   containers:
     - container: webapi-init-job
       type: acr
-      azureSubscription: $(svcConnAzureRmDefault)
+      azureSubscription: $(svcConnAzureRmTest)
       resourceGroup: rg-common
       registry: acrcommon01
       repository: webapi-init-job
@@ -23,9 +28,6 @@ parameters:
   displayName: 'Apply Infra'
   type: boolean
   default: true
-
-variables: 
-  - template: templates/variables/root.yml   
 
 stages:
 - template: templates/stages/reg-env-stage.yml
