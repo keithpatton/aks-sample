@@ -14,7 +14,7 @@ resources:
     - container: webapi-init-job
       type: acr
 
-      ${{ if eq(variables['Build.SourceBranch']), 'refs/heads/master') }}:
+      ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
       ${{ else }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
