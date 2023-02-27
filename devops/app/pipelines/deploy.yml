@@ -2,6 +2,11 @@ name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger: none
 
+variables: 
+  - name: azRmTest
+    value: test
+  - template: templates/variables/root.yml   
+
 resources:
   repositories:
   - repository: self
@@ -14,10 +19,10 @@ resources:
     - container: webapi-init-job
       type: acr
 
-      ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
-        azureSubscription: 'Keith Patton - VS Professional Sub2'
-      ${{ else }}:
+      ${{ if eq(variables['azRmTest'], 'test') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
+      ${{ else }}:
+        azureSubscription: 'Keith Patton - VS Professional Sub2'
       resourceGroup: rg-common
       registry: acrcommon01
       repository: webapi-init-job
@@ -28,8 +33,7 @@ parameters:
   type: boolean
   default: true
 
-variables: 
-  - template: templates/variables/root.yml   
+
 
 stages:
 - template: templates/stages/reg-env-stage.yml
