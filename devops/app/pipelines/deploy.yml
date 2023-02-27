@@ -13,9 +13,9 @@ resources:
   containers:
     - container: webapi-init-job
       type: acr
-      azureSubscription: "Keith Patton - VS Professional Sub"
-      resourceGroup: "rg-common"
-      registry: acrcommon01
+      azureSubscription: $[if(eq($(resources.pipeline.build_and_package.sourceBranch), 'refs/heads/master'), $(acrSvcConnAzureRmLive), $(acrSvcConnAzureRmInternal))]
+      resourceGroup: $[if(eq($(resources.pipeline.build_and_package.sourceBranch), 'refs/heads/master'), $(acrResourceGroupLive), $(acrResourceGroupInternal))]
+      registry: $[if(eq($(resources.pipeline.build_and_package.sourceBranch), 'refs/heads/master'), $(acrNameInternal), $(acrNameLive))]
       repository: webapi-init-job
 
 parameters:

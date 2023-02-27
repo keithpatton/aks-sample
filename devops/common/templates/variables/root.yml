@@ -7,5 +7,20 @@ variables:
 - name: rgCommonName
   value: 'rg-common'
 
-- name: acrName
+- name: acrNameInternal
   value: 'acrcommon01'
+
+- name: acrResourceGroupInternal
+  value: 'rg-common'
+
+- name: acrSvcConnAzureRmInternal
+  value: 'Keith Patton - VS Professional Sub'
+
+- name: acrNameInternal
+  value: 'acrcommon01'
+
+- name: acrResourceGroupLive
+  value: 'rg-common'
+
+- name: acrSvcConnAzureRmLive
+  value: 'Keith Patton - VS Professional Sub'
