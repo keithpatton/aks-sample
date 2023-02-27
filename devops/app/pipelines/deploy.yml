@@ -33,7 +33,7 @@ resources:
   containers:
     - container: webapi
       type: acr
-      ${{ if eq(parameters['parameters.channel'], 'internal') }}:
+      ${{ if eq(parameters['channel'], 'internal') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
         resourceGroup: rg-common
         registry: acrcommon01
@@ -45,7 +45,7 @@ resources:
         repository: webapi 
     - container: webapi-init-job
       type: acr
-      ${{ if eq(parameters['parameters.channel'], 'internal') }}:
+      ${{ if eq(parameters['channel'], 'internal') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
         resourceGroup: rg-common
         registry: acrcommon01
