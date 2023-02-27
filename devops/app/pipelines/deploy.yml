@@ -14,7 +14,7 @@ parameters:
   default: true
 - name: registry
   displayName: Container Registry
-  type: radio
+  type: string
   default: internal
   values:
     - internal
