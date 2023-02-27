@@ -42,7 +42,9 @@ resources:
         azureSubscription: 'Keith Patton - VS Professional Sub2'
         resourceGroup: rg-common2
         registry: acrcommon02
-        repository: ${{ variables['buildBranch'] }}
+        repository: ${{ variables['Build.SourceBranchName'] }}
+
+# resources.pipelines.build_and_package.sourceBranch
 
 
 stages:
