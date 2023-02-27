@@ -14,8 +14,8 @@ resources:
     - container: webapi-init-job
       type: acr
       azureSubscription: $[if(eq($(resources.pipeline.build_and_package.sourceBranch), 'refs/heads/master'), $(acrSvcConnAzureRmLive), $(acrSvcConnAzureRmInternal))]
-      resourceGroup: $[if(eq($(resources.pipeline.build_and_package.sourceBranch), 'refs/heads/master'), $(acrResourceGroupLive), $(acrResourceGroupInternal))]
-      registry: $[if(eq($(resources.pipeline.build_and_package.sourceBranch), 'refs/heads/master'), $(acrNameInternal), $(acrNameLive))]
+      resourceGroup: rg-common
+      registry: acrcommon01
       repository: webapi-init-job
 
 parameters:
