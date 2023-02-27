@@ -7,17 +7,18 @@ variables:
     value: $(Build.SourceBranchName)
   - template: templates/variables/root.yml   
 
-
 parameters:
 - name: apply
   displayName: 'Apply Infra'
   type: boolean
   default: true
-- name: test
-  displayName: Test
-  type: string
-  default: 'test'  
-
+- name: registry
+  displayName: Container Registry
+  type: radio
+  default: internal
+  values:
+    - internal
+    - live
 
 resources:
   repositories:
@@ -30,7 +31,7 @@ resources:
   containers:
     - container: webapi-init-job
       type: acr
-      ${{ if eq(parameters['test'], 'test') }}:
+      ${{ if eq(parameters['registry'], 'internal') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
       ${{ else }}:
         azureSubscription: 'Keith Patton - VS Professional Sub2'
