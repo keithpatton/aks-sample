@@ -10,6 +10,14 @@ resources:
     source: Aks.App.BuildPackage.Poc # The name of the pipeline referenced by this pipeline resource.
     trigger: true 
   
+  containers:
+    - container: webapi-init-job
+      type: acr
+      azureSubscription: "Keith Patton - VS Professional Sub"
+      resourceGroup: "rg-common"
+      registry: acrcommon01"
+      repository: webapi-init-job
+
 parameters:
 - name: apply
   displayName: 'Apply Infra'
