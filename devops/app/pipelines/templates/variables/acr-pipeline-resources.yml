@@ -12,5 +12,5 @@ variables:
     acrName: acrcommon01
   ${{ else }}:
     acrAzureSubscription: 'Keith Patton - VS Professional Sub'
-    acrAzureSubscription: rg-common
+    azrResourceGroup: rg-common
     acrName: acrcommon01
