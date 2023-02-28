@@ -43,7 +43,7 @@ resources:
         azureSubscription: 'Keith Patton - VS Professional Sub'
         resourceGroup: rg-common
         registry: acrcommon01
-        repository: $(variables.resources.pipelines.build_and_package.sourceVersion)
+        repository: ${{ resources.pipelines.build_and_package.sourceVersion }}
     # - container: webapi-init-job  # e.g. core job
     #   type: acr
     #   ${{ if eq(parameters['channel'], 'internal') }}:
