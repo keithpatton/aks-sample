@@ -10,8 +10,8 @@ parameters:
   displayName: 'Apply Infra'
   type: boolean
   default: true
-- name: channel
-  displayName: Deployment Channel
+- name: dependentResourcesRegistry
+  displayName: Dependent Resources Registry
   type: string
   default: internal
   values:
@@ -29,19 +29,20 @@ resources:
     trigger: none 
   
   containers:
-    - container: webapi-internal # e.g. core api (internal)
-      type: acr
-      azureSubscription: 'Keith Patton - VS Professional Sub'
-      resourceGroup: rg-common
-      registry: acrcommon01
-      repository: webapi       
-
-    - container: webapi-live # e.g. core api (live)
-      type: acr
-      azureSubscription: 'Keith Patton - VS Professional Sub'
-      resourceGroup: rg-common
-      registry: acrcommon01
-      repository: webapi            
+    ${{ if eq(parameters['dependentResourcesRegistry'], 'internal') }}:
+      - container: webapi-init-job-internal 
+        type: acr
+        azureSubscription: 'Keith Patton - VS Professional Sub'
+        resourceGroup: rg-common
+        registry: acrcommon01
+        repository: webapi       
+    ${{ else }}:
+      - container: webapi-init-job-live 
+        type: acr
+        azureSubscription: 'Keith Patton - VS Professional Sub'
+        resourceGroup: rg-common
+        registry: acrcommon01
+        repository: webapi            
 
       # ${{ if eq( variables.buildBranch, 'refs/heads/master') }}:
         # azureSubscription: 'Keith Patton - VS Professional Sub'
