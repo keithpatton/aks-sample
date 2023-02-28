@@ -1,6 +1,6 @@
 parameters:
-- name: svcConnAzureRm
-  type: string  
+# - name: svcConnAzureRm
+#   type: string  
 - name: region
   type: string
 - name: env
@@ -31,13 +31,7 @@ stages:
         deploy:
           steps:
           - checkout: self
-            clean: true            
-          - task: Bash@3
-            inputs:
-              targetType: 'inline'
-              script: |
-                echo $(resources.container.webapi-init-job-internal.tag)        
-                echo $(resources.container.webapi-init-job-live.tag)                 
+            clean: true                         
           - template:  ../../../../common/templates/steps/vars-reg-env-set.yml        
             parameters:
               region: ${{ parameters.region }}
@@ -52,14 +46,14 @@ stages:
               targetFiles: devops/app/terraform/variables.tf
           - template: ../../../../common/templates/steps/agent-sql-access.yml
             parameters:
-              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
           - template: ../../../../common/templates/steps/tf-init-az.yml
             parameters:
-              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/devops/app/terraform'
           - template: ../../../../common/templates/steps/tf-apply-az.yml
             parameters:
-              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/devops/app/terraform'  
   - deployment: Deploy    
     dependsOn: Infrastructure
@@ -88,7 +82,7 @@ stages:
           - task: AzureCLI@2
             displayName: Get Azure Managed Workload Identities
             inputs:
-              azureSubscription: ${{ parameters.svcConnAzureRm}}
+              azureSubscription: ${{ variables.svcConnAzureRm}}
               scriptType: bash
               scriptLocation: 'inlineScript'
               inlineScript: |
@@ -102,7 +96,7 @@ stages:
                 devops/app/helm/**/values.yaml            
           - template: ../../../../common/templates/steps/helm-upgrade.yml
             parameters:
-              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
+              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
               releaseName: $(helmReleaseName)
               chartPath: '$(System.DefaultWorkingDirectory)/devops/app/helm/$(appName)'
               namespace: $(helmReleaseNamespace)

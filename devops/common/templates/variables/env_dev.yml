@@ -1,3 +1,6 @@
 # env dev variables
 variables:
- env: dev
+- name: env
+  value: qa
+- name: svcConnAzureRm
+  value: 'Keith Patton - VS Professional Sub' 

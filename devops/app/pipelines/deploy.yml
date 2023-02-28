@@ -42,7 +42,6 @@ resources:
 stages:
 - template: templates/stages/reg-env-stage.yml
   parameters:
-    svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'dev'
     apply: ${{ parameters.apply }}
@@ -50,7 +49,6 @@ stages:
 
 - template: templates/stages/reg-env-stage.yml
   parameters:
-    svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'qa'
     apply: ${{ parameters.apply }}

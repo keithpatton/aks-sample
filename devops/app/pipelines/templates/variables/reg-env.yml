@@ -20,4 +20,4 @@ variables:
 - name: aksWorkloadIdentityNamePrefix
   value: "aks-${{ parameters.region }}-${{ parameters.env }}-$(aksNamespacePrefix)"
 - name: aksWorkloadIdentityNameDefaultSuffix
-  value: "default"  
+  value: "default"

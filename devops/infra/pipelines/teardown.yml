@@ -12,21 +12,18 @@ stages:
 
 - template: templates/stages/reg-env-stage-teardown.yml
   parameters:
-    svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'dev'
     dependsOn: []
 
 - template: templates/stages/reg-env-stage-teardown.yml
   parameters:
-    svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'qa'
     dependsOn: []
 
 - template: templates/stages/common-stage-teardown.yml
   parameters:
-    svcConnAzureRm: $(svcConnAzureRmDefault)
     region: 'au1'
     env: 'dev'
     dependsOn: [au1_dev,au1_qa]
