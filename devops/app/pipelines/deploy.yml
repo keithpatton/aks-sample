@@ -4,7 +4,7 @@ trigger: none
 
 variables: 
   - name: buildBranch
-    value: $(resources.pipelines.build_and_package.sourceVersion)
+    value: $(resources.pipelines.build_and_package.sourceBranch)
   - template: templates/variables/root.yml   
 
 parameters:
