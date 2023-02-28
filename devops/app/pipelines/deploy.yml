@@ -2,18 +2,21 @@ name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger: none
 
+variables: 
+  - template: templates/variables/root.yml   
+
 parameters:
 - name: apply
   displayName: 'Apply Infra'
   type: boolean
   default: true
-# - name: channel
-#   displayName: Deployment Channel
-#   type: string
-#   default: internal
-#   values:
-#     - internal
-#     - live
+- name: channel
+  displayName: Deployment Channel
+  type: string
+  default: internal
+  values:
+    - internal
+    - live
 
 resources:
   
