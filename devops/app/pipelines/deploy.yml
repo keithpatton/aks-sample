@@ -38,12 +38,12 @@ resources:
     trigger: none 
   
   containers:
-    - container: $(rgAcrName)
+    - container: ${{ variables.rgAcrName }}
       type: acr
       repository: webapi-init-job
-      azureSubscription: 'Keith Patton - VS Professional Sub'
-      resourceGroup: $(rgAcrName)
-      registry: $(acrName)
+      azureSubscription: ${{ variables.svcConnAzureRmAcr }}
+      resourceGroup: ${{ variables.rgAcrName }}
+      registry: ${{ variables.acrName }}
 
 stages:
 - template: templates/stages/reg-env-stage.yml
