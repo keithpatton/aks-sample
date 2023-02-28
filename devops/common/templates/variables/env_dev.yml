@@ -2,5 +2,5 @@
 variables:
 - name: env
   value: qa
-- name: svcConnAzureRm
-  value: 'Keith Patton - VS Professional Sub' 
+# - name: svcConnAzureRm
+#   value: 'Keith Patton - VS Professional Sub' 

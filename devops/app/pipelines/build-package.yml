@@ -53,7 +53,7 @@ stages:
       - task: AzureCLI@2
         displayName: 'Push Images'
         inputs:
-          azureSubscription: $(svcConnAzureRmDefault)
+          azureSubscription: $(svcConnAzureRm)
           scriptType: 'pscore'
           scriptLocation: 'inlineScript'
           inlineScript: |

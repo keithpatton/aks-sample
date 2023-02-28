@@ -1,6 +1,4 @@
 parameters:
-# - name: svcConnAzureRm
-#   type: string  
 - name: region
   type: string
 - name: env
