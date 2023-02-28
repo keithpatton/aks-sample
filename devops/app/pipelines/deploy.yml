@@ -19,7 +19,13 @@ variables:
   - template: templates/variables/root.yml  
   - template: templates/variables/acr-pipeline-resources.yml
     parameters:
-      registry: ${{ parameters.containerRegistry }}   
+      registry: ${{ parameters.containerRegistry }}  
+  - name: svcConnAzureRmAcr
+    value: 'Keith Patton - VS Professional Sub'    
+  - name: rgAcrName
+    value: "rg-common"
+  - name: acrName
+    value: "acrcommon01"
 
 resources:
   
