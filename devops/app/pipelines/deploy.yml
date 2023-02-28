@@ -10,6 +10,13 @@ parameters:
   displayName: 'Apply Infra'
   type: boolean
   default: true
+- name: containerResourcesRegistry
+  displayName: Container Resources Previous Version Selector
+  type: string
+  default: internal
+  values:
+    - internal
+    - live
 
 resources:
   
@@ -22,19 +29,17 @@ resources:
     trigger: none 
   
   containers:
-    - container: webapi-init-job-internal
+    - container: webapi-init-job
       type: acr
       repository: webapi
-      azureSubscription: 'Keith Patton - VS Professional Sub'
-      resourceGroup: rg-common
-      registry: acrcommon01
-    - container: webapi-init-job-live
-      type: acr
-      repository: webapi
-      azureSubscription: 'Keith Patton - VS Professional Sub'
-      resourceGroup: rg-common
-      registry: acrcommon01
-
+      ${{ if eq(parameters['containerResourcesRegistry'], 'internal') }}:     
+        azureSubscription: 'Keith Patton - VS Professional Sub'
+        resourceGroup: rg-common
+        registry: acrcommon01
+      ${{ else }}:
+        azureSubscription: 'Keith Patton - VS Professional Sub'
+        resourceGroup: rg-common
+        registry: acrcommon01
 stages:
 - template: templates/stages/reg-env-stage.yml
   parameters:
