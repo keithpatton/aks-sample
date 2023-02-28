@@ -7,19 +7,9 @@ parameters:
   displayName: 'Apply Infra'
   type: boolean
   default: true
-- name: envContainerResources
-  displayName: Container Resources Environment 
-  type: string
-  default: int
-  values:
-    - int
-    - live
 
 variables: 
   - template: templates/variables/root.yml  
-  - template: templates/variables/container-resources.yml
-    parameters:
-      env: ${{ parameters.envContainerResources }}  
 
 resources:
   
@@ -30,18 +20,11 @@ resources:
   - pipeline: build_and_package # Name of the pipeline resource.
     source: Aks.App.BuildPackage.Poc # The name of the pipeline referenced by this pipeline resource.
     trigger: none 
-  
-  containers:
-    - container: webapi-init-job
-      type: acr
-      repository: webapi-init-job
-      azureSubscription: ${{ variables.svcConnAzureRmAcr }}
-      resourceGroup: ${{ variables.rgAcrName }}
-      registry: ${{ variables.acrName }}
 
 stages:
 - template: templates/stages/reg-env-stage.yml
   parameters:
+    svcConnAzureRm: $(svcConnAzureRm)
     region: 'au1'
     env: 'dev'
     apply: ${{ parameters.apply }}
@@ -49,6 +32,7 @@ stages:
 
 - template: templates/stages/reg-env-stage.yml
   parameters:
+    svcConnAzureRm: $(svcConnAzureRm)
     region: 'au1'
     env: 'qa'
     apply: ${{ parameters.apply }}

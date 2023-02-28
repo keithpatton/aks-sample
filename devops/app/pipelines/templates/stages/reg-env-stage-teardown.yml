@@ -1,4 +1,6 @@
 parameters:
+- name: svcConnAzureRm
+  type: string  
 - name: region
   type: string
 - name: env
@@ -29,7 +31,7 @@ stages:
             displayName: 'Uninstall $(appName)'
             inputs:
               connectionType: 'Azure Resource Manager'
-              azureSubscription: ${{ variables.svcConnAzureRm}}
+              azureSubscription: ${{ parameters.svcConnAzureRm}}
               azureResourceGroup: $(rgName)
               kubernetesCluster: $(aksName)
               command: 'uninstall'
@@ -60,12 +62,12 @@ stages:
                 devops/app/terraform/variables.tf              
           - template: ../../../../common/templates/steps/agent-sql-access.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
           - template: ../../../../common/templates/steps/tf-init-az.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/devops/app/terraform'
           - template: ../../../../common/templates/steps/tf-destroy-az.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/devops/app/terraform'
