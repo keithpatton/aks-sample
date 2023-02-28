@@ -38,8 +38,8 @@ resources:
       type: acr
       repository: webapi-init-job
       azureSubscription: 'Keith Patton - VS Professional Sub'
-      resourceGroup: 'rg-common'
-      registry: 'acrcommon01'
+      resourceGroup: $(rgAcrName)
+      registry: $(acrName)
 
 stages:
 - template: templates/stages/reg-env-stage.yml
