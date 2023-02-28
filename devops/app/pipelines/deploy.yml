@@ -25,15 +25,15 @@ resources:
   repositories:
   - repository: self
 
-  # pipelines:
-  # - pipeline: build_and_package # Name of the pipeline resource.
-  #   source: Aks.App.BuildPackage.Poc # The name of the pipeline referenced by this pipeline resource.
-  #   trigger: none 
+  pipelines:
+  - pipeline: build_and_package # Name of the pipeline resource.
+    source: Aks.App.BuildPackage.Poc # The name of the pipeline referenced by this pipeline resource.
+    trigger: none 
   
   containers:
-    - container: webapi
+    - container: webapi # e.g. core api
       type: acr
-      ${{ if eq(parameters['channel'], 'internal') }}:
+      ${{ if eq(resources.pipelines.build_and_package.sourceVersion, 'refs/heads/master') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
         resourceGroup: rg-common
         registry: acrcommon01
@@ -43,21 +43,18 @@ resources:
         resourceGroup: rg-common2
         registry: acrcommon02
         repository: webapi 
-    - container: webapi-init-job
-      type: acr
-      ${{ if eq(parameters['channel'], 'internal') }}:
-        azureSubscription: 'Keith Patton - VS Professional Sub'
-        resourceGroup: rg-common
-        registry: acrcommon01
-        repository: webapi-init-job        
-      ${{ else }}:
-        azureSubscription: 'Keith Patton - VS Professional Sub2'
-        resourceGroup: rg-common2
-        registry: acrcommon02
-        repository: webapi-init-job 
-
-# resources.pipelines.build_and_package.sourceBranch
-
+    # - container: webapi-init-job  # e.g. core job
+    #   type: acr
+    #   ${{ if eq(parameters['channel'], 'internal') }}:
+    #     azureSubscription: 'Keith Patton - VS Professional Sub'
+    #     resourceGroup: rg-common
+    #     registry: acrcommon01
+    #     repository: webapi-init-job        
+    #   ${{ else }}:
+    #     azureSubscription: 'Keith Patton - VS Professional Sub2'
+    #     resourceGroup: rg-common2
+    #     registry: acrcommon02
+    #     repository: webapi-init-job 
 
 stages:
 - template: templates/stages/reg-env-stage.yml
