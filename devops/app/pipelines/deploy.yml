@@ -40,10 +40,10 @@ resources:
         registry: acrcommon01
         repository: webapi        
       ${{ else }}:
-        azureSubscription: 'Keith Patton - VS Professional Sub2'
-        resourceGroup: rg-common2
-        registry: acrcommon02
-        repository: webapi 
+        azureSubscription: 'Keith Patton - VS Professional Sub'
+        resourceGroup: rg-common
+        registry: acrcommon01
+        repository: variables['resources.pipelines.build_and_package.sourceVersion']
     # - container: webapi-init-job  # e.g. core job
     #   type: acr
     #   ${{ if eq(parameters['channel'], 'internal') }}:
