@@ -36,15 +36,8 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                # Set the container name based on the branch
-                if [[ $(resources.pipeline.myresourcevars.sourceBranch) == "master" ]]; then
-                  CONTAINER_NAME="webapi-init-job-live"
-                else
-                  CONTAINER_NAME="webapi-init-job-internal"
-                fi
-                
-                # Output the container tag using the dynamic variable name
-                echo "$(resources.container.${CONTAINER_NAME}.tag)"                  
+                echo $(resources.container.webapi-init-job-internal.tag)        
+                echo $(resources.container.webapi-init-job-live.tag)                 
           - template:  ../../../../common/templates/steps/vars-reg-env-set.yml        
             parameters:
               region: ${{ parameters.region }}
