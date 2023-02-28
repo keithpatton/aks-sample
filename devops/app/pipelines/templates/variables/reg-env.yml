@@ -9,6 +9,8 @@ parameters:
   type: string
 
 variables:
+- name: test
+  value: "higher priority"
 
 - template: ../../../../common/templates/variables/reg-env.yml
   parameters:
