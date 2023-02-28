@@ -20,12 +20,6 @@ variables:
   - template: templates/variables/acr-pipeline-resources.yml
     parameters:
       registry: ${{ parameters.containerRegistry }}  
-  - name: svcConnAzureRmAcr
-    value: 'Keith Patton - VS Professional Sub'    
-  - name: rgAcrName
-    value: "rg-common"
-  - name: acrName
-    value: "acrcommon01"
 
 resources:
   
@@ -38,7 +32,7 @@ resources:
     trigger: none 
   
   containers:
-    - container: ${{ variables.rgAcrName }}
+    - container: webapi-init-job
       type: acr
       repository: webapi-init-job
       azureSubscription: ${{ variables.svcConnAzureRmAcr }}
