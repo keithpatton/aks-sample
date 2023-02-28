@@ -34,7 +34,7 @@ resources:
     - container: webapi # e.g. core api
       type: acr
       
-      ${{ if eq( variables['resources.pipelines.build_and_package.sourceVersion'], 'refs/heads/master') }}:
+      ${{ if eq( resources.pipelines.build_and_package.sourceVersion, 'refs/heads/master') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
         resourceGroup: rg-common
         registry: acrcommon01
