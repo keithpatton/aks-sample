@@ -36,10 +36,10 @@ resources:
   containers:
     - container: webapi-init-job
       type: acr
-      repository: webapi
-      azureSubscription: $(svcConnAzureRmAcr)
-      resourceGroup: $(rgAcrName)
-      registry: $(acrName)
+      repository: webapi-init-job
+      azureSubscription: 'Keith Patton - VS Professional Sub'
+      resourceGroup: 'rg-common'
+      registry: 'acrcommon01'
 
 stages:
 - template: templates/stages/reg-env-stage.yml
