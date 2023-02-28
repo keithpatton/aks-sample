@@ -1,0 +1,20 @@
+parameters:
+- name: env
+  type: string
+  values:
+    - int
+    - live
+
+variables:
+
+- ${{ if eq(parameters['env'], 'live') }}: 
+  - name: svcConnAzureRmAcr
+    value: 'Keith Patton - VS Professional Sub'   
+- ${{ else }}:
+  - name: svcConnAzureRmAcr
+    value: 'Keith Patton - VS Professional Sub'  
+
+- name: rgAcrName
+  value: "rg-common"
+- name: acrName
+  value: "acrcommon01"

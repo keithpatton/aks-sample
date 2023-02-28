@@ -7,19 +7,19 @@ parameters:
   displayName: 'Apply Infra'
   type: boolean
   default: true
-- name: containerRegistry
-  displayName: Container Resources Registry
+- name: envContainerResources
+  displayName: Container Resources Environment 
   type: string
-  default: internal
+  default: int
   values:
-    - internal
+    - int
     - live
 
 variables: 
   - template: templates/variables/root.yml  
-  - template: templates/variables/acr-pipeline-resources.yml
+  - template: templates/variables/container-resources.yml
     parameters:
-      registry: ${{ parameters.containerRegistry }}  
+      env: ${{ parameters.envContainerResources }}  
 
 resources:
   
