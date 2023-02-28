@@ -1,0 +1,15 @@
+parameters:
+- name: registry
+  type: string
+  values:
+    - internal
+    - live
+
+${{ if eq(parameters['registry'], 'internal') }}:     
+    acrAzureSubscription: 'Keith Patton - VS Professional Sub'
+    azrResourceGroup: rg-common
+    acrName: acrcommon01
+${{ else }}:
+    acrAzureSubscription: 'Keith Patton - VS Professional Sub'
+    acrAzureSubscription: rg-common
+    acrName: acrcommon01

@@ -2,21 +2,26 @@ name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger: none
 
-variables: 
-  - template: templates/variables/root.yml   
+
 
 parameters:
 - name: apply
   displayName: 'Apply Infra'
   type: boolean
   default: true
-- name: containerResourcesRegistry
-  displayName: Container Resources Previous Version Selector
+- name: containerRegistry
+  displayName: Container Resources Registry
   type: string
   default: internal
   values:
     - internal
     - live
+
+variables: 
+  - template: templates/variables/root.yml  
+  - template: templates/variables/acr-pipeline-resources.yml
+    parameters:
+      registry: ${{ parameters.containerRegistry }}   
 
 resources:
   
@@ -32,14 +37,10 @@ resources:
     - container: webapi-init-job
       type: acr
       repository: webapi
-      ${{ if eq(parameters['containerResourcesRegistry'], 'internal') }}:     
-        azureSubscription: 'Keith Patton - VS Professional Sub'
-        resourceGroup: rg-common
-        registry: acrcommon01
-      ${{ else }}:
-        azureSubscription: 'Keith Patton - VS Professional Sub'
-        resourceGroup: rg-common
-        registry: acrcommon01
+      azureSubscription: $(acrAzureSubscription)
+      resourceGroup: $(acrResourceGroup)
+      registry: $(acrRegistry)
+
 stages:
 - template: templates/stages/reg-env-stage.yml
   parameters:
