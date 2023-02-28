@@ -29,15 +29,14 @@ resources:
     trigger: none 
   
   containers:
-    ${{ if eq(parameters['dependentResourcesRegistry'], 'internal') }}:
-      - container: webapi-init-job-internal 
+    - container: webapi-init-job
+      ${{ if eq(parameters['dependentResourcesRegistry'], 'internal') }}:
         type: acr
         azureSubscription: 'Keith Patton - VS Professional Sub'
         resourceGroup: rg-common
         registry: acrcommon01
         repository: webapi       
-    ${{ else }}:
-      - container: webapi-init-job-live 
+      ${{ else }}:
         type: acr
         azureSubscription: 'Keith Patton - VS Professional Sub'
         resourceGroup: rg-common
