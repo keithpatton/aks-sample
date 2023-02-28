@@ -6,14 +6,14 @@ parameters:
     - live
 
 variables:
-${{ if eq(parameters['registry'], 'internal') }}: 
+- ${{ if eq(parameters['registry'], 'internal') }}: 
   - name: svcConnAzureRmAcr
     value: "Keith Patton - VS Professional Sub"      
   - name: rgAcrName
     value: "rg-common"      
   - name: acrName
     value: acrcommon01 
-${{ else }}:
+- ${{ else }}:
   - name: svcConnAzureRmAcr
     value: "Keith Patton - VS Professional Sub"      
   - name: rgAcrName
