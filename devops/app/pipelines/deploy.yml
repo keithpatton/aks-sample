@@ -31,19 +31,30 @@ resources:
     trigger: none 
   
   containers:
-    - container: webapi # e.g. core api
+    - container: webapi-internal # e.g. core api (internal)
       type: acr
-      
-      ${{ if eq( variables.buildBranch, 'refs/heads/master') }}:
-        azureSubscription: 'Keith Patton - VS Professional Sub'
-        resourceGroup: rg-common
-        registry: acrcommon01
-        repository: webapi        
-      ${{ else }}:
-        azureSubscription: 'Keith Patton - VS Professional Sub'
-        resourceGroup: rg-common
-        registry: acrcommon01
-        repository: ${{ variables.buildBranch }}
+      azureSubscription: 'Keith Patton - VS Professional Sub'
+      resourceGroup: rg-common
+      registry: acrcommon01
+      repository: webapi       
+
+    - container: webapi-live # e.g. core api (live)
+      type: acr
+      azureSubscription: 'Keith Patton - VS Professional Sub'
+      resourceGroup: rg-common
+      registry: acrcommon01
+      repository: webapi            
+
+      # ${{ if eq( variables.buildBranch, 'refs/heads/master') }}:
+        # azureSubscription: 'Keith Patton - VS Professional Sub'
+        # resourceGroup: rg-common
+        # registry: acrcommon01
+        # repository: webapi        
+      # ${{ else }}:
+        # azureSubscription: 'Keith Patton - VS Professional Sub'
+        # resourceGroup: rg-common
+        # registry: acrcommon01
+        # repository: webapi
     # - container: webapi-init-job  # e.g. core job
     #   type: acr
     #   ${{ if eq(parameters['channel'], 'internal') }}:
