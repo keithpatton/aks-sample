@@ -9,8 +9,8 @@ variables:
   ${{ if eq(parameters['registry'], 'internal') }}:     
     acrAzureSubscription: 'Keith Patton - VS Professional Sub'
     azrResourceGroup: rg-common
-    acrName: acrcommon01
+    acrRegistry: acrcommon01
   ${{ else }}:
     acrAzureSubscription: 'Keith Patton - VS Professional Sub'
     azrResourceGroup: rg-common
-    acrName: acrcommon01
+    acrRegistry: acrcommon01
