@@ -21,13 +21,13 @@ resources:
     source: Aks.App.BuildPackage.Poc # The name of the pipeline referenced by this pipeline resource.
     trigger: none 
 
-  containers:
-    - container: webapi-init-job
-      type: acr
-      repository: webapi-init-job
-      azureSubscription: ${{ variables.svcConnAzureRm }}
-      resourceGroup: ${{ variables.rgCommonName }}
-      registry: ${{ variables.acrName }}
+  # containers:
+  #   - container: webapi-init-job
+  #     type: acr
+  #     repository: webapi-init-job
+  #     azureSubscription: ${{ variables.svcConnAzureRm }}
+  #     resourceGroup: ${{ variables.rgCommonName }}
+  #     registry: ${{ variables.acrName }}
 
 stages:
 - template: templates/stages/reg-env-stage.yml
