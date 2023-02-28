@@ -4,7 +4,7 @@ trigger: none
 
 variables: 
   - name: buildBranch
-    value: 'test'
+    value: ${{ resources.pipelines.build_and_package.sourceVersion }}
   - template: templates/variables/root.yml   
 
 parameters:
@@ -34,7 +34,7 @@ resources:
     - container: webapi # e.g. core api
       type: acr
       
-      ${{ if eq( variables.resources.pipelines.build_and_package.sourceVersion, 'refs/heads/master') }}:
+      ${{ if eq( variables.buildBranch, 'refs/heads/master') }}:
         azureSubscription: 'Keith Patton - VS Professional Sub'
         resourceGroup: rg-common
         registry: acrcommon01
@@ -43,7 +43,7 @@ resources:
         azureSubscription: 'Keith Patton - VS Professional Sub'
         resourceGroup: rg-common
         registry: acrcommon01
-        repository: ${{ resources.pipelines.build_and_package.sourceVersion }}
+        repository: ${{ variables.buildBranch }}
     # - container: webapi-init-job  # e.g. core job
     #   type: acr
     #   ${{ if eq(parameters['channel'], 'internal') }}:
