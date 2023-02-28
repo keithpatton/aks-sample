@@ -26,7 +26,7 @@ resources:
       type: acr
       repository: webapi-init-job
       azureSubscription: ${{ variables.svcConnAzureRm }}
-      resourceGroup: ${{ variables.rgAcrName }}
+      resourceGroup: ${{ variables.rgCommonName }}
       registry: ${{ variables.acrName }}
 
 stages:
