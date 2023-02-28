@@ -14,13 +14,13 @@ variables:
   value: 'rg-common'
 
 - name: acrSvcConnAzureRmInternal
-  value: 'Keith Patton - VS Professional Sub'
+  value: $(svcConnAzureRmDefault)
 
-- name: acrNameInternal
+- name: acrNameLive
   value: 'acrcommon01'
 
 - name: acrResourceGroupLive
-  value: 'rg-common'
+  value: $(rgCommonName)
 
 - name: acrSvcConnAzureRmLive
   value: 'Keith Patton - VS Professional Sub'

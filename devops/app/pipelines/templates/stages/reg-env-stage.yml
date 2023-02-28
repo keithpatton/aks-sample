@@ -31,7 +31,20 @@ stages:
         deploy:
           steps:
           - checkout: self
-            clean: true                                   
+            clean: true            
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Set the container name based on the branch
+                if [[ $(resources.pipeline.myresourcevars.sourceBranch) == "master" ]]; then
+                  CONTAINER_NAME="webapi-init-job-live"
+                else
+                  CONTAINER_NAME="webapi-init-job-internal"
+                fi
+                
+                # Output the container tag using the dynamic variable name
+                echo "$(resources.container.${CONTAINER_NAME}.tag)"                  
           - template:  ../../../../common/templates/steps/vars-reg-env-set.yml        
             parameters:
               region: ${{ parameters.region }}
