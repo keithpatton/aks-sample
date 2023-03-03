@@ -1,4 +1,6 @@
 parameters:
+- name: svcConnAzureRm
+  type: string  
 - name: region
   type: string
 - name: env
@@ -29,9 +31,9 @@ stages:
                 devops/infra/terraform/common/variables.tf                                    
           - template: ../../../../common/templates/steps/tf-init-az.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/common'
           - template: ../../../../common/templates/steps/tf-destroy-az.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/common'

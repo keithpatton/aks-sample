@@ -1,4 +1,6 @@
 parameters:
+- name: svcConnAzureRm
+  type: string  
 - name: region
   type: string
 - name: env
@@ -32,7 +34,7 @@ stages:
             displayName: 'Enable Workload Identity Preview (One Time)'
             condition: eq(1,2)
             inputs:
-              azureSubscription: ${{ variables.svcConnAzureRm}}
+              azureSubscription: ${{ parameters.svcConnAzureRm}}
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
@@ -41,18 +43,18 @@ stages:
                 az provider register --namespace Microsoft.ContainerService
           - template: ../../../../common/templates/steps/tf-state-az.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
           - template: ../../../../common/templates/steps/vars-replace-tokens.yml
             parameters:
               targetFiles: |
                 devops/infra/terraform/regenv/variables.tf          
           - template: ../../../../common/templates/steps/tf-init-az.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/regenv'
           - template: ../../../../common/templates/steps/tf-apply-az.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/regenv'
   - deployment: InfrastructureApps    
     displayName: Deploy ${{ parameters.region }}_${{ parameters.env }} Infra Apps
@@ -71,7 +73,7 @@ stages:
                 devops/infra/helm/**/values.yaml
           - template: ../../../../common/templates/steps/helm-upgrade.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               releaseName: $(traefikReleaseName)
               chartPath: '$(System.DefaultWorkingDirectory)/devops/infra/helm/traefik'    
               namespace: $(traefikAksNamespace)

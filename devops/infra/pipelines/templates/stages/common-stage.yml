@@ -1,4 +1,6 @@
 parameters:
+- name: svcConnAzureRm
+  type: string  
 - name: dependsOn  
   type: object
 
@@ -21,16 +23,16 @@ stages:
             clean: true              
           - template: ../../../../common/templates/steps/tf-state-az.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
           - template: ../../../../common/templates/steps/vars-replace-tokens.yml
             parameters:
               targetFiles: |
                 devops/infra/terraform/common/variables.tf          
           - template: ../../../../common/templates/steps/tf-init-az.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/common'
           - template: ../../../../common/templates/steps/tf-apply-az.yml
             parameters:
-              svcConnAzureRm: ${{ variables.svcConnAzureRm }}
+              svcConnAzureRm: ${{ parameters.svcConnAzureRm }}
               workingDirectory: '$(System.DefaultWorkingDirectory)/devops/infra/terraform/common'
