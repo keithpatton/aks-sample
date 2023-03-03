@@ -45,9 +45,6 @@ namespace AksWorkloadIdentitySample.Api.Controllers
             var sqlServerName = IsInAks() ? Environment.GetEnvironmentVariable("sql_server_name") : "sql-au1-dev-01";
             var connString = $"Data Source={sqlServerName}.database.windows.net; Initial Catalog={tenant}; Encrypt=True; Authentication=Active Directory Default";
             using SqlConnection conn = new SqlConnection(connString);
-            //var credential = new Azure.Identity.DefaultAzureCredential();
-            //var token = credential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net/.default" }));
-            //conn.AccessToken = token.Token;
             conn.Open();
 
             using (SqlCommand command = new SqlCommand("IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'example_table') CREATE TABLE example_table (id INT PRIMARY KEY, name VARCHAR(255), date_created DATETIME DEFAULT GETDATE());", conn))

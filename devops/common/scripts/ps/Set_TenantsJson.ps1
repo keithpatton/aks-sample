@@ -94,7 +94,7 @@ foreach ($tenantName in $tenantNames) {
 }
 
 # get all tenant data as minified json array from tenants object collection
-$tenantsJson = ($tenantObjs.Count -eq 0) ? "[]" : $tenantObjs | ConvertTo-Json -Depth 3 -Compress
+$tenantsJson = $tenantObjs | ConvertTo-Json -Depth 3 -Compress -AsArray
 
 # Set the Azure DevOps variable to the output of the GetTenantsData function
 Write-Host "##vso[task.setvariable variable=tenantsJson]$tenantsJson"

@@ -78,7 +78,8 @@ stages:
               ringsDataFilePath: $(ringsDataFilePath)   
               tenantsDataPaths: $(tenantsDataPaths)
               tenantsRequiredData: $(tenantsRequiredData)  
-              tenantsScriptFilePath: $(tenantsScriptFilePath)                          
+              tenantsScriptFilePath: $(tenantsScriptFilePath)  
+                                      
           - task: AzureCLI@2
             displayName: Get Azure Managed Workload Identities
             inputs:
