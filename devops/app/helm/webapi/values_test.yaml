@@ -29,26 +29,38 @@ rings: [
 groups: [{
     "name": "common",
     "region": "au1",
-    "env": "dev",
-    "cpu": "1",
-    "memory": "1Gi",
-    "pods": "1",
-    "requestsCpu": "500m",
-    "requestsMemory": "500Mi",
-    "limitsCpu": "1",
-    "limitsMemory": "1Gi"
+    "env": "dev", 
+
+    "cpuQuota": "1500m",
+    "memoryQuota": "2.5Gi",
+    "limitsCpuQuota": "2",
+    "limitsMemoryQuota": "3.5Gi",
+    "podsQuota": "5", 
+
+    "cpuPod": "250m",
+    "memoryPod": "400Mi",
+    "limitsCpuPod": "325m",
+    "limitsMemoryPod": "500Mi",
+
+    "replicas": 1 
   },
   {
     "name": "common",
     "region": "au1",
-    "env": "qa",
-    "cpu": "1",
-    "memory": "1Gi",
-    "pods": "1",
-    "requestsCpu": "500m",
-    "requestsMemory": "500Mi",
-    "limitsCpu": "1",
-    "limitsMemory": "1Gi"
+    "env": "qa", 
+    
+    "cpuQuota": "1500m",
+    "memoryQuota": "2.5Gi",
+    "limitsCpuQuota": "2",
+    "limitsMemoryQuota": "3.5Gi",
+    "podsQuota": "5", 
+
+    "cpuPod": "250m",
+    "memoryPod": "400Mi",
+    "limitsCpuPod": "325m",
+    "limitsMemoryPod": "500Mi",
+    
+    "replicas": 1 
   }]
 sqlServerName: sql-au1-dev-01
 tenants: [{"name":"tenant1","group":"common","region":"au1","env":"dev","ring":"stable"},{"name":"tenant2","group":"common2","region":"au1","env":"dev","ring":"latest"}]
