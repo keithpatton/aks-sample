@@ -101,7 +101,7 @@ resource "mssql_user" "aks" {
     host = data.azurerm_mssql_server.sql.fully_qualified_domain_name
     login {
       username = var.sql_admin_username
-      password = 'p@ssw0rd123'
+      password = "p@ssw0rd123"
     }
   }
 
@@ -120,7 +120,7 @@ resource "mssql_user" "aks-default" {
     host = data.azurerm_mssql_server.sql.fully_qualified_domain_name
     login {
       username = var.sql_admin_username
-      password = 'p@ssw0rd123'
+      password = "p@ssw0rd123"
     }
   }
 
