@@ -43,7 +43,7 @@ spec:
   template:
     metadata:
       annotations:
-        azure.workload.identity/inject-proxy-sidecar: "false"
+        azure.workload.identity/inject-proxy-sidecar: true
       labels:
         app: {{ $deploymentName }}
         azure.workload.identity/use: "true"
