@@ -9,7 +9,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.40.0"
     }
-
+    mssql = {
+      source = "betr-io/mssql"
+      version = "~> 0.2.7"
+    }
   }
 
   required_version = ">= 1.1.0"
