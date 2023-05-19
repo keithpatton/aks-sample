@@ -395,3 +395,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/devops/app/helm/webapi/templates/resourcequota.yml
